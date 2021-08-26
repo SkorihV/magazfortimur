@@ -9,20 +9,9 @@
 </head>
 <body>
 <?php
-require_once "db.php";
-require_once('libs/Smarty/Smarty.class.php');
 
-$smarty = new Smarty();
-$smarty->template_dir = __DIR__ . '/templates';
-$smarty->compile_dir = __DIR__ . '/var/compile';
-$smarty->cache_dir = __DIR__ . '/var/cache';
-$smarty->config_dir = __DIR__ . '/var/configs';
-
-$connect = connect();
-
-$query = "SELECT * FROM products";
-$result = query($connect, $query);
-
+$products = get_product_list($connect);
+$smarty->assign('products', $products);
 $smarty->display('products/index.tpl');
 
 //echo "<a href='/add.php'>Добавить</a>";
