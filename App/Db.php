@@ -8,6 +8,26 @@ class Db
     private static $password = '';
     private static $bd = 'phpwebinars';
 
+
+    public static function query ($query) {
+        $conn = static::getConnect();
+        $result = mysqli_query($conn, $query);
+
+        if (mysqli_errno($conn)) {
+            $error = mysqli_error($conn);
+            var_dump($error);
+            exit;
+        }
+        return $result;
+    }
+
+    public static function affectedRows()
+    {
+        $conn = static::getConnect();
+        return mysqli_affected_rows($conn);
+    }
+
+
     public static function getConnect()
     {
         if (is_null(static::$connect)) {
@@ -16,7 +36,7 @@ class Db
 
         return static::$connect;
     }
-    
+
     private static function connect () {
 
         $connect = mysqli_connect(static::$host, static::$user, static::$password, static::$bd);
@@ -31,18 +51,5 @@ class Db
 
         return $connect;
     }
-
-    public static function query ($query) {
-        $conn = static::getConnect();
-        $result = mysqli_query($conn, $query);
-
-        if (mysqli_errno($conn)) {
-            $error = mysqli_error($conn);
-            var_dump($error);
-            exit;
-        }
-        return $result;
-    }
-
 }
 

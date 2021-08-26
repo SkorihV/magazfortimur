@@ -5,15 +5,14 @@ $id = (int) $id;
 $category = [];
 
 if ($id) {
-    $category = Category::getById($connect, $id);
+    $category = Category::getById($id);
 }
-
 
 if (!empty($_POST)) {
 
     $category = Category::getFromPost();
 
-    $edited = Category::uploadById($connect, $id, $category);
+    $edited = Category::uploadById($id, $category);
 
     if ($edited) {
         header('Location: /categories/list');

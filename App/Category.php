@@ -1,10 +1,12 @@
 <?php
 
 class Category {
-    public static function getList ($connect)
+    public static function getList ()
     {
         $query = "SELECT * FROM categories";
-        $result = query($connect, $query);
+
+        $result = Db::query($query);
+
         $categories = [];
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -14,11 +16,11 @@ class Category {
         return $categories;
     }
 
-    public static function getById ($connect, $id)
+    public static function getById ($id)
     {
 
         $query = "SELECT * FROM categories WHERE id = $id";
-        $result = query($connect, $query);
+        $result = Db::query($query);
 
         $category = mysqli_fetch_assoc($result);
 
@@ -29,33 +31,33 @@ class Category {
         return $category;
     }
 
-    public static function uploadById ($connect, $id, $category)
+    public static function uploadById ($id, $category)
     {
         $name = $category['name'] ?? '';
 
         $query = "UPDATE categories SET name = '$name' WHERE id = '$id'";
-        query($connect, $query);
+        Db::query($query);
 
-        return mysqli_affected_rows($connect);
+        return Db::affectedRows();
     }
 
-    public static function add($connect, $category)
+    public static function add($category)
     {
         $name = $category['name'] ?? '';
 
 
         $query = "INSERT INTO categories(name) VALUES ('$name')";
-        query($connect, $query);
+        Db::query($query);
 
-        return mysqli_affected_rows($connect);
+        return Db::affectedRows();
     }
 
-    public static function deleteById ($connect, $id)
+    public static function deleteById ($id)
     {
         $query = "DELETE FROM categories WHERE id = $id";
 
-        query($connect, $query);
-        return mysqli_affected_rows($connect);
+        Db::query($query);
+        return Db::affectedRows();
     }
 
     public static function  getFromPost () : array

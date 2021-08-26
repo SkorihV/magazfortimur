@@ -5,7 +5,7 @@ $id = (int) $id;
 $product = [];
 
 if ($id) {
-    $product = Product::getById($connect, $id);
+    $product = Product::getById($id);
 }
 
 
@@ -13,7 +13,7 @@ if (!empty($_POST)) {
 
     $product = Product::getFromPost();
 
-    $edited = Product::uploadById($connect, $id, $product);
+    $edited = Product::uploadById($id, $product);
 
     if ($edited) {
         header('Location: /products/list');
@@ -23,7 +23,7 @@ if (!empty($_POST)) {
 }
 
 
-$categories = Category::getList($connect);
+$categories = Category::getList();
 
 $smarty->assign("categories", $categories);
 $smarty->assign('product', $product);

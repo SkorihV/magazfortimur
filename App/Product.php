@@ -2,18 +2,18 @@
 
 class Product {
 
-    public static function getListCount($connect) {
+    public static function getListCount() {
         $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
-        $result = query($connect, $query);
+        $result = Db::query($query);
 
         $row = mysqli_fetch_assoc($result);
 
         return (int) ($row['c'] ?? 0);
     }
 
-    public static function getList ($connect, int $limit = 100, int $offset = 0 ){
-        $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id LIMIT $offset, $limit";
-        $result = query($connect, $query);
+    public static function getList (int $limit = 100, int $offset = 0 ){
+        $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
+        $result = Db::query($query);
         $products = [];
 
         while  ($row = mysqli_fetch_assoc($result)) {
@@ -23,9 +23,9 @@ class Product {
         return $products;
     }
 
-     public static function getListByCategoryId ($connect, $category_id) {
+     public static function getListByCategoryId ($category_id) {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
-        $result = query($connect, $query);
+        $result = Db::query($query);
         $products = [];
 
         while  ($row = mysqli_fetch_assoc($result)) {
@@ -35,10 +35,10 @@ class Product {
         return $products;
     }
 
-     public static function getById($connect, $id){
+     public static function getById($id){
 
         $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
-        $result = query($connect,$query);
+        $result = Db::query($query);
 
         $product = mysqli_fetch_assoc($result);
 
@@ -49,7 +49,7 @@ class Product {
         return $product;
     }
 
-    public static function uploadById($connect, $id, $product){
+    public static function uploadById($id, $product){
         $name = $product['name'] ?? '';
         $article = $product['article'] ?? '';
         $price = $product['price'] ?? '';
@@ -58,12 +58,12 @@ class Product {
         $category_id = $product['category_id'] ?? '';
 
         $query = "UPDATE products SET name = '$name', article = '$article', price = '$price', amount = '$amount', description = '$description', category_id = '$category_id' WHERE id = '$id'";
-        query($connect,$query);
+        Db::query($query);
 
-        return mysqli_affected_rows($connect);
+        return Db::affectedRows();
     }
 
-    public static function add ($connect, $product){
+    public static function add ($product){
         $name = $product['name'] ?? '';
         $article = $product['article'] ?? '';
         $price = $product['price'] ?? '';
@@ -72,16 +72,16 @@ class Product {
         $category_id = $product['category_id'] ?? '';
 
         $query = "INSERT INTO products(name,article,price, amount, description, category_id) VALUES ('$name','$article','$price', '$amount', '$description', '$category_id')";
-        query($connect, $query);
+        Db::query($query);
 
-        return mysqli_affected_rows($connect);
+        return Db::affectedRows();
     }
 
-    public static function deleteById($connect, $id){
+    public static function deleteById($id){
         $query = "DELETE FROM products WHERE id = $id";
 
-        query($connect, $query);
-        return mysqli_affected_rows($connect);
+        Db::query($query);
+        return Db::affectedRows();
     }
 
     public static function getFromPost () : array

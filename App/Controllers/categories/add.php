@@ -2,7 +2,7 @@
 
     if (!empty($_POST)) {
         $category  = Category::getFromPost();
-        $insert = Category::add($connect, $category);
+        $insert = Category::add($category);
 
         if ($insert) {
             header('Location: /categories/list');

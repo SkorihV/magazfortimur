@@ -1,6 +1,8 @@
 <?php
+
+
 $current_page = (int) $_GET['p'] ?? 0;
-$limit = 4;
+$limit = 5;
 
 $offset = ($current_page - 1) * $limit;
 
@@ -9,10 +11,11 @@ if ($offset < 1) {
 }
 
 
-$products = Product::getList($connect, $limit, $offset);
+
+$products = Product::getList($limit, $offset);
 
 
-$products_count = Product::getListCount($connect);
+$products_count = Product::getListCount();
 $pages_count = ceil($products_count / $limit);
 
 
