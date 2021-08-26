@@ -4,49 +4,25 @@ class Product {
 
     public static function getListCount() {
         $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
-        $result = Db::query($query);
-
-        $row = mysqli_fetch_assoc($result);
-
-        return (int) ($row['c'] ?? 0);
+        return Db::fetchOne($query);
     }
 
     public static function getList (int $limit = 100, int $offset = 0 ){
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
-        $result = Db::query($query);
-        $products = [];
 
-        while  ($row = mysqli_fetch_assoc($result)) {
-            $products[] = $row;
-        }
-
-        return $products;
+        return Db::fetchAll($query);
     }
 
      public static function getListByCategoryId ($category_id) {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
-        $result = Db::query($query);
-        $products = [];
 
-        while  ($row = mysqli_fetch_assoc($result)) {
-            $products[] = $row;
-        }
-
-        return $products;
+         return Db::fetchAll($query);
     }
 
      public static function getById($id){
 
         $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
-        $result = Db::query($query);
-
-        $product = mysqli_fetch_assoc($result);
-
-        if (is_null($product)) {
-            $product = [];
-        }
-
-        return $product;
+        return Db::fetchRow($query);
     }
 
     public static function uploadById($id, $product){
@@ -77,11 +53,10 @@ class Product {
         return Db::affectedRows();
     }
 
-    public static function deleteById($id){
-        $query = "DELETE FROM products WHERE id = $id";
+    public static function deleteById(int $id){
 
-        Db::query($query);
-        return Db::affectedRows();
+        return Db::delete('products', "id = $id");
+
     }
 
     public static function getFromPost () : array

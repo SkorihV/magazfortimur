@@ -5,30 +5,14 @@ class Category {
     {
         $query = "SELECT * FROM categories";
 
-        $result = Db::query($query);
-
-        $categories = [];
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $categories[] = $row;
-        }
-
-        return $categories;
+        return Db::fetchAll($query);
     }
 
     public static function getById ($id)
     {
 
         $query = "SELECT * FROM categories WHERE id = $id";
-        $result = Db::query($query);
-
-        $category = mysqli_fetch_assoc($result);
-
-        if (is_null($category)) {
-            $category = [];
-        }
-
-        return $category;
+        return Db::fetchRow($query);
     }
 
     public static function uploadById ($id, $category)
@@ -54,10 +38,8 @@ class Category {
 
     public static function deleteById ($id)
     {
-        $query = "DELETE FROM categories WHERE id = $id";
+        return Db::delete('categories', "id = $id");
 
-        Db::query($query);
-        return Db::affectedRows();
     }
 
     public static function  getFromPost () : array

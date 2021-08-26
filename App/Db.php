@@ -21,6 +21,51 @@ class Db
         return $result;
     }
 
+
+    public static function fetchAll(string $query): array
+    {
+        $result = Db::query($query);
+
+        $data = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
+    public static function fetchRow (string $query): array
+    {
+        $result = Db::query($query);
+        $row = mysqli_fetch_assoc($result);
+
+        if (is_null($row)) {
+            $row = [];
+        }
+
+        return $row;
+    }
+
+    public static function fetchOne(string $query): string
+    {
+        $result = Db::query($query);
+
+        $row = mysqli_fetch_row($result);
+        return (string) ($row[0] ?? '');
+    }
+
+    public static function delete(string $tableName, string $where)
+    {
+        $query = "DELETE FROM " . $tableName;
+
+        if ($where) {
+            $query .= " WHERE " . $where;
+        }
+
+        Db::query($query);
+        return Db::affectedRows();
+    }
+
     public static function affectedRows()
     {
         $conn = static::getConnect();
