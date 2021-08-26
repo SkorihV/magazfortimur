@@ -5,15 +5,15 @@ $id = (int) $id;
 $product = [];
 
 if ($id) {
-    $product = get_product_by_id($connect, $id);
+    $product = Product::getById($connect, $id);
 }
 
 
 if (!empty($_POST)) {
 
-    $product = get_product_from_post();
+    $product = Product::getFromPost();
 
-    $edited = upload_product_by_id($connect, $id, $product);
+    $edited = Product::uploadById($connect, $id, $product);
 
     if ($edited) {
         header('Location: /products/list');
@@ -23,7 +23,7 @@ if (!empty($_POST)) {
 }
 
 
-$categories = get_category_list($connect);
+$categories = Category::getList($connect);
 
 $smarty->assign("categories", $categories);
 $smarty->assign('product', $product);

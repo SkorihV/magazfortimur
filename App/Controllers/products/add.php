@@ -1,8 +1,8 @@
 <?php
 
     if (!empty($_POST)) {
-        $product  = get_product_from_post();
-        $insert = add_product($connect, $product);
+        $product  = Product::getFromPost();
+        $insert = Product::add($connect, $product);
 
         if ($insert) {
             header('Location: /products/list');
@@ -10,7 +10,7 @@
             die('какая то ошибка сзаза');
         }
     }
-$categories = get_category_list($connect);
+$categories = Category::getList($connect);
 
 $smarty->assign("categories", $categories);
 $smarty->display('products/add.tpl');

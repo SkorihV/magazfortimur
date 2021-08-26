@@ -35,3 +35,23 @@ CREATE TABLE products (
                           `description` MEDIUMTEXT DEFAULT NULL,
                           `category_id` int unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+products | CREATE TABLE `products` (
+           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+           `name` varchar(255) NOT NULL DEFAULT '',
+           `article` varchar(255) NOT NULL DEFAULT '',
+           `price` double unsigned DEFAULT NULL,
+           `amount` int(10) unsigned DEFAULT NULL,
+           `description` mediumtext,
+           `category_id` int(10) unsigned DEFAULT NULL,
+           PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 |
+
+| categories | CREATE TABLE `categories` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 |

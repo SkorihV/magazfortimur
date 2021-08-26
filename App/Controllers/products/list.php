@@ -4,12 +4,16 @@ $limit = 4;
 
 $offset = ($current_page - 1) * $limit;
 
+if ($offset < 1) {
+    $offset = 0;
+}
 
-$products = get_product_list($connect, $limit, $offset);
 
-$products_count = get_product_list_count($connect);
+$products = Product::getList($connect, $limit, $offset);
+
+
+$products_count = Product::getListCount($connect);
 $pages_count = ceil($products_count / $limit);
-
 
 
 $smarty->assign('pages_count', $pages_count);

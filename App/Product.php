@@ -1,98 +1,101 @@
 <?php
 
-function get_product_list_count($connect) {
-    $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
-    $result = query($connect, $query);
+class Product {
 
-    $row = mysqli_fetch_assoc($result);
+    public static function getListCount($connect) {
+        $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
+        $result = query($connect, $query);
 
-    return (int) ($row['c'] ?? 0);
-}
+        $row = mysqli_fetch_assoc($result);
 
-
-function get_product_list ($connect, int $limit = 100, int $offset = 0 ){
-    $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id LIMIT $offset, $limit";
-    $result = query($connect, $query);
-    $products = [];
-
-    while  ($row = mysqli_fetch_assoc($result)) {
-        $products[] = $row;
+        return (int) ($row['c'] ?? 0);
     }
 
-    return $products;
-}
+    public static function getList ($connect, int $limit = 100, int $offset = 0 ){
+        $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id LIMIT $offset, $limit";
+        $result = query($connect, $query);
+        $products = [];
 
-function get_product_list_by_category_id ($connect, $category_id) {
-    $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
-    $result = query($connect, $query);
-    $products = [];
+        while  ($row = mysqli_fetch_assoc($result)) {
+            $products[] = $row;
+        }
 
-    while  ($row = mysqli_fetch_assoc($result)) {
-        $products[] = $row;
+        return $products;
     }
 
-    return $products;
-}
+     public static function getListByCategoryId ($connect, $category_id) {
+        $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
+        $result = query($connect, $query);
+        $products = [];
 
-function get_product_by_id($connect, $id){
+        while  ($row = mysqli_fetch_assoc($result)) {
+            $products[] = $row;
+        }
 
-    $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
-    $result = query($connect,$query);
-
-    $product = mysqli_fetch_assoc($result);
-
-    if (is_null($product)) {
-        $product = [];
+        return $products;
     }
 
-    return $product;
-}
+     public static function getById($connect, $id){
 
-function upload_product_by_id($connect, $id, $product){
-    $name = $product['name'] ?? '';
-    $article = $product['article'] ?? '';
-    $price = $product['price'] ?? '';
-    $amount = $product['amount'] ?? '';
-    $description = $product['description'] ?? '';
-    $category_id = $product['category_id'] ?? '';
+        $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
+        $result = query($connect,$query);
 
-    $query = "UPDATE products SET name = '$name', article = '$article', price = '$price', amount = '$amount', description = '$description', category_id = '$category_id' WHERE id = '$id'";
-    query($connect,$query);
+        $product = mysqli_fetch_assoc($result);
 
-    return mysqli_affected_rows($connect);
-}
+        if (is_null($product)) {
+            $product = [];
+        }
 
-function add_product($connect, $product){
-    $name = $product['name'] ?? '';
-    $article = $product['article'] ?? '';
-    $price = $product['price'] ?? '';
-    $amount = $product['amount'] ?? '';
-    $description = $product['description'] ?? '';
-    $category_id = $product['category_id'] ?? '';
+        return $product;
+    }
 
-    $query = "INSERT INTO products(name,article,price, amount, description, category_id) VALUES ('$name','$article','$price', '$amount', '$description', '$category_id')";
-    query($connect, $query);
+    public static function uploadById($connect, $id, $product){
+        $name = $product['name'] ?? '';
+        $article = $product['article'] ?? '';
+        $price = $product['price'] ?? '';
+        $amount = $product['amount'] ?? '';
+        $description = $product['description'] ?? '';
+        $category_id = $product['category_id'] ?? '';
 
-    return mysqli_affected_rows($connect);
-}
+        $query = "UPDATE products SET name = '$name', article = '$article', price = '$price', amount = '$amount', description = '$description', category_id = '$category_id' WHERE id = '$id'";
+        query($connect,$query);
 
-function delete_product_by_id($connect, $id){
-    $query = "DELETE FROM products WHERE id = $id";
+        return mysqli_affected_rows($connect);
+    }
 
-    query($connect, $query);
-    return mysqli_affected_rows($connect);
-}
+    public static function add ($connect, $product){
+        $name = $product['name'] ?? '';
+        $article = $product['article'] ?? '';
+        $price = $product['price'] ?? '';
+        $amount = $product['amount'] ?? '';
+        $description = $product['description'] ?? '';
+        $category_id = $product['category_id'] ?? '';
 
-function get_product_from_post () {
+        $query = "INSERT INTO products(name,article,price, amount, description, category_id) VALUES ('$name','$article','$price', '$amount', '$description', '$category_id')";
+        query($connect, $query);
 
-    return [
-        'name'           => $_POST['name'] ?? '',
-        'article'        => $_POST['article'] ?? '',
-        'price'          => $_POST['price'] ?? '',
-        'amount'         => $_POST['amount'] ?? '',
-        'description'    => $_POST['description'] ?? '',
-        'category_id'    => $_POST['category_id'] ?? ''
+        return mysqli_affected_rows($connect);
+    }
 
-    ];
+    public static function deleteById($connect, $id){
+        $query = "DELETE FROM products WHERE id = $id";
 
+        query($connect, $query);
+        return mysqli_affected_rows($connect);
+    }
+
+    public static function getFromPost () : array
+    {
+
+        return [
+            'name'           => $_POST['name'] ?? '',
+            'article'        => $_POST['article'] ?? '',
+            'price'          => $_POST['price'] ?? '',
+            'amount'         => $_POST['amount'] ?? '',
+            'description'    => $_POST['description'] ?? '',
+            'category_id'    => $_POST['category_id'] ?? ''
+
+        ];
+
+    }
 }
