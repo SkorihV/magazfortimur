@@ -5,6 +5,15 @@
         <input type="text" name="name" required value="{$product.name}">
     </label>
     <label>
+        <div class="div-label">Категории : </div>
+        <select name="category_id" >
+            <option value="0">Не выбрано</option>
+            {foreach from=$categories item=category}
+                <option {if $product.category_id == $category.id}selected{/if} value="{$category.id}">{$category.name}</option>
+            {/foreach}
+        </select>
+    </label>
+    <label>
         <div class="div-label">Артикул : </div>
         <input type="text" name="article" value="{$product.article}">
     </label>

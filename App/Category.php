@@ -1,79 +1,68 @@
 <?php
 
 
-function get_product_list($connect)
+function get_category_list ($connect)
 {
-    $query = "SELECT * FROM products";
+    $query = "SELECT * FROM categories";
     $result = query($connect, $query);
-    $products = [];
+    $categories = [];
 
     while ($row = mysqli_fetch_assoc($result)) {
-        $products[] = $row;
+        $categories[] = $row;
     }
 
-    return $products;
+    return $categories;
 }
 
-function get_product_by_id($connect, $id)
+function get_category_by_id ($connect, $id)
 {
 
-    $query = "SELECT * FROM products WHERE id = $id";
+    $query = "SELECT * FROM categories WHERE id = $id";
     $result = query($connect, $query);
 
-    $product = mysqli_fetch_assoc($result);
+    $category = mysqli_fetch_assoc($result);
 
-    if (is_null($product)) {
-        $product = [];
+    if (is_null($category)) {
+        $category = [];
     }
 
-    return $product;
+    return $category;
 }
 
-function upload_product_by_id($connect, $id, $product)
+function upload_category_by_id ($connect, $id, $category)
 {
-    $name = $product['name'] ?? '';
-    $article = $product['article'] ?? '';
-    $price = $product['price'] ?? '';
-    $amount = $product['amount'] ?? '';
-    $description = $product['description'] ?? '';
+    $name = $category['name'] ?? '';
 
-    $query = "UPDATE products SET name = '$name', article = '$article', price = '$price', amount = '$amount', description = '$description' WHERE id = '$id'";
+    $query = "UPDATE categories SET name = '$name' WHERE id = '$id'";
     query($connect, $query);
 
     return mysqli_affected_rows($connect);
 }
 
-function add_product($connect, $product)
+function add_category($connect, $category)
 {
-    $name = $product['name'] ?? '';
-    $article = $product['article'] ?? '';
-    $price = $product['price'] ?? '';
-    $amount = $product['amount'] ?? '';
-    $description = $product['description'] ?? '';
+    $name = $category['name'] ?? '';
 
-    $query = "INSERT INTO products(name,article,price, amount, description) VALUES ('$name','$article','$price', '$amount', '$description')";
+
+    $query = "INSERT INTO categories(name) VALUES ('$name')";
     query($connect, $query);
 
     return mysqli_affected_rows($connect);
 }
 
-function delete_product_by_id($connect, $id)
+function delete_category_by_id ($connect, $id)
 {
-    $query = "DELETE FROM products WHERE id = $id";
+    $query = "DELETE FROM categories WHERE id = $id";
 
     query($connect, $query);
     return mysqli_affected_rows($connect);
 }
 
-function get_product_from_post()
+function get_category_from_post ()
 {
 
     return [
         'name' => $_POST['name'] ?? '',
-        'article' => $_POST['article'] ?? '',
-        'price' => $_POST['price'] ?? '',
-        'amount' => $_POST['amount'] ?? '',
-        'description' => $_POST['description'] ?? ''
     ];
 
 }

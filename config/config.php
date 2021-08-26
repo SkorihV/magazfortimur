@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../libs/Smarty/Smarty.class.php';
 require_once __DIR__ . '/../App/Product.php';
+require_once __DIR__ . '/../App/Category.php';
+
 
 function connect () {
 

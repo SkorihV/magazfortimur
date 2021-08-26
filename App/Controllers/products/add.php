@@ -10,6 +10,8 @@
             die('какая то ошибка сзаза');
         }
     }
+$categories = get_category_list($connect);
 
+$smarty->assign("categories", $categories);
 $smarty->display('products/add.tpl');
 
