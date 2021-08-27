@@ -2,7 +2,7 @@
 
 if (Request::isPost()) {
 
-    $product  = Product::getFromPost();
+    $product  = Product::getDataFromPost();
     $productId = Product::add($product);
 
 

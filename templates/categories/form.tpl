@@ -1,8 +1,8 @@
 <form action="" method="post" class="form">
     <input type="hidden" name="id" value="{$category.id}">
-    <label>
-        <div class="div-label">Название категории: </div>
+    <div class="label-wrapper">
+        <div class="div-for-label">Название категории: </div>
         <input type="text" name="name" required value="{$category.name}">
-    </label>
+    </div>
     <input type="submit" value="{$submit_name|default:'Сохранить'}">
 </form>

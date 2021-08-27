@@ -9,6 +9,12 @@ class ProductImages
         return Db::fetchRow($query);
     }
 
+    public static function findByFilenameProduct(int $productId, string $filename)
+    {
+        $query = "SELECT * FROM product_images WHERE product_id = $productId AND name = '$filename'";
+        return Db::fetchRow($query);
+    }
+
     public static function uploadById(int $id, array $productImage): int
     {
         if (isset($productImage['id'])){
@@ -19,17 +25,15 @@ class ProductImages
 
     public static function add ($productImage): int
     {
-
         if (isset($productImage['id'])){
             unset($productImage['id']);
         }
         return Db::insert("product_images", $productImage);
     }
 
-    public static function deleteById(int $productId): int
+    public static function deleteById(int $productImageId): int
     {
-
-        return Db::delete('product_images', "product_id = $productId");
+        return Db::delete('product_images', "id = $productImageId");
     }
 
 //    public static function getFromPost () : array

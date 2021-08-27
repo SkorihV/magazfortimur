@@ -28,12 +28,15 @@ class Product {
      public static function getById($id){
 
         $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
-        return Db::fetchRow($query);
+
+        $product =  Db::fetchRow($query);
+        $product['images'] = ProductImages::getListProductId($id);
+
+        return $product;
     }
 
     public static function uploadById(int $id, array $product): int
     {
-
         return Db::update('products', $product, "id = $id");
     }
 
@@ -55,7 +58,7 @@ class Product {
         return Db::delete('products', "id = $id");
     }
 
-    public static function getFromPost () : array
+    public static function getDataFromPost () : array
     {
         return [
             'id'             => Request::getIntFromPost('id', false),

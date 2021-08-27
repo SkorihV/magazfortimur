@@ -6,7 +6,7 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
     <input type="hidden" name="id" value="<?php echo $this->_tpl_vars['category']['id']; ?>
 ">
     <label>
-        <div class="div-label">Название категории: </div>
+        <div class="div-for-label">Название категории: </div>
         <input type="text" name="name" required value="<?php echo $this->_tpl_vars['category']['name']; ?>
 ">
     </label>

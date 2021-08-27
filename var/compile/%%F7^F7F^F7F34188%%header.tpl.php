@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-26 15:17:01
+<?php /* Smarty version 2.6.31, created on 2021-08-27 15:46:43
          compiled from header.tpl */ ?>
 <!doctype html>
 <html lang="ru">
@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список товаров</title>
     <link rel="stylesheet" href="/assets/styles.scss">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->

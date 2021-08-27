@@ -27,14 +27,14 @@ html, body {
   flex-direction: column;
   width: 100%;
 }
-.form label {
+.label-wrapper {
   width: 100%;
   display: flex;
   flex-direction: row;
   margin: 5px;
 }
 
-.form .div-label {
+.div-for-label {
   flex: 1 1 auto;
   max-width: 30%;
 }
