@@ -39,7 +39,8 @@ html, body {
   max-width: 30%;
 }
 .form input,
-.form select{
+.form select,
+.form textarea {
   flex: 1 1 auto;
   padding: 5px;
 }

@@ -1,8 +1,8 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-26 13:33:34
+<?php /* Smarty version 2.6.31, created on 2021-08-27 12:28:42
          compiled from products/form.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', 'products/form.tpl', 32, false),)), $this); ?>
-<form action="" method="post" class="form">
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', 'products/form.tpl', 37, false),)), $this); ?>
+<form action="" method="post" class="form" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $this->_tpl_vars['product']['id']; ?>
 ">
     <label>
@@ -24,6 +24,10 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
         </select>
     </label>
     <label>
+        <div class="div-label">Загрузка файлов</div>
+        <input type="file" name="images[]" multiple >
+    </label>
+    <label>
         <div class="div-label">Артикул : </div>
         <input type="text" name="article" value="<?php echo $this->_tpl_vars['product']['article']; ?>
 ">
@@ -40,9 +44,9 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
     </label>
     <label>
         <div class="div-label">Описание : </div>
-        <input type="text" name="description" value="<?php echo $this->_tpl_vars['product']['description']; ?>
-">
-    </label>
+        <textarea name="description" cols="30" rows="10"><?php echo $this->_tpl_vars['product']['description']; ?>
+</textarea>
+        </label>
     <input type="submit" value="<?php echo ((is_array($_tmp=@$this->_tpl_vars['submit_name'])) ? $this->_run_mod_handler('default', true, $_tmp, 'Сохранить') : smarty_modifier_default($_tmp, 'Сохранить')); ?>
 ">
 </form>

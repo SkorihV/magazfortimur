@@ -55,3 +55,11 @@ products | CREATE TABLE `products` (
     `name` varchar(255) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 |
+
+CREATE  TABLE `product_images` (
+    `id` int unsigned NOT NULL AUTO_INCREMENT,
+    `product_id` varchar(255) NOT NULL,
+    `name` varchar(255) NOT NULL DEFAULT '',
+    `path` varchar(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (`id`)
+    )

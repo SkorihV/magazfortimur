@@ -10,7 +10,13 @@ class Product {
     public static function getList (int $limit = 100, int $offset = 0 ){
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
 
-        return Db::fetchAll($query);
+        $products =  Db::fetchAll($query);
+        foreach ($products as &$product) {
+            $images = ProductImages::getListProductId($product['id']);
+            $product['images'] = $images;
+        }
+
+        return $products;
     }
 
      public static function getListByCategoryId ($category_id) {
@@ -40,6 +46,11 @@ class Product {
     }
 
     public static function deleteById(int $id){
+
+        $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $id;
+        delDir($path);
+
+        ProductImages::deleteById($id);
 
         return Db::delete('products', "id = $id");
     }

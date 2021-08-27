@@ -1,4 +1,4 @@
-<form action="" method="post" class="form">
+<form action="" method="post" class="form" enctype="multipart/form-data">
     <input type="hidden" name="id" value="{$product.id}">
     <label>
         <div class="div-label">Название : </div>
@@ -14,6 +14,10 @@
         </select>
     </label>
     <label>
+        <div class="div-label">Загрузка файлов</div>
+        <input type="file" name="images[]" multiple >
+    </label>
+    <label>
         <div class="div-label">Артикул : </div>
         <input type="text" name="article" value="{$product.article}">
     </label>
@@ -27,7 +31,8 @@
     </label>
     <label>
         <div class="div-label">Описание : </div>
-        <input type="text" name="description" value="{$product.description}">
+        <textarea name="description" cols="30" rows="10">{$product.description}</textarea>
+    {*    <input type="text" name="description" value="{$product.description}"> *}
     </label>
     <input type="submit" value="{$submit_name|default:'Сохранить'}">
 </form>
