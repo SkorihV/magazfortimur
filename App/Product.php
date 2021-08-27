@@ -25,52 +25,35 @@ class Product {
         return Db::fetchRow($query);
     }
 
-    public static function uploadById($id, $product){
-        $name = $product['name'] ?? '';
-        $article = $product['article'] ?? '';
-        $price = $product['price'] ?? '';
-        $amount = $product['amount'] ?? '';
-        $description = $product['description'] ?? '';
-        $category_id = $product['category_id'] ?? '';
+    public static function uploadById(int $id, array $product): int
+    {
 
-        $query = "UPDATE products SET name = '$name', article = '$article', price = '$price', amount = '$amount', description = '$description', category_id = '$category_id' WHERE id = '$id'";
-        Db::query($query);
-
-        return Db::affectedRows();
+        return Db::update('products', $product, "id = $id");
     }
 
     public static function add ($product){
-        $name = $product['name'] ?? '';
-        $article = $product['article'] ?? '';
-        $price = $product['price'] ?? '';
-        $amount = $product['amount'] ?? '';
-        $description = $product['description'] ?? '';
-        $category_id = $product['category_id'] ?? '';
 
-        $query = "INSERT INTO products(name,article,price, amount, description, category_id) VALUES ('$name','$article','$price', '$amount', '$description', '$category_id')";
-        Db::query($query);
-
-        return Db::affectedRows();
+        if (isset($product['id'])){
+            unset($product['id']);
+        }
+        return Db::insert("products", $product);
     }
 
     public static function deleteById(int $id){
 
         return Db::delete('products', "id = $id");
-
     }
 
     public static function getFromPost () : array
     {
-
         return [
-            'name'           => $_POST['name'] ?? '',
-            'article'        => $_POST['article'] ?? '',
-            'price'          => $_POST['price'] ?? '',
-            'amount'         => $_POST['amount'] ?? '',
-            'description'    => $_POST['description'] ?? '',
-            'category_id'    => $_POST['category_id'] ?? ''
-
+            'id'             => Request::getIntFromPost('id', false),
+            'name'           => Request::getStrFromPost('name'),
+            'article'        => Request::getStrFromPost('article'),
+            'price'          => Request::getIntFromPost('price'),
+            'amount'         => Request::getStrFromPost('amount'),
+            'description'    => Request::getStrFromPost('description'),
+            'category_id'    => Request::getIntFromPost('category_id')
         ];
-
     }
 }

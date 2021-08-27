@@ -10,30 +10,21 @@ class Category {
 
     public static function getById ($id)
     {
-
         $query = "SELECT * FROM categories WHERE id = $id";
         return Db::fetchRow($query);
     }
 
-    public static function uploadById ($id, $category)
+    public static function uploadById (int $id, array $category)
     {
-        $name = $category['name'] ?? '';
-
-        $query = "UPDATE categories SET name = '$name' WHERE id = '$id'";
-        Db::query($query);
-
-        return Db::affectedRows();
+        return Db::update('categories', $category, "id = $id");
     }
 
     public static function add($category)
     {
-        $name = $category['name'] ?? '';
-
-
-        $query = "INSERT INTO categories(name) VALUES ('$name')";
-        Db::query($query);
-
-        return Db::affectedRows();
+        if (isset($category['id'])){
+            unset($category['id']);
+        }
+        return Db::insert("categories", $category);
     }
 
     public static function deleteById ($id)
@@ -45,7 +36,8 @@ class Category {
     public static function  getFromPost () : array
     {
         return [
-            'name' => $_POST['name'] ?? '',
+            'id'    => Request::getIntFromPost('id', false),
+            'name'  => Request::getStrFromPost('name'),
         ];
 
     }

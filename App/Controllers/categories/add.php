@@ -1,15 +1,14 @@
 <?php
 
-    if (!empty($_POST)) {
+    if (Request::isPost()) {
         $category  = Category::getFromPost();
         $insert = Category::add($category);
 
         if ($insert) {
-            header('Location: /categories/list');
+            Response::redirect('/categories/list');
         } else {
             die('какая то ошибка сзаза');
         }
     }
 
 $smarty->display('categories/add.tpl');
-

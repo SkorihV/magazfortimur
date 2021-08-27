@@ -66,10 +66,53 @@ class Db
         return Db::affectedRows();
     }
 
+    public static function insert(string $tableName, array $fields)
+    {
+        $setFieldsName = [];
+        $setFieldsValue = [];
+
+        foreach ($fields as $fieldName => $fieldValue) {
+            $setFieldsName[] = "`$fieldName`";
+            $setFieldsValue[] = "'$fieldValue'";
+        }
+
+        $setFieldsName = implode(',', $setFieldsName);
+        $setFieldsValue = implode(',', $setFieldsValue);
+
+        $query = "INSERT INTO $tableName($setFieldsName) VALUES  ($setFieldsValue)";
+
+        Db::query($query);
+        return Db::lastInsertId();
+    }
+
+    public static function update(string $tableName, array $fields, string $where)
+    {
+        $setFields = [];
+
+        foreach ($fields as $fieldName => $fieldValue) {
+            $setFields[] = " $fieldName = '$fieldValue'";
+        }
+        $setFields = implode(',', $setFields);
+        $query = "UPDATE $tableName SET $setFields";
+
+        if ($where) {
+            $query .= " WHERE " . $where;
+        }
+
+        Db::query($query);
+        return Db::affectedRows();
+    }
+
     public static function affectedRows()
     {
         $conn = static::getConnect();
         return mysqli_affected_rows($conn);
+    }
+
+    public static function lastInsertId()
+    {
+        $conn = static::getConnect();
+        return mysqli_insert_id($conn);
     }
 
 

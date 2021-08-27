@@ -14,8 +14,11 @@ if (is_null($path_info)) {
     $path_info = '/products/list';
 }
 
+
 $categories = Category::getList();
 $smarty->assign('categories_shared', $categories);
+
+
 
 $controller_path = $_SERVER['DOCUMENT_ROOT'] . '/../App/Controllers' . $path_info . '.php';
 

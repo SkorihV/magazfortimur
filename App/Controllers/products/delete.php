@@ -1,17 +1,15 @@
 <?php
 
-$id = $_POST['id'] ?? 0;
-$id = (int) $id;
+$id = Request::getIntFromPost('id', false);
 
 if (!$id) {
     die ("error");
 }
 
-
 $deleted =  Product::deleteById($id);
 
 if ($deleted) {
-    header('Location: /products/list');
+    Response::redirect('/products/list');
 } else {
     die('какая то ошибка сзаза');
 }
