@@ -13,6 +13,10 @@
             {/foreach}
         </select>
     </div>
+    <div class="label-wrapper">
+        <div class="div-for-label">Ссылка на изображение :</div>
+        <input type="text" name="image_url"  >
+    </div>
      <div class="label-wrapper">
         <div class="div-for-label">Загрузка файлов</div>
         <input type="file" name="images[]" multiple >
@@ -24,10 +28,6 @@
                 <div class="card" style="width: 90px;">
                     <div class="card-body">
                         <button class="btn btn-danger btn-sm" data-image-id="{$image.id}" onclick="return deleteImage(this)">Удалить</button>
-
-{*                        <form action="/products/delete_image" method="POST">*}
-{*                            <input type="hidden" name="product_image_id" value="{$image.id}">*}
-{*                        </form>*}
                     </div>
                     <img src="{$image.path}" class="card-img-top" alt="{$image.name}">
                 </div>
@@ -57,6 +57,7 @@
                     .then((response) => {
                         response.text()
                         .then((text) => {
+                            console.log(imageId);
                             if (text.indexOf('error') > -1) {
                                 alert("Ошибка удаления");
                             } else {

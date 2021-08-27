@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-27 15:56:14
+<?php /* Smarty version 2.6.31, created on 2021-08-27 17:16:22
          compiled from products/form.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', 'products/form.tpl', 90, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', 'products/form.tpl', 91, false),)), $this); ?>
 <form action="" method="post" class="form" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $this->_tpl_vars['product']['id']; ?>
 ">
@@ -23,6 +23,10 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
             <?php endforeach; endif; unset($_from); ?>
         </select>
     </div>
+    <div class="label-wrapper">
+        <div class="div-for-label">Ссылка на изображение :</div>
+        <input type="text" name="image_url"  >
+    </div>
      <div class="label-wrapper">
         <div class="div-for-label">Загрузка файлов</div>
         <input type="file" name="images[]" multiple >
@@ -37,7 +41,6 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
                     <div class="card-body">
                         <button class="btn btn-danger btn-sm" data-image-id="<?php echo $this->_tpl_vars['image']['id']; ?>
 " onclick="return deleteImage(this)">Удалить</button>
-
                     </div>
                     <img src="<?php echo $this->_tpl_vars['image']['path']; ?>
 " class="card-img-top" alt="<?php echo $this->_tpl_vars['image']['name']; ?>
@@ -69,6 +72,7 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'default', '
                     .then((response) => {
                         response.text()
                         .then((text) => {
+                            console.log(imageId);
                             if (text.indexOf(\'error\') > -1) {
                                 alert("Ошибка удаления");
                             } else {
