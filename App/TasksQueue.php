@@ -40,6 +40,7 @@ class TasksQueue
             'new',
             'in_process',
             'done',
+            'error',
         ];
 
         if (!in_array($status, $availableStatus)) {
@@ -52,11 +53,18 @@ class TasksQueue
     }
     
 
-    public static function run($id)
+    public static function runById($id)
     {
         $task = static::getById($id);
 
-        if (empty($task)) {
+        return static::run($task);
+
+    }
+
+    public static function run(array $task)
+    {
+        $taskId = $task['id'] ?? '';
+        if (empty($task) || is_null($taskId)) {
             return false;
         }
 
@@ -68,13 +76,39 @@ class TasksQueue
         $taskMethodExist = method_exists($taskAction[0], $taskAction[1]);
 
         if (!$taskClassExist || !$taskMethodExist) {
+            static::setStatus($taskId, 'error');
             return false;
         }
         $taskParams = json_decode($task['params'], true);
-        static::setStatus($id, 'in_process');
+        static::setStatus($taskId, 'in_process');
+
+        sleep(10);
 
         call_user_func($taskAction, $taskParams);
-        static::setStatus($id, 'done');
+        static::setStatus($taskId, 'done');
 
+        return true;
+    }
+
+    public static function execute()
+    {
+        $query = "SELECT * FROM tasks_queue WHERE status = 'in_process' LIMIT 1";
+        $inProcessTask = Db::fetchRow($query);
+
+        if (!empty($inProcessTask)) {
+            echo "in_process task found";
+            return false;
+        }
+
+        $query = "SELECT * FROM tasks_queue WHERE status = 'new' ORDER BY created_at LIMIT 1";
+        $newTaskProcess = Db::fetchRow($query);
+
+        if (empty($newTaskProcess)) {
+            echo "new task";
+            return false;
+        }
+        echo "new task found";
+
+        return static::run($newTaskProcess);
     }
 }
