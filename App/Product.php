@@ -22,7 +22,12 @@ class Product {
      public static function getListByCategoryId ($category_id) {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
 
-         return Db::fetchAll($query);
+         $products =  Db::fetchAll($query);
+         foreach ($products as &$product) {
+             $images = ProductImages::getListProductId($product['id']);
+             $product['images'] = $images;
+         }
+         return $products;
     }
 
      public static function getById($id){
@@ -53,7 +58,7 @@ class Product {
         $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $id;
         delDir($path);
 
-        ProductImages::deleteById($id);
+        ProductImages::deleteByProductId($id);
 
         return Db::delete('products', "id = $id");
     }

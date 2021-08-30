@@ -4,6 +4,7 @@
         $category  = Category::getFromPost();
         $insert = Category::add($category);
 
+
         if ($insert) {
             Response::redirect('/categories/list');
         } else {

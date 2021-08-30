@@ -5,33 +5,15 @@ if (Request::isPost()) {
     $product  = Product::getDataFromPost();
     $productId = Product::add($product);
 
+    /* Начало загрузки изображений*/
 
-    $uploadImages = $_FILES["images"] ?? [];
+    $imageUrl = trim($_POST['image_url']);
+    ProductImages::uploadImagesByUrl($productId, $imageUrl);
 
-    $imageNames = $uploadImages['name'];
-    $imageTmpNames = $uploadImages['tmp_name'];
+    $uploadImages = $_FILES['images'] ?? [];
+    ProductImages::uploadImages($productId, $uploadImages);
 
-    $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $productId;
-
-    if(!file_exists($path)) {
-        mkdir($path);
-    }
-
-    for ($i=0; $i< count($imageNames); $i++) {
-        $imageName = basename($imageNames[$i]);
-        $imageTmpName = $imageTmpNames[$i];
-
-        $imagePath = $path . '/' . $imageName;
-
-        move_uploaded_file($imageTmpName, $path . '/' . $imageName);
-
-        ProductImages::add([
-            'product_id' => $productId,
-            'name' => $imageName,
-            'path' => str_replace(APP_PUBLIC_DIR, '', $imagePath),
-        ]);
-
-    }
+    /* конец загрузки изображений*/
 
     if ($productId) {
        Response::redirect('/products/list');
