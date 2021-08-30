@@ -1,5 +1,8 @@
 <?php
 
+use App\ProductImages;
+use App\Request;
+
 $productImageId = Request::getIntFromPost('product_image_id');
 
 if (!$productImageId) {

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Db;
+
 class Db
 {
     private static $connect;

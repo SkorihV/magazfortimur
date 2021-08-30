@@ -1,5 +1,11 @@
 <?php
 
+use App\Category;
+use App\Product;
+use App\ProductImages;
+use App\Request;
+use App\Response;
+
 if (Request::isPost()) {
 
     $product  = Product::getDataFromPost();

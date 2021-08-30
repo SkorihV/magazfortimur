@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use App\Db\Db;
+
 class Product {
 
     public static function getListCount() {

@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use App\Db\Db;
+
 class Import
 {
     public static function productsFromFileTask(array $params)

@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use App\Db\Db;
+
 class TasksQueue
 {
     public static function addTask(string $name, string $task, array $params)

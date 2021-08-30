@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use App\Db\Db;
+
 class ProductImages
 {
     private CONST IMAGES_MIME_DICT = [

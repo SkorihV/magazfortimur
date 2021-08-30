@@ -1,6 +1,10 @@
 <?php
 
-    if (Request::isPost()) {
+use App\Category;
+use App\Request;
+use App\Response;
+
+if (Request::isPost()) {
         $category  = Category::getFromPost();
         $insert = Category::add($category);
 

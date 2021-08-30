@@ -1,4 +1,9 @@
 <?php
+
+use App\Category;
+use App\Request;
+use App\Response;
+
 $id = Request::getIntFromGet('id', false);
 
 $category = [];
