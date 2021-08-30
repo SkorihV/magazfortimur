@@ -63,3 +63,18 @@ CREATE  TABLE `product_images` (
     `path` varchar(255) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`)
     )
+
+CREATE  TABLE `tasks_queue` (
+               `id` int unsigned NOT NULL AUTO_INCREMENT,
+               `name` varchar(255) NOT NULL DEFAULT '',
+               `task` varchar(255) NOT NULL DEFAULT '',
+               `params` text NOT NULL,
+               `status` ENUM('new', 'in_process', 'done') DEFAULT 'new',
+               `create_at` DATETIME NOT NULL,
+                `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+               PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `tasks_queue` CHANGE COLUMN `create_at` `created_at` DATETIME NOT NULL;
+
+ALTER TABLE tasks_queue CHANGE updated_at `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;

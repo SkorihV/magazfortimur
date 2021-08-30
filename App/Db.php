@@ -67,18 +67,24 @@ class Db
 
     public static function insert(string $tableName, array $fields)
     {
-        $setFieldsName = [];
-        $setFieldsValue = [];
+        $fieldsNames = [];
+        $fieldsValues = [];
 
         foreach ($fields as $fieldName => $fieldValue) {
-            $setFieldsName[] = "`$fieldName`";
-            $setFieldsValue[] = "'$fieldValue'";
+            $fieldsNames[] = "`$fieldName`";
+
+            if ($fieldValue instanceof DbExp) {
+                $fieldsValues[] = "$fieldValue";
+            } else {
+                $fieldValue = Db::escape($fieldValue);
+                $fieldsValues[] = "'$fieldValue'";
+            }
         }
 
-        $setFieldsName = implode(',', $setFieldsName);
-        $setFieldsValue = implode(',', $setFieldsValue);
+        $fieldsNames = implode(',', $fieldsNames);
+        $fieldsValues = implode(',', $fieldsValues);
 
-        $query = "INSERT INTO $tableName($setFieldsName) VALUES  ($setFieldsValue)";
+        $query = "INSERT INTO $tableName($fieldsNames) VALUES  ($fieldsValues)";
 
         Db::query($query);
         return Db::lastInsertId();
@@ -89,7 +95,13 @@ class Db
         $setFields = [];
 
         foreach ($fields as $fieldName => $fieldValue) {
-            $setFields[] = " $fieldName = '$fieldValue'";
+
+            if ($fieldValue instanceof DbExp) {
+                $setFields[] = " $fieldName = $fieldValue";
+            } else {
+                $fieldValue = Db::escape($fieldValue);
+                $setFields[] = " $fieldName = '$fieldValue'";
+            }
         }
         $setFields = implode(',', $setFields);
         $query = "UPDATE $tableName SET $setFields";
@@ -128,6 +140,11 @@ class Db
     {
         $conn = static::getConnect();
         return mysqli_real_escape_string($conn, $value);
+    }
+
+    public static function expr(string $value)
+    {
+        return new DbExp($value);
     }
 
     private static function connect () {
