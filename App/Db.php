@@ -38,7 +38,6 @@ class Db
     {
         $result = Db::query($query);
         $row = mysqli_fetch_assoc($result);
-
         if (is_null($row)) {
             $row = [];
         }
@@ -123,6 +122,12 @@ class Db
         }
 
         return static::$connect;
+    }
+
+    public static function escape(string $value)
+    {
+        $conn = static::getConnect();
+        return mysqli_real_escape_string($conn, $value);
     }
 
     private static function connect () {

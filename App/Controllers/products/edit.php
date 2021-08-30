@@ -21,7 +21,7 @@ if (Request::isPost()) {
     }
 
     $imageUrl = trim($_POST['image_url']);
-    ProductImages::uploadImagesByUrl($productId, $imageUrl);
+    ProductImages::uploadImageByUrl($productId, $imageUrl);
 
     /* Начало загрузки изображений*/
 

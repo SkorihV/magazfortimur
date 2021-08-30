@@ -1,7 +1,7 @@
 <?php
 
 $current_page = Request::getIntFromGet('p', 1);
-$limit = 5;
+$limit = 10;
 
 $offset = ($current_page - 1) * $limit;
 
