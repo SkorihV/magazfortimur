@@ -18,7 +18,7 @@
 <div class="site-wrapper">
     <h1>{$h1}</h1>
     <ul class="top-menu">
-        <li><a href="/products/list">Товарв</a></li>
+        <li><a href="/products/">Товарв</a></li>
         <li><a href="/categories/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
