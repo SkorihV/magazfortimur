@@ -5,12 +5,15 @@ namespace App\Db;
 class Db
 {
     private static $connect;
-    private static $host = '127.0.0.1';
-    private static $user = 'skorihv';
-    private static $password = '';
-    private static $bd = 'phpwebinars';
+    private static string $host = '127.0.0.1';
+    private static string $user = 'skorihv';
+    private static string $password = '';
+    private static string $bd = 'phpwebinars';
 
-
+    /**
+     * @param $query
+     * @return bool|\mysqli_result|void
+     */
     public static function query ($query) {
         $conn = static::getConnect();
         $result = mysqli_query($conn, $query);
@@ -23,7 +26,10 @@ class Db
         return $result;
     }
 
-
+    /**
+     * @param string $query
+     * @return array
+     */
     public static function fetchAll(string $query): array
     {
         $result = static::query($query);
@@ -32,10 +38,13 @@ class Db
         while ($row = mysqli_fetch_assoc($result)) {
             $data[] = $row;
         }
-
         return $data;
     }
 
+    /**
+     * @param string $query
+     * @return array
+     */
     public static function fetchRow (string $query): array
     {
         $result = static::query($query);
@@ -43,7 +52,6 @@ class Db
         if (is_null($row)) {
             $row = [];
         }
-
         return $row;
     }
 
@@ -133,13 +141,11 @@ class Db
         return mysqli_insert_id($conn);
     }
 
-
     public static function getConnect()
     {
         if (is_null(static::$connect)) {
             static::$connect = static::connect();
         }
-
         return static::$connect;
     }
 
@@ -155,14 +161,12 @@ class Db
     }
 
     private static function connect () {
-
         $connect = mysqli_connect(static::$host, static::$user, static::$password, static::$bd);
         if(mysqli_connect_errno()) {
             $error = mysqli_connect_error();
             var_dump($error);
             exit;
         }
-
         mysqli_query($connect, "SET NAMES 'utf8' COLLATE 'utf8_general_ci'");
         mysqli_query($connect, "SET CHARACTER SET 'utf8'");
 

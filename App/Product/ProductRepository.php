@@ -8,7 +8,6 @@ use App\ProductImages as ProductImageService;
 
 class ProductRepository
 {
-
     public function getById(int $id)
     {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
@@ -22,7 +21,6 @@ class ProductRepository
 
             $product->addImage($productImage);
         }
-
 
         return $product;
     }
@@ -116,9 +114,9 @@ class ProductRepository
             throw new \Exception('Количество для инициализации товара обязательно');
         }
 
-        $article        = $data['article'] ?? '';
-        $description    = $data['description'] ?? '';
-        $categoryId     = $data['category_id'] ?? 0;
+        $article        = $data['article']      ?? '';
+        $description    = $data['description']  ?? '';
+        $categoryId     = $data['category_id']  ?? 0;
 
 
         $product = new ProductModel($name, $price, $amount);
@@ -130,7 +128,6 @@ class ProductRepository
                 $categoryData = \App\Category::getById($categoryId);
                 $categoryName = $categoryData['name'];
             }
-
 
             $category = new CategoryModel($categoryName);
             $category->setId($categoryId);
@@ -152,9 +149,7 @@ class ProductRepository
      */
     public function getProductImageFromArray(array $data): ProductImageModel
     {
-
         $productImage = new ProductImageModel();
-
 
         $productImage
             ->setId($data['id'])
@@ -164,5 +159,4 @@ class ProductRepository
 
         return $productImage;
     }
-
 }

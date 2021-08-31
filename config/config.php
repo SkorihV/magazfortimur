@@ -1,4 +1,7 @@
 <?php
+
+use App\Renderer;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
@@ -17,11 +20,11 @@ if (!file_exists(APP_UPLOAD_PRODUCTS_DIR)) {
 
 
 
-$smarty = new Smarty();
-$smarty->template_dir = __DIR__ . '/../templates';
-$smarty->compile_dir = __DIR__ . '/../var/compile';
-$smarty->cache_dir = __DIR__ . '/../var/cache';
-$smarty->config_dir = __DIR__ . '/../var/configs';
+$smarty = Renderer::getSmarty();
+//$smarty-> template_dir = __DIR__ . '/../templates';
+//$smarty->compile_dir = __DIR__ . '/../var/compile';
+//$smarty->cache_dir = __DIR__ . '/../var/cache';
+//$smarty->config_dir = __DIR__ . '/../var/configs';
 
 function delDir($dir) {
     $files = array_diff(scandir($dir), array('.','..'));

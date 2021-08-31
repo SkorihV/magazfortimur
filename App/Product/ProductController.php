@@ -25,10 +25,7 @@ class ProductController
         $productRepository = new ProductRepository();
         $products = $productRepository->getList($limit, $offset);
 
-
-
 //$products = Product::getList($limit, $offset);
-
 
         Renderer::getSmarty()->assign('pages_count', $pages_count);
         Renderer::getSmarty()->assign('products', $products);
@@ -41,7 +38,6 @@ class ProductController
         $product = [];
 
         $productRepository = new Product\ProductRepository();
-
 
         if ($productId) {
             $product = $productRepository->getById($productId);
@@ -57,7 +53,6 @@ class ProductController
             $product->setPrice(($productData['price']));
             $product->setDescription(($productData['description']));
 
-
             $categoryId = $productData['category_id'] ?? 0;
             if ($categoryId) {
                 $categoryData = Category::getById($categoryId);
@@ -70,7 +65,6 @@ class ProductController
             }
 
             $product = $productRepository->save($product);
-
 
             /* Начало загрузки изображений*/
 
@@ -91,8 +85,6 @@ class ProductController
             /* конец загрузки изображений*/
 
             Response::redirect('/products/list');
-
-
         }
 
         $categories = Category::getList();
@@ -134,7 +126,6 @@ class ProductController
         $category = new CategoryModel('');
         $category->setId(0);
         $product->setCategory($category);
-
 
         Renderer::getSmarty()->assign("categories", $categories);
         Renderer::getSmarty()->assign("product", $product);

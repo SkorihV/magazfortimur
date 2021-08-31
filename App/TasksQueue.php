@@ -65,7 +65,7 @@ class TasksQueue
 
     }
 
-    public static function run(array $task)
+    public static function run(array $task): bool
     {
         $taskId = $task['id'] ?? '';
         if (empty($task) || is_null($taskId)) {

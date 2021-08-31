@@ -1,7 +1,6 @@
 <?php
 
 use App\Category;
-use App\Controller\ProductController;
 use App\Renderer;
 use App\Router\Dispatcher;
 

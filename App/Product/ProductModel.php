@@ -4,7 +4,6 @@ namespace App\Product;
 
 use App\Category\CategoryModel;
 
-
 /**
  *
  */
@@ -46,13 +45,13 @@ class ProductModel
     protected CategoryModel $category;
 
     /**
-     * @var ProductImages[]
+     * @var ProductImageModel[]
      */
     protected array $images = [];
 
     /**
      * @param string $name
-     * @param string $article
+     * @param float $price
      * @param int $amount
      */
     public function __construct(string $name, float $price, int $amount)

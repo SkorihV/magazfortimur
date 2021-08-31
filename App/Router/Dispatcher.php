@@ -2,13 +2,12 @@
 
 namespace App\Router;
 
-
 use App\Product\ProductController;
 use App\Renderer;
 
 class Dispatcher
 {
-    protected $routes =  [
+    protected array $routes =  [
         '/products/'        => [ProductController::class, 'list'],
         '/products/edit'    => [ProductController::class,'edit'],
         '/products/add'     => [ProductController::class,'add'],
