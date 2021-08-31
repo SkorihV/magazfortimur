@@ -2,7 +2,7 @@
 
 namespace App\Category;
 
-class Category
+class CategoryModel
 {
     /**
      * @var int

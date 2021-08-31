@@ -8,8 +8,15 @@ use App\Response;
 
 if (Request::isPost()) {
 
-    $product  = Product::getDataFromPost();
-    $productId = Product::add($product);
+    $productData  = Product::getDataFromPost();
+
+    $productRepository = new Product\ProductRepository();
+    $product = $productRepository->getProductFromArray($productData);
+
+
+    $product = $productRepository->save($product);
+
+    $productId = $product->getId();
 
     /* Начало загрузки изображений*/
 
@@ -28,6 +35,7 @@ if (Request::isPost()) {
     }
 }
 $categories = Category::getList();
+
 
 
 $smarty->assign("categories", $categories);

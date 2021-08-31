@@ -2,12 +2,13 @@
 
 namespace App\Product;
 
-use App\Category\Category;
+use App\Category\CategoryModel;
+
 
 /**
  *
  */
-class Product
+class ProductModel
 {
     /**
      * @var int
@@ -40,12 +41,12 @@ class Product
     protected string $description = '';
 
     /**
-     * @var Category
+     * @var CategoryModel
      */
-    protected Category $category;
+    protected CategoryModel $category;
 
     /**
-     * @var array
+     * @var ProductImages[]
      */
     protected array $images = [];
 
@@ -170,25 +171,25 @@ class Product
     }
 
     /**
-     * @return Category|null
+     * @return CategoryModel|null
      */
-    public function getCategory(): Category
+    public function getCategory(): CategoryModel
     {
         return $this->category;
     }
 
     /**
-     * @param Category $category
+     * @param CategoryModel $category
      * @return $this
      */
-    public function setCategory(Category $category): self
+    public function setCategory(CategoryModel $category): self
     {
         $this->category = $category;
         return $this;
     }
 
     /**
-     * @return array
+     * @return ProductImageModel[]
      */
     public function getImages(): array
     {
@@ -196,12 +197,18 @@ class Product
     }
 
     /**
-     * @param array $images
+     * @param ProductImageModel[] $images
      * @return $this
      */
     public function setImages(array $images): self
     {
         $this->images = $images;
+        return $this;
+    }
+
+    public function addImage(ProductImageModel $productImage): self
+    {
+        $this->images[] = $productImage;
         return $this;
     }
 }

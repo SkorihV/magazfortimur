@@ -76,8 +76,9 @@ class Product {
             'price'          => Request::getIntFromPost('price'),
             'amount'         => Request::getStrFromPost('amount'),
             'description'    => Request::getStrFromPost('description'),
-            'category_id'    => Request::getIntFromPost('category_id')
+            'category_id'    => Request::getIntFromPost('category_id', 0)
         ];
+
     }
 
     public static function getByField(string $mainField,string $value)

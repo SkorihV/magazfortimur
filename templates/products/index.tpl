@@ -32,12 +32,12 @@
             <tr>
                 <td>{$product->getId()}</td>
                 <td>{$product->getName()}
-                    {*if $product.images}
+                    {if $product->getImages()}
                         <br>
-                        {foreach from=$product.images item=image}
-                            <img src="{$image.path}" alt="{$image.name}" width=50>
+                        {foreach from=$product->getImages() item=image}
+                            <img src="{$image->getPath()}" alt="{$image->getName()}" width=50>
                         {/foreach}
-                    {/if*}
+                    {/if}
                 </td>
                 {assign var=productCategory value=$product->getCategory()}
                 <td>{$productCategory->getName()}</td>

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-31 10:59:37
+<?php /* Smarty version 2.6.31, created on 2021-08-31 12:41:57
          compiled from products/index.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список товаров")));
@@ -68,7 +68,17 @@ $this->_sections['pagination']['last']       = ($this->_sections['pagination']['
 </td>
                 <td><?php echo $this->_tpl_vars['product']->getName(); ?>
 
-                                    </td>
+                    <?php if ($this->_tpl_vars['product']->getImages()): ?>
+                        <br>
+                        <?php $_from = $this->_tpl_vars['product']->getImages(); if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['image']):
+?>
+                            <img src="<?php echo $this->_tpl_vars['image']->getPath(); ?>
+" alt="<?php echo $this->_tpl_vars['image']->getName(); ?>
+" width=50>
+                        <?php endforeach; endif; unset($_from); ?>
+                    <?php endif; ?>
+                </td>
                 <?php $this->assign('productCategory', $this->_tpl_vars['product']->getCategory()); ?>
                 <td><?php echo $this->_tpl_vars['productCategory']->getName(); ?>
 </td>
