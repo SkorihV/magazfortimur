@@ -8,10 +8,16 @@ $limit = 10;
 
 $offset = ($current_page - 1) * $limit;
 
-$products = Product::getList($limit, $offset);
-
 $products_count = Product::getListCount();
 $pages_count = ceil($products_count / $limit);
+
+$productRepository = new Product\ProductRepository();
+$products = $productRepository->getList($limit, $offset);
+
+
+
+//$products = Product::getList($limit, $offset);
+
 
 $smarty->assign('pages_count', $pages_count);
 $smarty->assign('products', $products);

@@ -26,7 +26,7 @@ class Db
 
     public static function fetchAll(string $query): array
     {
-        $result = Db::query($query);
+        $result = static::query($query);
 
         $data = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -38,8 +38,8 @@ class Db
 
     public static function fetchRow (string $query): array
     {
-        $result = Db::query($query);
-        $row = mysqli_fetch_assoc($result);
+        $result = static::query($query);
+        $row = static::fetchAssoc($result);
         if (is_null($row)) {
             $row = [];
         }
@@ -47,9 +47,14 @@ class Db
         return $row;
     }
 
+    public static function fetchAssoc($result): ?array
+    {
+        return mysqli_fetch_assoc($result);
+    }
+
     public static function fetchOne(string $query): string
     {
-        $result = Db::query($query);
+        $result = static::query($query);
 
         $row = mysqli_fetch_row($result);
         return (string) ($row[0] ?? '');
@@ -63,8 +68,8 @@ class Db
             $query .= " WHERE " . $where;
         }
 
-        Db::query($query);
-        return Db::affectedRows();
+        static::query($query);
+        return static::affectedRows();
     }
 
     public static function insert(string $tableName, array $fields)
@@ -78,7 +83,7 @@ class Db
             if ($fieldValue instanceof DbExp) {
                 $fieldsValues[] = "$fieldValue";
             } else {
-                $fieldValue = Db::escape($fieldValue);
+                $fieldValue = static::escape($fieldValue);
                 $fieldsValues[] = "'$fieldValue'";
             }
         }
@@ -88,8 +93,8 @@ class Db
 
         $query = "INSERT INTO $tableName($fieldsNames) VALUES  ($fieldsValues)";
 
-        Db::query($query);
-        return Db::lastInsertId();
+        static::query($query);
+        return static::lastInsertId();
     }
 
     public static function update(string $tableName, array $fields, string $where)
@@ -101,7 +106,7 @@ class Db
             if ($fieldValue instanceof DbExp) {
                 $setFields[] = " $fieldName = $fieldValue";
             } else {
-                $fieldValue = Db::escape($fieldValue);
+                $fieldValue = static::escape($fieldValue);
                 $setFields[] = " $fieldName = '$fieldValue'";
             }
         }
@@ -112,8 +117,8 @@ class Db
             $query .= " WHERE " . $where;
         }
 
-        Db::query($query);
-        return Db::affectedRows();
+        static::query($query);
+        return static::affectedRows();
     }
 
     public static function affectedRows()
