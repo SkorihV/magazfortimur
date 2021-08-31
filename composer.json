@@ -1,0 +1,16 @@
+{
+    "name": "skorihv/magazfortimur",
+    "autoload": {
+        "psr-4": {"App\\": "App/"}
+    },
+    "authors": [
+        {
+            "name": "SkorihV",
+            "email": "skorih.vitalii@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "smarty/smarty": "2.6.*"
+    }
+}

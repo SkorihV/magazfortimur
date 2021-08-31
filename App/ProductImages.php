@@ -18,14 +18,14 @@ class ProductImages
             'image/webp'        => '.webp',
         ];
 
-    public static function getById(int $id)
+    public static function getById(int $id): array
     {
 
         $query = "SELECT * FROM product_images WHERE id = $id";
         return Db::fetchRow($query);
     }
 
-    public static function findByFilenameInProduct(int $productId, string $filename)
+    public static function findByFilenameInProduct(int $productId, string $filename): array
     {
         $query = "SELECT * FROM product_images WHERE product_id = $productId AND name = '$filename'";
         return Db::fetchRow($query);

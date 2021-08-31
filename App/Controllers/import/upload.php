@@ -1,5 +1,6 @@
 <?php
 
+use App\Import;
 use App\Response;
 use App\TasksQueue;
 
@@ -24,7 +25,7 @@ move_uploaded_file($file['tmp_name'], $uploadDir . '/' . $importFilename);
 $filePath = APP_UPLOAD_DIR . '/import/' . $importFilename;
 
 $taskName = 'Импорт файла ' . $importFilename;
-$task = 'Import::productsFromFileTask';
+$task = Import::class . '::productsFromFileTask';
 $taskParams =  [
     'filename' => $importFilename
 ];

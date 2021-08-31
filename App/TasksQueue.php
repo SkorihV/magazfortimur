@@ -86,8 +86,6 @@ class TasksQueue
         $taskParams = json_decode($task['params'], true);
         static::setStatus($taskId, 'in_process');
 
-        sleep(10);
-
         call_user_func($taskAction, $taskParams);
         static::setStatus($taskId, 'done');
 
