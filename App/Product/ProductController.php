@@ -131,4 +131,41 @@ class ProductController
         Renderer::getSmarty()->assign("product", $product);
         Renderer::getSmarty()->display('products/add.tpl');
     }
+
+    public function delete()
+    {
+        $id = Request::getIntFromPost('id', false);
+
+
+        if (!$id) {
+            die ("error");
+        }
+
+        $deleted =  Product::deleteById($id);
+
+        if ($deleted) {
+            Response::redirect('/products/list');
+        } else {
+            die('какая то ошибка сзаза1');
+        }
+    }
+
+    public function deleteImage ()
+    {
+        $productImageId = Request::getIntFromPost('product_image_id');
+
+        if (!$productImageId) {
+            die ("error");
+        }
+
+        $deleted =  ProductImages::deleteById($productImageId);
+        die('ок');
+
+//        if ($deleted) {
+//
+//            Response::redirect('/products/list');
+//        } else {
+//            die('какая то ошибка сзаза');
+//        }
+    }
 }

@@ -19,7 +19,7 @@
     <h1>{$h1}</h1>
     <ul class="top-menu">
         <li><a href="/products/">Товарв</a></li>
-        <li><a href="/categories/list">Категории</a></li>
+        <li><a href="/category/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
 
@@ -32,7 +32,7 @@
             <div class="category-list">
                 {foreach from=$categories_shared item=category}
                 <div class="category-item">
-                    <a href="/categories/view?id={$category.id}" class="category-link {if $current_category.id == $category.id}active{/if}">
+                    <a href="/category/view?id={$category.id}" class="category-link {if $current_category.id == $category.id}active{/if}">
                         {$category.name}
                     </a>
                 </div>

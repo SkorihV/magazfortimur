@@ -1,5 +1,5 @@
 <?php /* Smarty version 2.6.31, created on 2021-08-30 16:14:00
-         compiled from queue/list.tpl */ ?>
+         compiled from Queue/list.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список задач")));
 $this->_tpl_vars = $_smarty_tpl_vars;
