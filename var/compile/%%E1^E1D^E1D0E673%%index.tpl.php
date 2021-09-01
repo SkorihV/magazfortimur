@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-31 12:41:57
+<?php /* Smarty version 2.6.31, created on 2021-09-01 13:25:46
          compiled from products/index.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список товаров")));
@@ -79,9 +79,11 @@ $this->_sections['pagination']['last']       = ($this->_sections['pagination']['
                         <?php endforeach; endif; unset($_from); ?>
                     <?php endif; ?>
                 </td>
-                <?php $this->assign('productCategory', $this->_tpl_vars['product']->getCategory()); ?>
-                <td><?php echo $this->_tpl_vars['productCategory']->getName(); ?>
+                <?php if ($this->_tpl_vars['product']->getCategory()): ?>
+                    <?php $this->assign('productCategory', $this->_tpl_vars['product']->getCategory()); ?>
+                     <td><?php echo $this->_tpl_vars['productCategory']->getName(); ?>
 </td>
+                <?php endif; ?>
                 <td><?php echo $this->_tpl_vars['product']->getArticle(); ?>
 </td>
                 <td><?php echo $this->_tpl_vars['product']->getPrice(); ?>

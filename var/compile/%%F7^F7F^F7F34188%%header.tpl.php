@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-09-01 11:14:40
+<?php /* Smarty version 2.6.31, created on 2021-09-01 12:53:25
          compiled from header.tpl */ ?>
 <!doctype html>
 <html lang="ru">
@@ -21,8 +21,8 @@
     <h1><?php echo $this->_tpl_vars['h1']; ?>
 </h1>
     <ul class="top-menu">
-        <li><a href="/products/">Товарв</a></li>
-        <li><a href="/category/list">Категории</a></li>
+        <li><a href="/products/list">Товарв</a></li>
+        <li><a href="/categories/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
 
@@ -37,7 +37,7 @@
     foreach ($_from as $this->_tpl_vars['category']):
 ?>
                 <div class="category-item">
-                    <a href="/category/view?id=<?php echo $this->_tpl_vars['category']['id']; ?>
+                    <a href="/categories/view?id=<?php echo $this->_tpl_vars['category']['id']; ?>
 " class="category-link <?php if ($this->_tpl_vars['current_category']['id'] == $this->_tpl_vars['category']['id']): ?>active<?php endif; ?>">
                         <?php echo $this->_tpl_vars['category']['name']; ?>
 

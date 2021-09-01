@@ -39,8 +39,10 @@
                         {/foreach}
                     {/if}
                 </td>
-                {assign var=productCategory value=$product->getCategory()}
-                <td>{$productCategory->getName()}</td>
+                {if $product->getCategory()}
+                    {assign var=productCategory value=$product->getCategory()}
+                     <td>{$productCategory->getName()}</td>
+                {/if}
                 <td>{$product->getArticle()}</td>
                 <td>{$product->getPrice()}</td>
                 <td>{$product->getAmount()}</td>

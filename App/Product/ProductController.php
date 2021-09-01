@@ -12,6 +12,16 @@ use App\Response;
 
 class ProductController
 {
+    /**
+     * @var array
+     */
+    private array $params;
+
+    public function __construct(array $params)
+    {
+        $this->params = $params;
+    }
+
     public function list()
     {
         $current_page = Request::getIntFromGet('p', 1);
@@ -19,13 +29,16 @@ class ProductController
 
         $offset = ($current_page - 1) * $limit;
 
+
         $products_count = Product::getListCount();
         $pages_count = ceil($products_count / $limit);
 
         $productRepository = new ProductRepository();
+
         $products = $productRepository->getList($limit, $offset);
 
 //$products = Product::getList($limit, $offset);
+
 
         Renderer::getSmarty()->assign('pages_count', $pages_count);
         Renderer::getSmarty()->assign('products', $products);
@@ -34,7 +47,13 @@ class ProductController
 
     public function edit()
     {
-        $productId = Request::getIntFromGet('id');
+        $productId = Request::getIntFromGet('id', null);
+        if (is_null($productId)) {
+            $productId = $this->params['id'] ?? null;
+        }
+
+
+
         $product = [];
 
         $productRepository = new Product\ProductRepository();

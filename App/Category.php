@@ -33,6 +33,9 @@ class Category {
 
     public static function deleteById ($id)
     {
+//вернуться к вопросу позже. При удалении категории у товаров остаются и выпадают с ошибкой
+        //Db::update("products", ['category_id' => NULL], "category_id = $id");
+
         return Db::delete('categories', "id = $id");
 
     }

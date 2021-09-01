@@ -4,7 +4,6 @@ use App\Renderer;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
 define('APP_DIR', realpath(__DIR__ . '/../'));
 define('APP_PUBLIC_DIR', APP_DIR . '/public');
 define('APP_UPLOAD_DIR', APP_PUBLIC_DIR . '/upload');
@@ -18,13 +17,7 @@ if (!file_exists(APP_UPLOAD_PRODUCTS_DIR)) {
     mkdir(APP_UPLOAD_PRODUCTS_DIR);
 }
 
-
-
 $smarty = Renderer::getSmarty();
-//$smarty-> template_dir = __DIR__ . '/../templates';
-//$smarty->compile_dir = __DIR__ . '/../var/compile';
-//$smarty->cache_dir = __DIR__ . '/../var/cache';
-//$smarty->config_dir = __DIR__ . '/../var/configs';
 
 function delDir($dir) {
     $files = array_diff(scandir($dir), array('.','..'));

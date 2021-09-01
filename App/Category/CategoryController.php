@@ -10,6 +10,16 @@ use App\Response;
 
 class CategoryController
 {
+    /**
+     * @var array
+     */
+    private array $params;
+
+    public function __construct(array $params)
+    {
+        $this->params = $params;
+    }
+
     public function add()
     {
         if (Request::isPost()) {
@@ -18,7 +28,7 @@ class CategoryController
 
 
             if ($insert) {
-                Response::redirect('/category/list');
+                Response::redirect('/categories/list');
             } else {
                 die('какая то ошибка сзаза');
             }
@@ -36,10 +46,11 @@ class CategoryController
             die ("error");
         }
 
+
         $deleted =  Category::deleteById($id);
 
         if ($deleted) {
-            Response::redirect('/category/list');
+            Response::redirect('/categories/list');
         } else {
             die('какая то ошибка сзаза');
         }
@@ -62,7 +73,7 @@ class CategoryController
             $edited = Category::uploadById($id, $category);
 
             if ($edited) {
-                Response::redirect('/category/list');
+                Response::redirect('/categories/list');
             } else {
                 die('какая то ошибка сзаза');
             }
@@ -85,7 +96,12 @@ class CategoryController
 
     public function view()
     {
-        $category_id = Request::getIntFromGet('id');
+        $category_id = Request::getIntFromGet('id', null);
+
+
+        if (is_null($category_id)) {
+            $category_id = $this->params['id'] ?? null;
+        }
 
         $category = Category::getById( $category_id);
         $products = Product::getListByCategoryId($category_id);

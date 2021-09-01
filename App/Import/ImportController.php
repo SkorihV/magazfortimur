@@ -9,6 +9,16 @@ use App\TasksQueue;
 
 class ImportController
 {
+    /**
+     * @var array
+     */
+    private array $params;
+
+    public function __construct(array $params)
+    {
+        $this->params = $params;
+    }
+
     public function index()
     {
         Renderer::getSmarty()->display('import/index.tpl');

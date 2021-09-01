@@ -9,6 +9,17 @@ use App\TasksQueue;
 
 class QueueController
 {
+
+    /**
+     * @var array
+     */
+    private array $params;
+
+    public function __construct(array $params)
+    {
+        $this->params = $params;
+    }
+
     public function list()
     {
         $tasks = TasksQueue::getTaskList();

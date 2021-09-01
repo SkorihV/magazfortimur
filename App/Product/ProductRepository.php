@@ -2,8 +2,10 @@
 
 namespace App\Product;
 
+use App\Category;
 use App\Category\CategoryModel;
 use App\Db\Db;
+use App\ProductImages;
 use App\ProductImages as ProductImageService;
 
 class ProductRepository
@@ -34,6 +36,7 @@ class ProductRepository
     {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
 
+
         $result =  Db::query($query);
 
         $products = [];
@@ -50,6 +53,7 @@ class ProductRepository
 
             $products[] = $product;
         }
+
         return $products;
     }
 
@@ -125,20 +129,23 @@ class ProductRepository
             $categoryName   = $productArray['category_name'] ?? null;
 
             if (is_null($categoryName)) {
-                $categoryData = \App\Category::getById($categoryId);
+
+                $categoryData = Category::getById($categoryId);
                 $categoryName = $categoryData['name'];
+
             }
 
             $category = new CategoryModel($categoryName);
+
             $category->setId($categoryId);
 
             $product->setCategory($category);
         }
-
         $product
             ->setId($id)
             ->setArticle($article)
             ->setDescription($description);
+
 
         return $product;
     }
