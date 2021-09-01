@@ -9,17 +9,18 @@ use App\ProductImages;
 use App\Renderer;
 use App\Request;
 use App\Response;
+use App\Router\Route;
 
 class ProductController
 {
     /**
-     * @var array
+     * @var Route
      */
-    private array $params;
+    private array $route;
 
-    public function __construct(array $params)
+    public function __construct(Route $route)
     {
-        $this->params = $params;
+        $this->route = $route;
     }
 
     public function list()
@@ -49,7 +50,7 @@ class ProductController
     {
         $productId = Request::getIntFromGet('id', null);
         if (is_null($productId)) {
-            $productId = $this->params['id'] ?? null;
+            $productId = $this->route->getParam('id');
         }
 
 

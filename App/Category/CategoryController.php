@@ -58,7 +58,11 @@ class CategoryController
 
     public function edit()
     {
-        $id = Request::getIntFromGet('id', false);
+        $id = Request::getIntFromGet('id', null);
+
+        if (is_null($id)) {
+            $id = $this->params['id'] ?? null;
+        }
 
         $category = [];
 
