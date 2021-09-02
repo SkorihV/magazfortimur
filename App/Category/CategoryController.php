@@ -2,8 +2,8 @@
 
 namespace App\Category;
 
-use App\CategoryService;
-use App\ProductService;
+
+use App\Product\ProductService;
 use App\Renderer;
 use App\Request;
 use App\Response;
@@ -21,22 +21,15 @@ class CategoryController
         $this->params = $params;
     }
 
-    /**
-     * @route("/semple")
-     */
-    public function semple() {
-        echo 111;
-    }
-
-    public function add()
+    public function add(Request $request, CategoryService $categoryService, Response $response)
     {
-        if (Request::isPost()) {
-            $category  = CategoryService::getFromPost();
-            $insert = CategoryService::add($category);
+        if ($request->isPost()) {
+            $category  = $categoryService->getFromPost();
+            $insert = $categoryService->add($category);
 
 
             if ($insert) {
-                Response::redirect('/categories/list');
+                $response->redirect('/categories/list');
             } else {
                 die('какая то ошибка сзаза');
             }
@@ -45,27 +38,27 @@ class CategoryController
         $smarty->display('categories/add.tpl');
     }
 
-    public function delete()
+    public function delete(Request $request, CategoryService $categoryService, Response $response)
     {
-        $id = Request::getIntFromPost('id' );
+        $id = $request->getIntFromPost('id' );
 
         if (!$id) {
             die ("error");
         }
 
 
-        $deleted =  CategoryService::deleteById($id);
+        $deleted =  $categoryService->deleteById($id);
 
         if ($deleted) {
-            Response::redirect('/categories/list');
+            $response->redirect('/categories/list');
         } else {
             die('какая то ошибка сзаза');
         }
     }
 
-    public function edit()
+    public function edit(Request $request, CategoryService $categoryService, Response $response)
     {
-        $id = Request::getIntFromGet('id', null);
+        $id = $request->getIntFromGet('id', null);
 
         if (is_null($id)) {
             $id = $this->params['id'] ?? null;
@@ -74,17 +67,17 @@ class CategoryController
         $category = [];
 
         if ($id) {
-            $category = CategoryService::getById($id);
+            $category = $categoryService->getById($id);
         }
 
-        if (Request::isPost()) {
+        if ($request->isPost()) {
 
-            $category = CategoryService::getFromPost();
+            $category = $categoryService->getFromPost( );
 
-            $edited = CategoryService::uploadById($id, $category);
+            $edited = $categoryService->uploadById($id, $category);
 
             if ($edited) {
-                Response::redirect('/categories/list');
+                $response->redirect('/categories/list');
             } else {
                 die('какая то ошибка сзаза');
             }
@@ -95,10 +88,10 @@ class CategoryController
         $smarty->display('categories/edit.tpl');
     }
 
-    public function list()
+    public function list(CategoryService $categoryService)
     {
 
-        $category = CategoryService::getList();
+        $category = $categoryService->getList();
 
         $smarty = Renderer::getSmarty();
         $smarty->assign('categories', $category);
@@ -106,17 +99,17 @@ class CategoryController
 
     }
 
-    public function view()
+    public function view(Request $request, CategoryService $categoryService, ProductService $productService)
     {
-        $category_id = Request::getIntFromGet('id', null);
+        $category_id = $request->getIntFromGet('id', null);
 
 
         if (is_null($category_id)) {
             $category_id = $this->params['id'] ?? null;
         }
 
-        $category = CategoryService::getById( $category_id);
-        $products = ProductService::getListByCategoryId($category_id);
+        $category = $categoryService->getById( $category_id);
+        $products = $productService->getListByCategoryId($category_id);
 
         $smarty = Renderer::getSmarty();
         $smarty->assign('current_category', $category);

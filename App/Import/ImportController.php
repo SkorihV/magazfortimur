@@ -25,7 +25,7 @@ class ImportController
         Renderer::getSmarty()->display('import/index.tpl');
     }
 
-    public function upload()
+    public function upload(Response $response, TasksQueue $queue)
     {
         $file = $_FILES['import_file'] ?? null;
 
@@ -53,7 +53,7 @@ class ImportController
             'filename' => $importFilename
         ];
 
-        TasksQueue::addTask($taskName, $task, $taskParams);
-        Response::redirect('/queue/list');
+        $queue->addTask($taskName, $task, $taskParams);
+        $response->redirect('/queue/list');
     }
 }

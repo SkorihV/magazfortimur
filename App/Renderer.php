@@ -2,9 +2,16 @@
 
 namespace App;
 
+use Smarty;
+
 class Renderer
 {
-    protected static $smarty;
+    protected static  $smarty;
+
+    public function __construct(Smarty $smarty)
+    {
+            $this->smarty = $smarty;
+    }
 
     public static function getSmarty()
     {
@@ -18,7 +25,7 @@ class Renderer
 
     protected static function init()
     {
-        $smarty = new \Smarty();
+        $smarty = new Smarty();
 
         $smarty->template_dir = APP_DIR . '/templates';
         $smarty->compile_dir = APP_DIR . '/var/compile';
@@ -27,7 +34,4 @@ class Renderer
 
         static::$smarty = $smarty;
     }
-
-
-
 }

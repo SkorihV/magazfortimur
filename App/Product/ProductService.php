@@ -17,7 +17,7 @@ class ProductService {
 
         $products =  Db::fetchAll($query);
         foreach ($products as &$product) {
-            $images = ProductImages::getListProductId($product['id']);
+            $images = ProductImagesService::getListProductId($product['id']);
             $product['images'] = $images;
         }
 
@@ -29,7 +29,7 @@ class ProductService {
 
          $products =  Db::fetchAll($query);
          foreach ($products as &$product) {
-             $images = ProductImages::getListProductId($product['id']);
+             $images = ProductImagesService::getListProductId($product['id']);
              $product['images'] = $images;
          }
          return $products;
@@ -40,7 +40,7 @@ class ProductService {
         $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
 
         $product =  Db::fetchRow($query);
-        $product['images'] = ProductImages::getListProductId($id);
+        $product['images'] = ProductImagesService::getListProductId($id);
 
         return $product;
     }
@@ -63,7 +63,7 @@ class ProductService {
         $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $id;
         delDir($path);
 
-        ProductImages::deleteByProductId($id);
+        ProductImagesService::deleteByProductId($id);
 
         return Db::delete('products', "id = $id");
     }

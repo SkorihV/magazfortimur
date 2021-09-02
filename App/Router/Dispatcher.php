@@ -85,13 +85,11 @@ class Dispatcher
 
     public function dispatch()
     {
-
         $this->routes = $this->getRouts();
 
         $request = new Request();
         $url = $request->getUrl();
         $route = new Route($url);
-
 
         foreach ($this->routes as $path => $controller) {
             if ($this->isValidPath($path, $route)){
@@ -107,8 +105,13 @@ class Dispatcher
 
                 throw new NotFoundException();
             }
+            $container = new Container();
 
-            $controller = new $controllerClass($route);
+
+            $controller = $container->get($controllerClass);
+
+        //    $controller = new $controllerClass($route);
+
             $controllerMethod = $route->getMethod();
 
             if (method_exists($controller, $controllerMethod)) {

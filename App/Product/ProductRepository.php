@@ -2,7 +2,7 @@
 
 namespace App\Product;
 
-use App\CategoryService;
+use App\Category\CategoryService;
 use App\Category\CategoryModel;
 use App\Db\Db;
 //use App\ProductImagesService as ProductImageService;
@@ -136,8 +136,8 @@ class ProductRepository
             $categoryName   = $productArray['category_name'] ?? null;
 
             if (is_null($categoryName)) {
-
-                $categoryData = CategoryService::getById($categoryId);
+                $categoryService = new CategoryService();
+                $categoryData = $categoryService->getById($categoryId);
                 $categoryName = $categoryData['name'];
 
             }

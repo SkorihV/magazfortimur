@@ -1,6 +1,6 @@
 <?php
 
-use App\CategoryService;
+use App\Category\CategoryService;
 use App\Renderer;
 use App\Router\Dispatcher;
 
