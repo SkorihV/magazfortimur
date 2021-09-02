@@ -35,4 +35,15 @@ class Request
     {
         return !empty($_POST);
     }
+
+    public static function getUrl()
+    {
+        $requestUri = $_SERVER["REQUEST_URI"];
+        $requestUri = explode('?', $requestUri);
+        $requestUri = $requestUri[0];
+
+        $url = $requestUri ?? '/';
+
+        return $url;
+    }
 }

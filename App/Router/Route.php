@@ -96,11 +96,11 @@ class Route
         $controllerClass = $this->getController();
 
         if (is_null($controllerClass)) {
+
             throw new NotFoundException();
         }
 
-        $controller = new $controllerClass([]);
-
+        $controller = new $controllerClass($this);
         $controllerMethod = $this->getMethod();
 
         if (method_exists($controller, $controllerMethod)) {
@@ -119,5 +119,63 @@ class Route
     public function getParam(string $key)
     {
         return $this->params[$key] ?? null;
+    }
+
+    public function clearParams()
+    {
+        $this->params = [];
+        return $this;
+    }
+
+    public function isValidPath(string $path)
+    {
+        return $this->getUrl() == $path || $this->checkSmartPath($path);
+
+    }
+
+    private function checkSmartPath(string $path): bool
+    {
+        $isSmartPath = strpos($path, '{');
+
+        if (!$isSmartPath) {
+            return false;
+        }
+
+        $this->clearParams();
+        $isEqual = false;
+
+        $url = $this->getUrl();
+
+        $urlLiChunks = explode('/', $url);
+        $pathChunks = explode('/', $path);
+
+        if (count($urlLiChunks) != count($pathChunks)) {
+            return false;
+        }
+
+        for ($i = 0; $i < count($pathChunks); $i++) {
+
+            $urlChunk = $urlLiChunks[$i];
+            $pathChunk = $pathChunks[$i];
+
+            $isSmartChunk = strpos($pathChunk, '{') !== false && strpos($pathChunk, '}') !== false;
+
+            if ($urlChunk == $pathChunk) {
+                $isEqual = true;
+
+                continue;
+            } else if ($isSmartChunk){
+                $paramName = str_replace(['{','}'], '', $pathChunk);
+
+                $this->setParam($paramName, $urlChunk);
+                $isEqual = true;
+
+                continue;
+            }
+            $isEqual = false;
+            break;
+
+        }
+        return $isEqual;
     }
 }

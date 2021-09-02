@@ -7,15 +7,16 @@ use App\Product;
 use App\Renderer;
 use App\Request;
 use App\Response;
+use App\Router\Route;
 
 class CategoryController
 {
     /**
-     * @var array
+     * @var Route
      */
-    private array $params;
+    private Route $params;
 
-    public function __construct(array $params)
+    public function __construct(Route $params)
     {
         $this->params = $params;
     }
@@ -40,7 +41,6 @@ class CategoryController
     public function delete()
     {
         $id = Request::getIntFromPost('id' );
-
 
         if (!$id) {
             die ("error");
@@ -90,6 +90,7 @@ class CategoryController
 
     public function list()
     {
+
         $category = Category::getList();
 
         $smarty = Renderer::getSmarty();

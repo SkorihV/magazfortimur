@@ -5,17 +5,18 @@ namespace App\Queue;
 use App\Renderer;
 use App\Request;
 use App\Response;
+use App\Router\Route;
 use App\TasksQueue;
 
 class QueueController
 {
 
     /**
-     * @var array
+     * @var Route
      */
-    private array $params;
+    private Route $params;
 
-    public function __construct(array $params)
+    public function __construct(Route $params)
     {
         $this->params = $params;
     }

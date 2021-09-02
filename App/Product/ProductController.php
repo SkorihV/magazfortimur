@@ -16,7 +16,7 @@ class ProductController
     /**
      * @var Route
      */
-    private array $route;
+    private Route $route;
 
     public function __construct(Route $route)
     {
@@ -25,6 +25,7 @@ class ProductController
 
     public function list()
     {
+
         $current_page = Request::getIntFromGet('p', 1);
         $limit = 10;
 
@@ -52,8 +53,6 @@ class ProductController
         if (is_null($productId)) {
             $productId = $this->route->getParam('id');
         }
-
-
 
         $product = [];
 
