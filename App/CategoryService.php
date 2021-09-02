@@ -4,26 +4,26 @@ namespace App;
 
 use App\Db\Db;
 
-class Category {
-    public static function getList ()
+class CategoryService {
+    public function getList ()
     {
         $query = "SELECT * FROM categories";
 
         return Db::fetchAll($query);
     }
 
-    public static function getById ($id)
+    public function getById ($id)
     {
         $query = "SELECT * FROM categories WHERE id = $id";
         return Db::fetchRow($query);
     }
 
-    public static function uploadById (int $id, array $category)
+    public function uploadById (int $id, array $category)
     {
         return Db::update('categories', $category, "id = $id");
     }
 
-    public static function add($category)
+    public function add($category)
     {
         if (isset($category['id'])){
             unset($category['id']);
@@ -31,7 +31,7 @@ class Category {
         return Db::insert("categories", $category);
     }
 
-    public static function deleteById ($id)
+    public function deleteById ($id)
     {
 //вернуться к вопросу позже. При удалении категории у товаров остаются и выпадают с ошибкой
         //Db::update("products", ['category_id' => NULL], "category_id = $id");
@@ -40,16 +40,16 @@ class Category {
 
     }
 
-    public static function  getFromPost () : array
+    public function  getFromPost (Request $request) : array
     {
         return [
-            'id'    => Request::getIntFromPost('id', false),
-            'name'  => Request::getStrFromPost('name'),
+            'id'    => $request->getIntFromPost('id', false),
+            'name'  => $request->getStrFromPost('name'),
         ];
 
     }
 
-    public static function getByName(string $categoryName)
+    public function getByName(string $categoryName)
     {
         $query = "SELECT * FROM categories WHERE name = '$categoryName'";
         return Db::fetchRow($query);

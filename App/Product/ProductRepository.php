@@ -2,14 +2,19 @@
 
 namespace App\Product;
 
-use App\Category;
+use App\CategoryService;
 use App\Category\CategoryModel;
 use App\Db\Db;
-use App\ProductImages;
-use App\ProductImages as ProductImageService;
+//use App\ProductImagesService as ProductImageService;
 
 class ProductRepository
 {
+
+    public function getListCount() {
+        $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
+        return Db::fetchOne($query);
+    }
+
     public function getById(int $id)
     {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
@@ -17,7 +22,9 @@ class ProductRepository
         $productArray =  Db::fetchRow($query);
         $product = $this->getProductFromArray($productArray);
 
-        $imagesData = ProductImageService::getListProductId($product->getId());
+        $productImageService = new ProductImagesService();
+
+        $imagesData = $productImageService->getListProductId($product->getId());
         foreach ($imagesData as &$imageItem) {
             $productImage = $this->getProductImageFromArray($imageItem);
 
@@ -35,16 +42,16 @@ class ProductRepository
     public function getList(int $limit = 50, int $offset = 0): array
     {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
-
-
         $result =  Db::query($query);
+
+        $productImageService = new ProductImagesService();
 
         $products = [];
         while   ($productArray = Db::fetchAssoc($result)) {
             $product = $this->getProductFromArray($productArray);
 
 
-            $imagesData = ProductImageService::getListProductId($product->getId());
+            $imagesData = $productImageService->getListProductId($product->getId());
             foreach ($imagesData as &$imageItem) {
                 $productImage = $this->getProductImageFromArray($imageItem);
 
@@ -130,7 +137,7 @@ class ProductRepository
 
             if (is_null($categoryName)) {
 
-                $categoryData = Category::getById($categoryId);
+                $categoryData = CategoryService::getById($categoryId);
                 $categoryName = $categoryData['name'];
 
             }

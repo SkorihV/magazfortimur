@@ -2,8 +2,8 @@
 
 namespace App\Category;
 
-use App\Category;
-use App\Product;
+use App\CategoryService;
+use App\ProductService;
 use App\Renderer;
 use App\Request;
 use App\Response;
@@ -24,8 +24,8 @@ class CategoryController
     public function add()
     {
         if (Request::isPost()) {
-            $category  = Category::getFromPost();
-            $insert = Category::add($category);
+            $category  = CategoryService::getFromPost();
+            $insert = CategoryService::add($category);
 
 
             if ($insert) {
@@ -47,7 +47,7 @@ class CategoryController
         }
 
 
-        $deleted =  Category::deleteById($id);
+        $deleted =  CategoryService::deleteById($id);
 
         if ($deleted) {
             Response::redirect('/categories/list');
@@ -67,14 +67,14 @@ class CategoryController
         $category = [];
 
         if ($id) {
-            $category = Category::getById($id);
+            $category = CategoryService::getById($id);
         }
 
         if (Request::isPost()) {
 
-            $category = Category::getFromPost();
+            $category = CategoryService::getFromPost();
 
-            $edited = Category::uploadById($id, $category);
+            $edited = CategoryService::uploadById($id, $category);
 
             if ($edited) {
                 Response::redirect('/categories/list');
@@ -91,7 +91,7 @@ class CategoryController
     public function list()
     {
 
-        $category = Category::getList();
+        $category = CategoryService::getList();
 
         $smarty = Renderer::getSmarty();
         $smarty->assign('categories', $category);
@@ -108,8 +108,8 @@ class CategoryController
             $category_id = $this->params['id'] ?? null;
         }
 
-        $category = Category::getById( $category_id);
-        $products = Product::getListByCategoryId($category_id);
+        $category = CategoryService::getById( $category_id);
+        $products = ProductService::getListByCategoryId($category_id);
 
         $smarty = Renderer::getSmarty();
         $smarty->assign('current_category', $category);

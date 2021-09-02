@@ -93,21 +93,7 @@ class Route
      */
     public function execute()
     {
-        $controllerClass = $this->getController();
 
-        if (is_null($controllerClass)) {
-
-            throw new NotFoundException();
-        }
-
-        $controller = new $controllerClass($this);
-        $controllerMethod = $this->getMethod();
-
-        if (method_exists($controller, $controllerMethod)) {
-            return $controller->{$controllerMethod}();
-        }
-
-        throw new MethodDoesNotExistException();
     }
 
     public function setParam(string $key, $value)

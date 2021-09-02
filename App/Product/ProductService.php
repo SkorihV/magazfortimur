@@ -1,17 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Product;
 
 use App\Db\Db;
+use App\Request;
 
-class Product {
+class ProductService {
 
-    public static function getListCount() {
+    public function getListCount() {
         $query = "SELECT COUNT(1) as c FROM products p LEFT JOIN categories c ON p.category_id = c.id";
         return Db::fetchOne($query);
     }
 
-    public static function getList (int $limit = 100, int $offset = 0 ){
+    public function getList (int $limit = 100, int $offset = 0 ){
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id  ORDER BY p.id  LIMIT $offset, $limit ";
 
         $products =  Db::fetchAll($query);
@@ -23,7 +24,7 @@ class Product {
         return $products;
     }
 
-     public static function getListByCategoryId ($category_id) {
+     public function getListByCategoryId ($category_id) {
         $query = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.category_id = $category_id";
 
          $products =  Db::fetchAll($query);
@@ -34,7 +35,7 @@ class Product {
          return $products;
     }
 
-     public static function getById($id){
+     public function getById($id){
 
         $query = "SELECT p.*, c.id as category_id FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = $id";
 
@@ -44,12 +45,12 @@ class Product {
         return $product;
     }
 
-    public static function uploadById(int $id, array $product): int
+    public function uploadById(int $id, array $product): int
     {
         return Db::update('products', $product, "id = $id");
     }
 
-    public static function add ($product){
+    public function add ($product){
 
         if (isset($product['id'])){
             unset($product['id']);
@@ -57,7 +58,7 @@ class Product {
         return Db::insert("products", $product);
     }
 
-    public static function deleteById(int $id){
+    public function deleteById(int $id){
 
         $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $id;
         delDir($path);
@@ -67,21 +68,21 @@ class Product {
         return Db::delete('products', "id = $id");
     }
 
-    public static function getDataFromPost () : array
+    public function getDataFromPost (Request $request) : array
     {
         return [
-            'id'             => Request::getIntFromPost('id', false),
-            'name'           => Request::getStrFromPost('name'),
-            'article'        => Request::getStrFromPost('article'),
-            'price'          => Request::getIntFromPost('price'),
-            'amount'         => Request::getStrFromPost('amount'),
-            'description'    => Request::getStrFromPost('description'),
-            'category_id'    => Request::getIntFromPost('category_id', 0)
+            'id'             => $request->getIntFromPost('id', false),
+            'name'           => $request->getStrFromPost('name'),
+            'article'        => $request->getStrFromPost('article'),
+            'price'          => $request->getIntFromPost('price'),
+            'amount'         => $request->getStrFromPost('amount'),
+            'description'    => $request->getStrFromPost('description'),
+            'category_id'    => $request->getIntFromPost('category_id', 0)
         ];
 
     }
 
-    public static function getByField(string $mainField,string $value)
+    public function getByField(string $mainField,string $value)
     {
         $mainField = Db::escape($mainField);
         $value = Db::escape($value);

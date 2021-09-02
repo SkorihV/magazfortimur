@@ -3,6 +3,7 @@
 namespace App\Router;
 
 use App\Category\CategoryController;
+use App\Di\Container;
 use App\Import\ImportController;
 use App\Product\ProductController;
 use App\Queue\QueueController;
@@ -41,8 +42,8 @@ class Dispatcher
     ];
     public function dispatch()
     {
-
-        $url = Request::getUrl();
+        $request = new Request();
+        $url = $request->getUrl();
         $route = new Route($url);
 
 
@@ -53,7 +54,57 @@ class Dispatcher
         }
 
         try {
-            $route->execute();
+
+      //      $container = new Container();
+
+            $controllerClass = $route->getController();
+
+            if (is_null($controllerClass)) {
+
+                throw new NotFoundException();
+            }
+
+            $controller = new $controllerClass($route);
+            $controllerMethod = $route->getMethod();
+
+            if (method_exists($controller, $controllerMethod)) {
+
+                $reflectionClass = new \ReflectionClass($controllerClass);
+                $reflectionMethod = $reflectionClass->getMethod($controllerMethod);
+
+                $reflectionParameters = $reflectionMethod->getParameters();
+
+                $arguments = [];
+
+                foreach ($reflectionParameters as $parameter) {
+                    /**
+                     * @var \ReflectionParameter $parameter
+                     */
+                    $parameterName = $parameter->getName();
+                    $parameterType = $parameter->getType();
+
+
+                    assert($parameterType instanceof \ReflectionNamedType);
+                    $className = $parameterType->getName();
+
+                    if (class_exists($className)) {
+                        $arguments[$parameterName] = new $className();
+                    }
+
+                    echo "<pre>";
+                    var_dump($parameterName, $parameterType->getName());
+                    echo "</pre>";
+
+                }
+
+                return call_user_func_array([$controller, $controllerMethod], $arguments);
+//                return $controller->{$controllerMethod}();
+            }
+
+            throw new MethodDoesNotExistException();
+
+
+           // $route->execute();
         } catch (NotFoundException | MethodDoesNotExistException $e) {
             $this->error404();
         }
