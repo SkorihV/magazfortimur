@@ -21,6 +21,12 @@ class ProductController
         $this->route = $route;
     }
 
+    /**
+     * @param Request $request
+     * @param ProductRepository $productRepository
+     *
+     * @route("/product_list")
+     */
     public function list(Request $request, ProductRepository $productRepository)
     {
         $current_page = $request->getIntFromGet('p', 1);
@@ -41,6 +47,18 @@ class ProductController
         Renderer::getSmarty()->display('products/index.tpl');
     }
 
+    /**
+     * @param Request $request
+     * @param ProductRepository $productRepository
+     * @param ProductService $productService
+     * @param ProductImagesService $productImagesService
+     * @param Response $response
+     * @param CategoryService $categoryService
+     *
+     * @route("/product_edit/{id}")
+     * @route("/product_edit")
+     *
+     */
     public function edit(Request $request,
                          ProductRepository $productRepository,
                          ProductService $productService,
@@ -85,11 +103,6 @@ class ProductController
 
             /* Начало загрузки изображений*/
 
-//    $path = APP_UPLOAD_PRODUCTS_DIR . '/' . $productId;
-//
-//    if(!file_exists($path)) {
-//        mkdir($path);
-//    }
 
             $imageUrl = trim($_POST['image_url']);
             $productImagesService->uploadImageByUrl($productId, $imageUrl);
@@ -110,6 +123,7 @@ class ProductController
         Renderer::getSmarty()->assign('product', $product);
         Renderer::getSmarty()->display('products/edit.tpl');
     }
+
 
     public function add()    {
 

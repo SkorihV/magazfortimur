@@ -21,6 +21,13 @@ class CategoryController
         $this->params = $params;
     }
 
+    /**
+     * @route("/semple")
+     */
+    public function semple() {
+        echo 111;
+    }
+
     public function add()
     {
         if (Request::isPost()) {

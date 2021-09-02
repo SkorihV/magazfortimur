@@ -11,6 +11,8 @@ use App\Renderer;
 use App\Request;
 use App\Router\Exception\MethodDoesNotExistException;
 use App\Router\Exception\NotFoundException;
+use ReflectionClass;
+use ReflectionParameter;
 
 class Dispatcher
 {
@@ -40,8 +42,52 @@ class Dispatcher
         '/import/upload'            => [ImportController::class, 'upload'],
 
     ];
+
+    protected function getRouts(): array
+    {
+        $routes = $this->routes;
+
+        $controllerFile = APP_DIR . '/App/Product/ProductController.php';
+
+        $files =  $this->scanDir(APP_DIR . '/App');
+
+        foreach ($files as $filepath) {
+
+            if (strpos($filepath, 'Controller.php') === false) {
+                continue;
+            }
+            $controllerRoutes = $this->getRoutesByControllerFile($filepath);
+            $routes = array_merge($routes, $controllerRoutes);
+        }
+        return $routes;
+    }
+
+    protected function scanDir(string $dirname) {
+        $list = scandir($dirname);
+
+        $list = array_filter($list, function ($item){
+            return !in_array($item, ['.', '..']);
+        });
+
+        $filenames = [];
+        foreach ($list as $fileItem) {
+            $filePath = $dirname . '/' . $fileItem;
+
+            if (!is_dir($filePath)) {
+                $filenames[] = $filePath;
+            } else {
+                $filenames = array_merge($filenames, $this->scanDir($filePath));
+            }
+        }
+
+        return $filenames;
+    }
+
     public function dispatch()
     {
+
+        $this->routes = $this->getRouts();
+
         $request = new Request();
         $url = $request->getUrl();
         $route = new Route($url);
@@ -55,8 +101,6 @@ class Dispatcher
 
         try {
 
-      //      $container = new Container();
-
             $controllerClass = $route->getController();
 
             if (is_null($controllerClass)) {
@@ -69,7 +113,7 @@ class Dispatcher
 
             if (method_exists($controller, $controllerMethod)) {
 
-                $reflectionClass = new \ReflectionClass($controllerClass);
+                $reflectionClass = new ReflectionClass($controllerClass);
                 $reflectionMethod = $reflectionClass->getMethod($controllerMethod);
 
                 $reflectionParameters = $reflectionMethod->getParameters();
@@ -77,12 +121,9 @@ class Dispatcher
                 $arguments = [];
 
                 foreach ($reflectionParameters as $parameter) {
-                    /**
-                     * @var \ReflectionParameter $parameter
-                     */
+
                     $parameterName = $parameter->getName();
                     $parameterType = $parameter->getType();
-
 
                     assert($parameterType instanceof \ReflectionNamedType);
                     $className = $parameterType->getName();
@@ -90,21 +131,11 @@ class Dispatcher
                     if (class_exists($className)) {
                         $arguments[$parameterName] = new $className();
                     }
-
-                    echo "<pre>";
-                    var_dump($parameterName, $parameterType->getName());
-                    echo "</pre>";
-
                 }
-
-                return call_user_func_array([$controller, $controllerMethod], $arguments);
-//                return $controller->{$controllerMethod}();
+            return call_user_func_array([$controller, $controllerMethod], $arguments);
             }
-
             throw new MethodDoesNotExistException();
 
-
-           // $route->execute();
         } catch (NotFoundException | MethodDoesNotExistException $e) {
             $this->error404();
         }
@@ -112,7 +143,8 @@ class Dispatcher
 
     public function isValidPath(string $path, Route $route)
     {
-        $controller = $this->routes[$path];
+        $routes = $this->getRouts();
+        $controller = $routes[$path];
 
         $isValidPath = $route->isValidPath($path);
         if ($isValidPath){
@@ -127,5 +159,55 @@ class Dispatcher
     {
         Renderer::getSmarty()->display('404.tpl');
         exit;
+    }
+
+    private function getRoutesByControllerFile(string $filePath) {
+
+        $routes = [];
+
+        $controllerClassName = str_replace([APP_DIR . '/', '.php'], '', $filePath);
+        $controllerClassName = str_replace([ '/', ], '\\', $controllerClassName);
+
+        $reflectionClass = new ReflectionClass($controllerClassName);
+
+        $reflectionMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+
+        foreach ($reflectionMethods as $reflectionMethod) {
+            if ($reflectionMethod->isConstructor()) {
+                continue;
+            }
+
+            $docComment = (string) $reflectionMethod->getDocComment();
+
+            $docComment = str_replace(['/**', '*/'], '', $docComment);
+            $docComment = trim($docComment);
+            $docCommentArray = explode("\n", $docComment);
+
+            $docCommentArray = array_map(function($item) {
+                $item = trim($item);
+
+                $position = strpos($item, '*');
+                if ($position === 0) {
+                    $item = substr($item, 1);
+                }
+
+                return trim($item);
+            }, $docCommentArray);
+
+            foreach ($docCommentArray as $docString) {
+                $isRoute = strpos($docString, '@route(') === 0;
+
+                if (empty($docString) || !$isRoute) {
+                    continue;
+                }
+
+                $url = str_replace(['@route("','")'], '', $docString);
+
+                $routes[$url] = [$controllerClassName, $reflectionMethod->getName()];
+            }
+        }
+
+        return $routes;
     }
 }
