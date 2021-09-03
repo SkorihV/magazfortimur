@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Renderer;
 use App\Router\Route;
 
+/**
+ * Необходим для вызова шаблонов смарти и их отрисовки с передачей параметров
+ */
 abstract class AbstractController
 {
     /**
@@ -15,9 +18,9 @@ abstract class AbstractController
     /**
      * @var Route
      */
-    protected $route;
+    protected Route $route;
 
-    public function render(string $templte, array $data = [])
+    public function render(string $template, array $data = [])
     {
         $smarty = Renderer::getSmarty();
 

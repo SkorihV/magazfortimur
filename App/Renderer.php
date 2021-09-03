@@ -8,9 +8,9 @@ class Renderer
 {
     protected static  $smarty;
 
-    public function __construct(Smarty $smarty)
+    public function __construct()
     {
-            $this->smarty = $smarty;
+       //     $this->smarty = $smarty;
     }
 
     public static function getSmarty()

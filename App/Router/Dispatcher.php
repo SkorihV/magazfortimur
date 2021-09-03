@@ -12,6 +12,7 @@ use App\Request;
 use App\Router\Exception\MethodDoesNotExistException;
 use App\Router\Exception\NotFoundException;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionParameter;
 
 class Dispatcher
@@ -47,7 +48,7 @@ class Dispatcher
     {
         $routes = $this->routes;
 
-        $controllerFile = APP_DIR . '/App/Product/ProductController.php';
+ //       $controllerFile = APP_DIR . '/App/Product/ProductController.php';
 
         $files =  $this->scanDir(APP_DIR . '/App');
 
@@ -59,6 +60,7 @@ class Dispatcher
             $controllerRoutes = $this->getRoutesByControllerFile($filepath);
             $routes = array_merge($routes, $controllerRoutes);
         }
+
         return $routes;
     }
 
@@ -83,6 +85,10 @@ class Dispatcher
         return $filenames;
     }
 
+    /**
+     * @return false|mixed|void|null
+     * @throws ReflectionException
+     */
     public function dispatch()
     {
         $this->routes = $this->getRouts();
@@ -96,46 +102,26 @@ class Dispatcher
                 break;
             }
         }
-
         try {
-
             $controllerClass = $route->getController();
 
-            if (is_null($controllerClass)) {
 
+            if (is_null($controllerClass)) {
                 throw new NotFoundException();
             }
             $container = new Container();
+            $controller = $container->getController($controllerClass);
 
 
-            $controller = $container->get($controllerClass);
-
-        //    $controller = new $controllerClass($route);
+            $renderer = $container->get(Renderer::class);
+            $container->setProperty($controller, 'renderer', $renderer);
+            $container->setProperty($controller, 'route', $route);
 
             $controllerMethod = $route->getMethod();
 
             if (method_exists($controller, $controllerMethod)) {
+                return $container->call($controller, $controllerMethod);
 
-                $reflectionClass = new ReflectionClass($controllerClass);
-                $reflectionMethod = $reflectionClass->getMethod($controllerMethod);
-
-                $reflectionParameters = $reflectionMethod->getParameters();
-
-                $arguments = [];
-
-                foreach ($reflectionParameters as $parameter) {
-
-                    $parameterName = $parameter->getName();
-                    $parameterType = $parameter->getType();
-
-                    assert($parameterType instanceof \ReflectionNamedType);
-                    $className = $parameterType->getName();
-
-                    if (class_exists($className)) {
-                        $arguments[$parameterName] = new $className();
-                    }
-                }
-            return call_user_func_array([$controller, $controllerMethod], $arguments);
             }
             throw new MethodDoesNotExistException();
 
