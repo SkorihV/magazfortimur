@@ -6,11 +6,13 @@ use Smarty;
 
 class Renderer
 {
-    protected static  $smarty;
+    protected static $smarty;
 
-    public function __construct()
+    protected $_smarty;
+
+    public function __construct(Smarty $smarty)
     {
-       //     $this->smarty = $smarty;
+            $this->_smarty = $smarty;
     }
 
     public static function getSmarty()
@@ -33,5 +35,13 @@ class Renderer
         $smarty->config_dir = APP_DIR . '/var/configs';
 
         static::$smarty = $smarty;
+    }
+
+    public function render(string $template, array $data = []) {
+        foreach ($data as $key => $value) {
+            $this->_smarty->assign($key, $value);
+        }
+
+        $this->_smarty->display($template);
     }
 }

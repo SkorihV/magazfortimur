@@ -10,27 +10,96 @@ use ReflectionObject;
 
 class  Container
 {
-    public function execute(string $className, string $methodName)
-    {
+    /**
+     * @var callable[]
+     */
+    private $factories = [];
 
-    }
+    /**
+     * @var object[]
+     */
+    private $singletones = [];
 
+
+    /**
+     * @param string $className
+     * @return object
+     * @throws ReflectionException
+     */
     public function get(string $className)
     {
-        return new $className();
+        if ($this->isSingletone($className)) {
+            return $this->getSingletone($className);
+        }
+        return $this->createInstance($className);
+    }
+
+    public function factory(string $className, callable $factory)
+    {
+        $this->factories[$className] = $factory;
     }
 
     /**
+     * @param string $className
+     * @param callable|null $factory
+     */
+    public function singletone(string $className, callable $factory = null)
+    {
+        if (!$this->isSingletone($className)) {
+            $this->singletones[$className] = null;
+        }
+
+        if (is_callable($factory)) {
+            $this->factory($className, $factory);
+        }
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     */
+    public function isSingletone(string $className)
+    {
+        return array_key_exists($className, $this->singletones);
+    }
+
+    /**
+     * @param string $className
+     * @return object|null
+     */
+    protected function getSingletone(string $className)
+    {
+        if (!$this->isSingletone($className)) {
+            return null;
+        };
+
+        if (is_null($this->singletones[$className])) {
+            $this->singletones[$className] = $this->createInstance($className);
+        }
+
+        return $this->singletones[$className];
+    }
+
+    /**
+     * @param string $className
+     * @return object
      * @throws ReflectionException
      */
-    public function getController(string $className)
+    protected function createInstance(string $className)
     {
+        if (isset($this->factories[$className])) {
+            return $this->factories[$className]();
+        }
+
         $reflectionClass = new ReflectionClass($className);
         $reflectionConstructor = $reflectionClass->getConstructor();
 
-        $arguments = $this->getDependencies($reflectionConstructor);
+        if ($reflectionConstructor instanceof \ReflectionMethod) {
+            $arguments = $this->getDependencies($reflectionConstructor);
+            return $reflectionClass->newInstanceArgs($arguments);
+        }
 
-        return $reflectionClass->newInstanceArgs($arguments);
+        return $reflectionClass->newInstance();
     }
 
     /**
@@ -56,6 +125,11 @@ class  Container
         return true;
     }
 
+    /**
+     * @param \ReflectionMethod $reflectionMethod
+     * @return array|void
+     * @throws ReflectionException
+     */
     protected function getDependencies(\ReflectionMethod $reflectionMethod) {
         $reflectionParameters = $reflectionMethod->getParameters();
 

@@ -14,9 +14,20 @@ use App\Router\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
+use Smarty;
 
 class Dispatcher
 {
+    /**
+     * @var Container
+     */
+    private Container $di;
+
+    public function __construct(Container $di)
+    {
+        $this->di = $di;
+    }
+
     protected array $routes =  [
         '/products/list'            => [ProductController::class, 'list'],
         '/'                         => [ProductController::class, 'list'],
@@ -109,18 +120,20 @@ class Dispatcher
             if (is_null($controllerClass)) {
                 throw new NotFoundException();
             }
-            $container = new Container();
-            $controller = $container->getController($controllerClass);
+
+            $di = $this->getDi();
+
+            $controller = $di->get($controllerClass);
 
 
-            $renderer = $container->get(Renderer::class);
-            $container->setProperty($controller, 'renderer', $renderer);
-            $container->setProperty($controller, 'route', $route);
+            $renderer = $di->get(Renderer::class);
+            $di->setProperty($controller, 'renderer', $renderer);
+            $di->setProperty($controller, 'route', $route);
 
             $controllerMethod = $route->getMethod();
 
             if (method_exists($controller, $controllerMethod)) {
-                return $container->call($controller, $controllerMethod);
+                return $di->call($controller, $controllerMethod);
 
             }
             throw new MethodDoesNotExistException();
@@ -198,5 +211,13 @@ class Dispatcher
         }
 
         return $routes;
+    }
+
+    /**
+     * @return Container
+     */
+    public function getDi(): Container
+    {
+        return $this->di;
     }
 }
