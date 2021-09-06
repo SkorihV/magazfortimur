@@ -3,22 +3,23 @@
 namespace App\Category;
 
 
+use App\Controller\AbstractController;
 use App\Product\ProductService;
 use App\Renderer;
 use App\Request;
 use App\Response;
 use App\Router\Route;
 
-class CategoryController
+class CategoryController extends AbstractController
 {
-    /**
-     * @var Route
-     */
-    private Route $params;
+//    /**
+//     * @var Route
+//     */
+//    private Route $params;
 
-    public function __construct(Route $params)
+    public function __construct()
     {
-        $this->params = $params;
+//        $this->params = $params;
     }
 
     public function add(Request $request, CategoryService $categoryService, Response $response)
@@ -34,8 +35,13 @@ class CategoryController
                 die('какая то ошибка сзаза');
             }
         }
-        $smarty = Renderer::getSmarty();
-        $smarty->display('categories/add.tpl');
+        //$smarty = Renderer::getSmarty();
+       // $smarty->display('categories/add.tpl');
+
+
+        return $this->render('categories/add.tpl');
+
+
     }
 
     public function delete(Request $request, CategoryService $categoryService, Response $response)
@@ -86,17 +92,28 @@ class CategoryController
         $smarty = Renderer::getSmarty();
         $smarty->assign('category', $category);
         $smarty->display('categories/edit.tpl');
+
+
+        return $this->render('categories/edit.tpl', [
+            'categories' => $category
+        ]);
+
     }
 
+    /**
+     * @param CategoryService $categoryService
+     *
+     * @return mixed
+     * @route("/categories/list")
+     */
     public function list(CategoryService $categoryService)
     {
 
         $category = $categoryService->getList();
 
-        $smarty = Renderer::getSmarty();
-        $smarty->assign('categories', $category);
-        $smarty->display('categories/index.tpl');
-
+        return $this->render('categories/index.tpl', [
+            'categories' => $category
+        ]);
     }
 
     public function view(Request $request, CategoryService $categoryService, ProductService $productService)
@@ -111,9 +128,11 @@ class CategoryController
         $category = $categoryService->getById( $category_id);
         $products = $productService->getListByCategoryId($category_id);
 
-        $smarty = Renderer::getSmarty();
-        $smarty->assign('current_category', $category);
-        $smarty->assign("products", $products);
-        $smarty->display('categories/view.tpl');
+
+        return $this->render('categories/view.tpl', [
+            'categories' => $category,
+            "products" => $products
+        ]);
+
     }
 }

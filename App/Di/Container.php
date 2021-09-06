@@ -6,6 +6,7 @@ use App\Router\Exception\MethodDoesNotExistException;
 use App\Router\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 use ReflectionObject;
 
 class  Container
@@ -87,6 +88,8 @@ class  Container
      */
     protected function createInstance(string $className)
     {
+
+
         if (isset($this->factories[$className])) {
             return $this->factories[$className]();
         }
@@ -94,7 +97,7 @@ class  Container
         $reflectionClass = new ReflectionClass($className);
         $reflectionConstructor = $reflectionClass->getConstructor();
 
-        if ($reflectionConstructor instanceof \ReflectionMethod) {
+        if ($reflectionConstructor instanceof ReflectionMethod) {
             $arguments = $this->getDependencies($reflectionConstructor);
             return $reflectionClass->newInstanceArgs($arguments);
         }
@@ -116,11 +119,16 @@ class  Container
         }
 
         $reflectionController = new ReflectionObject($object);
-
+        echo "<pre>";
+      //  var_dump($object);
+        var_dump($propertyName);
+        var_dump($reflectionController->getProperty($propertyName));
+        echo "</pre>";
         $reflectionRenderer = $reflectionController->getProperty($propertyName);
         $reflectionRenderer->setAccessible(true);
         $reflectionRenderer->setValue($object, $value);
         $reflectionRenderer->setAccessible(false);
+
 
         return true;
     }
@@ -137,8 +145,10 @@ class  Container
 
         foreach ($reflectionParameters as $parameter) {
 
+
             $parameterName = $parameter->getName();
             $parameterType = $parameter->getType();
+
 
             assert($parameterType instanceof \ReflectionNamedType);
             $className = $parameterType->getName();
@@ -166,6 +176,8 @@ class  Container
         $reflectionMethod = $reflectionClass->getMethod($methodName);
 
         $arguments = $this->getDependencies($reflectionMethod);
+
+
 
         return call_user_func_array([$object, $methodName], $arguments);
     }

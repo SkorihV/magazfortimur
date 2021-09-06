@@ -50,11 +50,11 @@ products | CREATE TABLE `products` (
            PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 |
 
-| categories | CREATE TABLE `categories` (
+ CREATE TABLE `categories` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 |
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE  TABLE `product_images` (
     `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -62,7 +62,7 @@ CREATE  TABLE `product_images` (
     `name` varchar(255) NOT NULL DEFAULT '',
     `path` varchar(255) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`)
-    )
+    )  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE  TABLE `tasks_queue` (
                `id` int unsigned NOT NULL AUTO_INCREMENT,

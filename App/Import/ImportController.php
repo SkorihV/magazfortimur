@@ -2,30 +2,36 @@
 
 namespace App\Import;
 
+use App\Category\CategoryService;
+use App\Controller\AbstractController;
 use App\Import;
 use App\Renderer;
 use App\Response;
 use App\Router\Route;
 use App\TasksQueue;
 
-class ImportController
+class ImportController extends AbstractController
 {
-    /**
-     * @var Route
-     */
-    private Route $params;
+//    /**
+//     * @var Route
+//     */
+//    private Route $params;
 
-    public function __construct(Route $params)
+    public function __construct()
     {
-        $this->params = $params;
+//        $this->params = $params;
     }
 
     public function index()
     {
-        Renderer::getSmarty()->display('import/index.tpl');
+
+        //Renderer::getSmarty()->display('import/index.tpl');
+
+        //$category = $categoryService->getList();
+        return $this->render('import/index.tpl');
     }
 
-    public function upload(Response $response, TasksQueue $queue)
+    public function upload( TasksQueue $queue )
     {
         $file = $_FILES['import_file'] ?? null;
 
@@ -54,6 +60,10 @@ class ImportController
         ];
 
         $queue->addTask($taskName, $task, $taskParams);
-        $response->redirect('/queue/list');
+        $tasks_queue = $queue->getTaskList();
+
+        return $this->render('queue/list.tpl',[
+        "tasks_queue" => $tasks_queue
+        ]);
     }
 }

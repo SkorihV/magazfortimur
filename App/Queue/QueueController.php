@@ -2,41 +2,49 @@
 
 namespace App\Queue;
 
+use App\Controller\AbstractController;
 use App\Renderer;
 use App\Request;
 use App\Response;
 use App\Router\Route;
 use App\TasksQueue;
 
-class QueueController
+class QueueController extends AbstractController
 {
 
-    /**
-     * @var Route
-     */
-    private Route $params;
+//    /**
+//     * @var Route
+//     */
+//    private Route $params;
 
-    public function __construct(Route $params)
+    public function __construct()
     {
-        $this->params = $params;
+   //     $this->params = $params;
     }
 
-    public function list()
+    public function list(TasksQueue $tasksQueue )
     {
-        $tasks = TasksQueue::getTaskList();
+        $tasks = $tasksQueue->getTaskList();
 
-        $smarty = Renderer::getSmarty();
-        $smarty->assign('tasks_queue', $tasks);
-        $smarty->display('queue/list.tpl');
+//        $smarty = Renderer::getSmarty();
+//        $smarty->assign('tasks_queue', $tasks);
+//        $smarty->display('queue/list.tpl');
+
+        return $this->render('queue/list.tpl', [
+            "tasks_queue" => $tasks
+        ]);
     }
 
-    public function run()
+    public function run(Request $request, TasksQueue $tasksQueue )
     {
-        $id = Request::getIntFromGet('id');
+        $id = $request->getIntFromGet('id');
 
-        $result = TasksQueue::runById($id);
+        $result = $tasksQueue->runById($id);
+        $tasks = $tasksQueue->getTaskList();
 
-        Response::redirect('/queue/list');
+        return $this->render('queue/list.tpl', [
+            "tasks_queue" => $tasks
+        ]);
 
     }
 }

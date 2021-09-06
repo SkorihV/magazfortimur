@@ -33,6 +33,7 @@ class ProductController extends AbstractController
      */
     public function list(Request $request, ProductRepository $productRepository)
     {
+
         $current_page = $request->getIntFromGet('p', 1);
         $limit = 10;
 
@@ -182,7 +183,7 @@ class ProductController extends AbstractController
 
         return $this->render('products/add.tpl', [
             "categories" => $categories,
-            'product' => $product
+            "product" => $product
         ]);
     }
 
