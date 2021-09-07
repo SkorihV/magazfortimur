@@ -53,6 +53,8 @@ class Dispatcher
 
         '/import/index'             => [ImportController::class, 'index'],
         '/import/upload'            => [ImportController::class, 'upload'],
+        '/import/parsing'            => [ImportController::class, 'parsing'],
+
 
     ];
 

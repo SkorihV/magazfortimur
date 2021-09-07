@@ -141,6 +141,21 @@ class Db
         return static::affectedRows();
     }
 
+    public function getColumnNamesArr(string $tableName)
+    {
+        $query = "SELECT * FROM $tableName";
+        $result = static::query($query);
+        $columnsArr = static::fetchAssoc($result);
+
+        $columnsName = [];
+
+        foreach ($columnsArr as $key => $value) {
+            $columnsName[] = $key;
+        }
+        return $columnsName;
+
+    }
+
     public static function affectedRows()
     {
         $conn = static::getConnect();
