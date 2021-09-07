@@ -4,6 +4,7 @@ namespace App\Category;
 
 
 use App\Controller\AbstractController;
+use App\Product\ProductRepository;
 use App\Product\ProductService;
 use App\Renderer;
 use App\Request;
@@ -24,8 +25,11 @@ class CategoryController extends AbstractController
 
     public function add(Request $request, CategoryService $categoryService, Response $response)
     {
+        $category = new CategoryModel('');
+        $category->setId(0);
         if ($request->isPost()) {
-            $category  = $categoryService->getFromPost();
+
+            $category  = $categoryService->getFromPost($request);
             $insert = $categoryService->add($category);
 
 
@@ -35,16 +39,13 @@ class CategoryController extends AbstractController
                 die('какая то ошибка сзаза');
             }
         }
-        //$smarty = Renderer::getSmarty();
-       // $smarty->display('categories/add.tpl');
 
-
-        return $this->render('categories/add.tpl');
-
-
+        return $this->render('categories/add.tpl',[
+            'category' => $category
+        ]);
     }
 
-    public function delete(Request $request, CategoryService $categoryService, Response $response)
+    public function delete(Request $request, CategoryService $categoryService, Response $response, CategoryRepository $categoryRepository)
     {
         $id = $request->getIntFromPost('id' );
 
@@ -53,7 +54,7 @@ class CategoryController extends AbstractController
         }
 
 
-        $deleted =  $categoryService->deleteById($id);
+        $deleted =  $categoryRepository->deleteById($id);
 
         if ($deleted) {
             $response->redirect('/categories/list');
@@ -62,8 +63,10 @@ class CategoryController extends AbstractController
         }
     }
 
-    public function edit(Request $request, CategoryService $categoryService, Response $response)
+    public function edit(Request $request, CategoryService $categoryService, Response $response, CategoryRepository $categoryRepository)
     {
+
+
         $id = $request->getIntFromGet('id', null);
 
         if (is_null($id)) {
@@ -73,14 +76,15 @@ class CategoryController extends AbstractController
         $category = [];
 
         if ($id) {
-            $category = $categoryService->getById($id);
+            $category = $categoryRepository->getById($id);
         }
 
         if ($request->isPost()) {
 
-            $category = $categoryService->getFromPost( );
+            $category = $categoryRepository->getFromPostObj($request);
 
-            $edited = $categoryService->uploadById($id, $category);
+            $edited = $categoryRepository->uploadById($category);
+
 
             if ($edited) {
                 $response->redirect('/categories/list');
@@ -89,13 +93,13 @@ class CategoryController extends AbstractController
             }
         }
 
-        $smarty = Renderer::getSmarty();
-        $smarty->assign('category', $category);
-        $smarty->display('categories/edit.tpl');
+//        $smarty = Renderer::getSmarty();
+//        $smarty->assign('category', $category);
+//        $smarty->display('categories/edit.tpl');
 
 
         return $this->render('categories/edit.tpl', [
-            'categories' => $category
+            'category' => $category
         ]);
 
     }
@@ -106,17 +110,21 @@ class CategoryController extends AbstractController
      * @return mixed
      * @route("/categories/list")
      */
-    public function list(CategoryService $categoryService)
+    public function list(CategoryRepository $categoryRepository)
     {
 
-        $category = $categoryService->getList();
+        $categories = $categoryRepository->getList();
 
         return $this->render('categories/index.tpl', [
-            'categories' => $category
+            'categories' => $categories
         ]);
     }
 
-    public function view(Request $request, CategoryService $categoryService, ProductService $productService)
+    public function view(Request $request,
+                         CategoryService $categoryService,
+                         ProductService $productService,
+                         CategoryRepository $categoryRepository,
+                         ProductRepository $productRepository)
     {
         $category_id = $request->getIntFromGet('id', null);
 
@@ -125,7 +133,7 @@ class CategoryController extends AbstractController
             $category_id = $this->params['id'] ?? null;
         }
 
-        $category = $categoryService->getById( $category_id);
+        $category = $categoryRepository->getById( $category_id);
         $products = $productService->getListByCategoryId($category_id);
 
 

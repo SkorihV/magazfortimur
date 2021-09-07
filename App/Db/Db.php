@@ -119,13 +119,17 @@ class Db
 
         foreach ($fields as $fieldName => $fieldValue) {
 
+
             if ($fieldValue instanceof DbExp) {
                 $setFields[] = " $fieldName = $fieldValue";
+
+
             } else {
                 $fieldValue = static::escape($fieldValue);
                 $setFields[] = " $fieldName = '$fieldValue'";
             }
         }
+
         $setFields = implode(',', $setFields);
         $query = "UPDATE $tableName SET $setFields";
 

@@ -26,6 +26,7 @@ class CategoryService {
 
     public function add($category)
     {
+
         if (isset($category['id'])){
             unset($category['id']);
         }

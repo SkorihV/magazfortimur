@@ -12,10 +12,10 @@
             <tbody>
             {foreach from=$categories item=category}
             <tr>
-                <td>{$category.id}</td>
-                <td>{$category.name}</td>
-                <td><a href='/categories/edit?id={$category.id}'>Редактировать</a></td>
-                <td><form action="/categories/delete" method="post" style="display:inline"><input type="hidden" name="id" value="{$category.id}"><input type="submit" value="Удалить"></form></td>
+                <td>{$category->getId()}</td>
+                <td>{$category->getName()}</td>
+                <td><a href='/categories/edit?id={$category->getId()}'>Редактировать</a></td>
+                <td><form action="/categories/delete" method="post" style="display:inline"><input type="hidden" name="id" value="{$category->getId()}"><input type="submit" value="Удалить"></form></td>
             </tr>
             {/foreach}
             </tbody>

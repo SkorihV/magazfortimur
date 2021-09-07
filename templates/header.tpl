@@ -32,8 +32,8 @@
             <div class="category-list">
                 {foreach from=$categories_shared item=category}
                 <div class="category-item">
-                    <a href="/categories/view?id={$category.id}" class="category-link {if $current_category.id == $category.id}active{/if}">
-                        {$category.name}
+                    <a href="/categories/view?id={$category->getId()}" class="category-link {if $current_category.id == $category->getId()}active{/if}">
+                        {$category->getName()}
                     </a>
                 </div>
                 {/foreach}

@@ -61,6 +61,7 @@ class Request
 
         public function getIntFromPost(string $key, $default = 0)
         {
+
             if(isset($_POST[$key])) {
                 return (int) $_POST[$key];
             }

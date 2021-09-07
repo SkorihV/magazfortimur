@@ -1,5 +1,7 @@
 <?php
 
+
+use App\Category\CategoryRepository;
 use App\Category\CategoryService;
 use App\Di\Container;
 use App\Kernel;
@@ -36,8 +38,6 @@ function delDir($dir) {
 }
 
 
-////////////////
-
 
 $di = new Container();
 $di->singletone(Smarty::class, function (){
@@ -54,12 +54,13 @@ $di->singletone(Smarty::class, function (){
 $smarty = $di->get(Smarty::class);
 
 
-$categoryService = new CategoryService();
-$categories = $categoryService->getList();
+$category = new CategoryRepository();
+$categories = $category->getList();
+
 $smarty->assign('categories_shared', $categories);
+
 
 $dispatcher = new Dispatcher($di);
 $dispatcher->dispatch();
-
 
 (new Kernel())->run();
