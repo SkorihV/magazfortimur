@@ -49,6 +49,7 @@ class Dispatcher
 
         '/queue/list'               => [QueueController::class, 'list'],
         '/queue/run'                => [QueueController::class, 'run'],
+        "/queue/delete"             => [QueueController::class, 'delete'],
 
         '/import/index'             => [ImportController::class, 'index'],
         '/import/upload'            => [ImportController::class, 'upload'],

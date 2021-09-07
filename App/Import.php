@@ -2,12 +2,20 @@
 
 namespace App;
 
+use App\Category\CategoryService;
 use App\Db\Db;
+use App\Product\ProductImagesService;
+use App\Product\ProductService;
 
 class Import
 {
     public static function productsFromFileTask(array $params)
     {
+
+        $categoryService = new CategoryService;
+        $productService = new ProductService;
+        $productImagesService = new ProductImagesService;
+
         $filename = $params['filename'] ?? null;
 
         if(is_null($filename)) {
@@ -52,10 +60,10 @@ class Import
             $categoryName = $productData['category_name'];
 
 
-            $category = CategoryService::getByName($categoryName);
+            $category = $categoryService->getByName($categoryName);
 
             if (empty($category)) {
-                $categoryId =  CategoryService::add([
+                $categoryId =  $categoryService->add([
                     'name' => $categoryName,
                 ]);
             } else {
@@ -64,13 +72,13 @@ class Import
 
             $product['category_id'] = $categoryId;
 
-            $targetProduct = ProductService::getByField($mainField, $product[$mainField]);
+            $targetProduct = $productService->getByField($mainField, $product[$mainField]);
             if (empty($targetProduct)) {
-                $productId = ProductService::add($product);
+                $productId = $productService->add($product);
             } else {
                 $productId = $targetProduct['id'];
                 $targetProduct = array_merge($targetProduct, $product);
-                ProductService::uploadById($productId, $targetProduct);
+                $productService->uploadById($productId, $targetProduct);
             }
 
 
@@ -83,7 +91,7 @@ class Import
             });
 
             foreach ($productData['image_urls'] as $imageUrl) {
-                ProductImagesService::uploadImageByUrl($productId, $imageUrl);
+                $productImagesService->uploadImageByUrl($productId, $imageUrl);
             }
         }
 

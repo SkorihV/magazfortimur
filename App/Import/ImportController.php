@@ -2,12 +2,9 @@
 
 namespace App\Import;
 
-use App\Category\CategoryService;
+
 use App\Controller\AbstractController;
 use App\Import;
-use App\Renderer;
-use App\Response;
-use App\Router\Route;
 use App\TasksQueue;
 
 class ImportController extends AbstractController

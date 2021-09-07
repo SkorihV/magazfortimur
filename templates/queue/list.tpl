@@ -15,7 +15,7 @@
             <td>{$task.name}</td>
             <td>{$task.status}</td>
             <td><a href='/queue/run?id={$task.id}'>Зап</a></td>
-            <td><form action="/queue/delete" method="post" style="display:inline"><input type="hidden" name="id" value="{$task.id}"><input type="submit" value="Удалить"></form></td>
+            <td><form action="/queue/delete?id={$task.id}" method="post" style="display:inline"><input type="hidden" name="id" value="{$task.id}"><input type="submit" value="Удалить"></form></td>
         </tr>
     {/foreach}
     </tbody>

@@ -1,5 +1,5 @@
-<?php /* Smarty version 2.6.31, created on 2021-08-30 16:14:00
-         compiled from Queue/list.tpl */ ?>
+<?php /* Smarty version 2.6.31, created on 2021-09-07 10:18:21
+         compiled from queue/list.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список задач")));
 $this->_tpl_vars = $_smarty_tpl_vars;
@@ -27,7 +27,8 @@ unset($_smarty_tpl_vars);
 </td>
             <td><a href='/queue/run?id=<?php echo $this->_tpl_vars['task']['id']; ?>
 '>Зап</a></td>
-            <td><form action="/queue/delete" method="post" style="display:inline"><input type="hidden" name="id" value="<?php echo $this->_tpl_vars['task']['id']; ?>
+            <td><form action="/queue/delete?id=<?php echo $this->_tpl_vars['task']['id']; ?>
+" method="post" style="display:inline"><input type="hidden" name="id" value="<?php echo $this->_tpl_vars['task']['id']; ?>
 "><input type="submit" value="Удалить"></form></td>
         </tr>
     <?php endforeach; endif; unset($_from); ?>

@@ -105,6 +105,14 @@ class Db
         return static::lastInsertId();
     }
 
+
+    public static function getFieldValueSelectedOne($tableName, $where, $fieldSearch)
+    {
+        $query = "SELECT `$fieldSearch` FROM $tableName WHERE $where";
+        return static::fetchRow($query);
+
+    }
+
     public static function update(string $tableName, array $fields, string $where)
     {
         $setFields = [];

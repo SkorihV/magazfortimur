@@ -119,11 +119,7 @@ class  Container
         }
 
         $reflectionController = new ReflectionObject($object);
-        echo "<pre>";
-      //  var_dump($object);
-        var_dump($propertyName);
-        var_dump($reflectionController->getProperty($propertyName));
-        echo "</pre>";
+
         $reflectionRenderer = $reflectionController->getProperty($propertyName);
         $reflectionRenderer->setAccessible(true);
         $reflectionRenderer->setValue($object, $value);

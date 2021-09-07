@@ -17,7 +17,8 @@ class Kernel
     {
         $configDir = __DIR__ . '/../config';
         $config = new Config\Config();
-        $config->parse($configDir);
+        $config->parser($configDir);
+
     }
 
     public function run()

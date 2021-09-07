@@ -3,6 +3,7 @@
 namespace App\Category;
 
 use App\Db\Db;
+use App\Request;
 
 class CategoryService {
     public function getList ()
