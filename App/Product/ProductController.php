@@ -7,8 +7,8 @@ use App\Category\CategoryModel;
 use App\Category\CategoryService;
 use App\Controller\AbstractController;
 use App\Renderer;
-use App\Request;
-use App\Response;
+use App\Http\Request;
+use App\Http\Response;
 use App\Router\Route;
 use Exception;
 

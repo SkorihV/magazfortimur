@@ -5,8 +5,8 @@ namespace App\Queue;
 use App\Controller\AbstractController;
 use App\Db\Db;
 use App\Renderer;
-use App\Request;
-use App\Response;
+use App\Http\Request;
+use App\Http\Response;
 use App\Router\Route;
 use App\TasksQueue;
 

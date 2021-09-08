@@ -3,18 +3,18 @@
 namespace App\Router;
 
 use App\Category\CategoryController;
+use App\Config\Config;
 use App\Di\Container;
+use App\FS\FS;
 use App\Import\ImportController;
 use App\Product\ProductController;
 use App\Queue\QueueController;
 use App\Renderer;
-use App\Request;
+use App\Http\Request;
 use App\Router\Exception\MethodDoesNotExistException;
 use App\Router\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionParameter;
-use Smarty;
 
 class Dispatcher
 {
@@ -23,81 +23,27 @@ class Dispatcher
      */
     private Container $di;
 
+    /**
+     * @var Config
+     */
+    private  $config;
+
+    /**
+     * @var FS
+     */
+    private $fs;
+
     public function __construct(Container $di)
     {
         $this->di = $di;
+        $this->config = $di->get(Config::class);
+        $this->fs = $di->get(FS::class);
     }
 
-    protected array $routes =  [
-        '/products/list'            => [ProductController::class, 'list'],
-        '/'                         => [ProductController::class, 'list'],
-        '/products/edit'            => [ProductController::class, 'edit'],
-        '/products/add'             => [ProductController::class, 'add'],
-        '/products/delete'          => [ProductController::class, 'delete'],
-        '/products/delete_image'    => [ProductController::class, 'deleteImage'],
-        '/products/edit/{id}'       => [ProductController::class, 'edit'],
-        '/products/{id}/edit'       => [ProductController::class, 'edit'],
-
-        '/categories/list'          => [CategoryController::class, 'list'],
-        '/categories/add'           => [CategoryController::class, 'add'],
-        '/categories/edit'          => [CategoryController::class, 'edit'],
-        '/categories/edit/{id}'     => [CategoryController::class, 'edit'],
-        '/categories/view'          => [CategoryController::class, 'view'],
-        '/categories/delete'        => [CategoryController::class, 'delete'],
-        '/categories/view/{id}'     => [CategoryController::class, 'view'],
-        '/categories/{id}/view'     => [CategoryController::class, 'view'],
-
-        '/queue/list'               => [QueueController::class, 'list'],
-        '/queue/run'                => [QueueController::class, 'run'],
-        "/queue/delete"             => [QueueController::class, 'delete'],
-
-        '/import/index'             => [ImportController::class, 'index'],
-        '/import/upload'            => [ImportController::class, 'upload'],
-        '/import/parsing'            => [ImportController::class, 'parsing'],
 
 
-    ];
 
-    protected function getRouts(): array
-    {
-        $routes = $this->routes;
 
- //       $controllerFile = APP_DIR . '/App/Product/ProductController.php';
-
-        $files =  $this->scanDir(APP_DIR . '/App');
-
-        foreach ($files as $filepath) {
-
-            if (strpos($filepath, 'Controller.php') === false) {
-                continue;
-            }
-            $controllerRoutes = $this->getRoutesByControllerFile($filepath);
-            $routes = array_merge($routes, $controllerRoutes);
-        }
-
-        return $routes;
-    }
-
-    protected function scanDir(string $dirname) {
-        $list = scandir($dirname);
-
-        $list = array_filter($list, function ($item){
-            return !in_array($item, ['.', '..']);
-        });
-
-        $filenames = [];
-        foreach ($list as $fileItem) {
-            $filePath = $dirname . '/' . $fileItem;
-
-            if (!is_dir($filePath)) {
-                $filenames[] = $filePath;
-            } else {
-                $filenames = array_merge($filenames, $this->scanDir($filePath));
-            }
-        }
-
-        return $filenames;
-    }
 
     /**
      * @return false|mixed|void|null
@@ -105,13 +51,12 @@ class Dispatcher
      */
     public function dispatch()
     {
-        $this->routes = $this->getRouts();
+        $request = $this->di->get(Request::class);
 
-        $request = new Request();
         $url = $request->getUrl();
         $route = new Route($url);
 
-        foreach ($this->routes as $path => $controller) {
+        foreach ($this->getRouts() as $path => $controller) {
             if ($this->isValidPath($path, $route)){
                 break;
             }
@@ -166,7 +111,38 @@ class Dispatcher
         exit;
     }
 
-    private function getRoutesByControllerFile(string $filePath) {
+    private function getRouts(): array
+    {
+        $routes = [];
+        foreach ($this->config->routes as $routePath => $routeConfig) {
+            $routes[$routePath] = $routeConfig;
+        }
+
+        $annotationRoutes = $this->parseControllerForAnnotationRoutes();
+
+        return array_merge($routes, $annotationRoutes);
+    }
+
+
+    private function parseControllerForAnnotationRoutes()
+    {
+        $files =  $this->fs->scanDir(APP_DIR . '/App');
+
+        $routes = [];
+
+        foreach ($files as $filepath) {
+
+            if (strpos($filepath, 'Controller.php') === false) {
+                continue;
+            }
+            $controllerRoutes = $this->getRoutesFromControllerFile($filepath);
+            $routes = array_merge($routes, $controllerRoutes);
+        }
+
+        return $routes;
+    }
+
+    private function getRoutesFromControllerFile(string $filePath) {
 
         $routes = [];
 

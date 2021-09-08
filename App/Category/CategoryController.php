@@ -7,8 +7,8 @@ use App\Controller\AbstractController;
 use App\Product\ProductRepository;
 use App\Product\ProductService;
 use App\Renderer;
-use App\Request;
-use App\Response;
+use App\Http\Request;
+use App\Http\Response;
 use App\Router\Route;
 
 class CategoryController extends AbstractController

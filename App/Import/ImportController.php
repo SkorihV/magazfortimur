@@ -6,8 +6,8 @@ namespace App\Import;
 use App\Controller\AbstractController;
 use App\Db\Db;
 use App\Import;
-use App\Request;
-use App\Response;
+use App\Http\Request;
+use App\Http\Response;
 use App\TasksQueue;
 
 class ImportController extends AbstractController

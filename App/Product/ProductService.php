@@ -3,7 +3,7 @@
 namespace App\Product;
 
 use App\Db\Db;
-use App\Request;
+use App\Http\Request;
 
 class ProductService {
 

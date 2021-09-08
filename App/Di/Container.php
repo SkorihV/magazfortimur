@@ -91,7 +91,7 @@ class  Container
 
 
         if (isset($this->factories[$className])) {
-            return $this->factories[$className]();
+            return $this->factories[$className]($this);
         }
 
         $reflectionClass = new ReflectionClass($className);
