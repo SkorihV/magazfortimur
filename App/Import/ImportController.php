@@ -55,10 +55,6 @@ class ImportController extends AbstractController
 //        $filePath = APP_UPLOAD_DIR . '/import/' . $importFilename;
 
 
-
-
-
-
         $fieldsArr = $this->filterFieldsArr($_POST);
 
         $importFilename = $this->getFilePathFromPost($request);
@@ -98,13 +94,13 @@ class ImportController extends AbstractController
         $filePath = APP_UPLOAD_DIR . '/import/' . $importFilename;
 
         $columnFile = $importRepository->getFirstLineArray($filePath);
-        $fieldsFile = $importRepository->getNames($columnFile);
+        $nameFieldsFile = $importRepository->getNames($columnFile);
 
         $columnTable = $db->getColumnNamesArr('products');
 
 
         return $this->render('import/parsing.tpl',[
-            'fieldsFile' => $fieldsFile,
+            'fieldsFile' => $nameFieldsFile,
             'columnTable' => $columnTable,
             'filePath' => $filePath,
             ]

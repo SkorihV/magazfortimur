@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'uploadDir' => __DIR__ . '/../../var/upload'
+    'uploadDir' => realpath(__DIR__ . '/../../var/upload')
 ];
