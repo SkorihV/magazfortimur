@@ -136,7 +136,6 @@ class CategoryController extends AbstractController
         $category = $categoryRepository->getById( $category_id);
         $products = $productService->getListByCategoryId($category_id);
 
-
         return $this->render('categories/view.tpl', [
             'categories' => $category,
             "products" => $products

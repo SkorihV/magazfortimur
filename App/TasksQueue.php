@@ -6,7 +6,7 @@ use App\Db\Db;
 
 class TasksQueue
 {
-    public static function addTask(string $name, string $task, array $params)
+    public function addTask(string $name, string $task, array $params)
     {
 
         $taskMeta = explode('::', $task);
@@ -26,7 +26,7 @@ class TasksQueue
         ]);
     }
 
-    public static function getById(int $taskId)
+    public function getById(int $taskId)
     {
         $query = "SELECT * FROM tasks_queue WHERE id = $taskId";
         return Db::fetchRow($query);
@@ -38,7 +38,7 @@ class TasksQueue
         return Db::fetchAll($query);
     }
 
-    public static function setStatus(int $taskId, string $status)
+    public function setStatus(int $taskId, string $status)
     {
         $availableStatus = [
             'new',
@@ -57,15 +57,15 @@ class TasksQueue
     }
     
 
-    public static function runById($id)
+    public function runById($id)
     {
-        $task = static::getById($id);
+        $task = $this->getById($id);
 
-        return static::run($task);
+        return $this->run($task);
 
     }
 
-    public static function run(array $task): bool
+    public function run(array $task): bool
     {
         $taskId = $task['id'] ?? '';
         if (empty($task) || is_null($taskId)) {
@@ -80,19 +80,25 @@ class TasksQueue
         $taskMethodExist = method_exists($taskAction[0], $taskAction[1]);
 
         if (!$taskClassExist || !$taskMethodExist) {
-            static::setStatus($taskId, 'error');
+            $this->setStatus($taskId, 'error');
             return false;
         }
         $taskParams = json_decode($task['params'], true);
-        static::setStatus($taskId, 'in_process');
 
-        call_user_func($taskAction, $taskParams);
-        static::setStatus($taskId, 'done');
+
+        $this->setStatus($taskId, 'in_process');
+
+        $filename['filename'] = $taskParams['filename'];
+        $fields = $taskParams['fields'];
+
+
+        call_user_func($taskAction, $filename,  $fields);
+        $this->setStatus($taskId, 'done');
 
         return true;
     }
 
-    public static function execute()
+    public function execute()
     {
         $query = "SELECT * FROM tasks_queue WHERE status = 'in_process' LIMIT 1";
         $inProcessTask = Db::fetchRow($query);
@@ -111,6 +117,6 @@ class TasksQueue
         }
         echo "new task found";
 
-        return static::run($newTaskProcess);
+        return $this->run($newTaskProcess);
     }
 }

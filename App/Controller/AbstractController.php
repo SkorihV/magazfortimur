@@ -31,6 +31,7 @@ abstract class AbstractController
 //        return $smarty->display($template);
 
         $this->renderer->render($template, $data);
+        return true;
     }
 
     public function redirect(string  $url) {

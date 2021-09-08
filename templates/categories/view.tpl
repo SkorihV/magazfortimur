@@ -19,7 +19,6 @@
         <tr>
             <td>{$product.id}</td>
             <td>{$product.name}
-                {$product.images}
                 {if $product.images}
                     <br>
                     {foreach from=$product.images item=image}

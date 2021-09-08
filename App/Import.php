@@ -9,7 +9,7 @@ use App\Product\ProductService;
 
 class Import
 {
-    public static function productsFromFileTask(array $params)
+    public static function productsFromFileTask(array $params, array $fields)
     {
 
         $categoryService = new CategoryService;
@@ -25,15 +25,15 @@ class Import
 
         $file = fopen($filePath, 'r');
         $withHeader = true;
-        $settings = [
-            0 =>'name',
-            1 => 'category_name',
-            2 => 'article',
-            3 => 'price',
-            4 => 'amount',
-            5 => 'description',
-            6 => 'image_urls',
-        ];
+//        $settings = [
+//            0 =>'name',
+//            1 => 'category_name',
+//            2 => 'article',
+//            3 => 'price',
+//            4 => 'amount',
+//            5 => 'description',
+//            6 => 'image_urls',
+//        ];
 
         $mainField = 'article';
 
@@ -41,24 +41,36 @@ class Import
             $headers = fgetcsv($file);
         }
 
+
         while ($row = fgetcsv($file)) {
+
+            $product = array_combine($fields, $row);
+
+            $image_urls = $product['image_url'] ?? null;
+            unset($product['image_url']);
+
+
+
+            foreach ($product as $key => $value) {
+                $product[$key] = Db::escape($value);
+            }
 
             $productData = [];
 
-            foreach ($settings as $index => $key) {
+//            foreach ($fields as $index => $key) {
+//
+//                $productData[$key] = $row[$index] ?? null;
+//            }
+//            $product = [
+//                'name'           => Db::escape($productData['name']),
+//                'article'        => Db::escape($productData['article']),
+//                'price'          => Db::escape($productData['price']),
+//                'amount'         => Db::escape($productData['amount']),
+//                'description'    => Db::escape($productData['description']),
+//            ];
 
-                $productData[$key] = $row[$index] ?? null;
-            }
-            $product = [
-                'name'           => Db::escape($productData['name']),
-                'article'        => Db::escape($productData['article']),
-                'price'          => Db::escape($productData['price']),
-                'amount'         => Db::escape($productData['amount']),
-                'description'    => Db::escape($productData['description']),
-            ];
 
-            $categoryName = $productData['category_name'];
-
+            $categoryName = $product['category_id'];
 
             $category = $categoryService->getByName($categoryName);
 
@@ -69,10 +81,13 @@ class Import
             } else {
                 $categoryId = $category['id'];
             }
-
             $product['category_id'] = $categoryId;
 
+
+
             $targetProduct = $productService->getByField($mainField, $product[$mainField]);
+
+
             if (empty($targetProduct)) {
                 $productId = $productService->add($product);
             } else {
@@ -82,7 +97,7 @@ class Import
             }
 
 
-            $productData['image_urls'] = explode("\n", $productData['image_urls']);
+            $productData['image_urls'] = explode("\n", $image_urls);
             $productData['image_urls'] = array_map(function ($item) {
                 return trim($item);
             }, $productData['image_urls']);

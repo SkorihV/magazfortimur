@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-09-07 12:41:01
+<?php /* Smarty version 2.6.31, created on 2021-09-08 12:25:17
          compiled from categories/view.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список товаров")));
@@ -28,8 +28,6 @@ unset($_smarty_tpl_vars);
             <td><?php echo $this->_tpl_vars['product']['id']; ?>
 </td>
             <td><?php echo $this->_tpl_vars['product']['name']; ?>
-
-                <?php echo $this->_tpl_vars['product']['images']; ?>
 
                 <?php if ($this->_tpl_vars['product']['images']): ?>
                     <br>
