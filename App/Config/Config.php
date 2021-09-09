@@ -19,17 +19,12 @@ class Config implements ArrayAccess, Iterator
             if (is_array($value)) {
                 $value = new self($value);
             }
-
             $this->{$key} = $value;
         }
-
     }
-
-
 
     public function __get(string $key)
     {
-
         return $this->data[$key] ?? (new NullConfig());
     }
 
@@ -93,6 +88,11 @@ class Config implements ArrayAccess, Iterator
 
         $dirname = APP_DIR . '/' . $dirname;
 
+        if (!file_exists($dirname) || !is_dir($dirname)) {
+            throw new ConfigDirectoryNotFoundException($dirname);
+        }
+
+
         $fs = new FS();
         $fileList = $fs->scanDir($dirname);
 
@@ -130,8 +130,6 @@ class Config implements ArrayAccess, Iterator
             $appConfigs  = array_merge_recursive($appConfigs, $config['src']);
         }
 
-
-
         $config = array_replace_recursive($defaultConfigs, $appConfigs);
 
         return new self($config);
@@ -150,5 +148,4 @@ class Config implements ArrayAccess, Iterator
 
         return $data;
     }
-
 }

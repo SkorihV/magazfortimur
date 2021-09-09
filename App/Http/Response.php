@@ -52,16 +52,16 @@ class Response
     /**
      * @return null
      */
-    public function getRedirectUrl($redirectUrl)
+    public function getRedirectUrl()
     {
         return $this->redirectUrl;
     }
 
     /**
-     * @param null $redirectUrl
+     * @param string $redirectUrl
      * @return Response
      */
-    public function setRedirectUrl($redirectUrl)
+    public function setRedirectUrl(string $redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
         return $this;

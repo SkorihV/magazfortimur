@@ -179,6 +179,7 @@ class Db
     public static function escape(string $value)
     {
         $conn = static::getConnect();
+
         return mysqli_real_escape_string($conn, $value);
     }
 

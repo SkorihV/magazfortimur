@@ -39,9 +39,12 @@ class QueueController extends AbstractController
         $tasksQueue->runById($id);
         $tasks = $tasksQueue->getTaskList();
 
-        return $this->render('queue/list.tpl', [
-            "tasks_queue" => $tasks
-        ]);
+//        return $this->render('queue/list.tpl', [
+//            "tasks_queue" => $tasks
+//        ]);
+
+
+        return $this->redirect('queue/list.tpl');
     }
 
     /**
@@ -60,7 +63,11 @@ class QueueController extends AbstractController
         $path = APP_UPLOAD_DIR .'/import/'. $fileName;
         unlink($path);
         $db->delete('tasks_queue', "id = $id");
-        $response->redirect('/queue/list');
+       // $response->setRedirectUrl('/queue/list');
+        echo "<pre>";
+        var_dump( $this->redirect('/queue/list'));
+        echo "</pre>";
 
+exit;
     }
 }

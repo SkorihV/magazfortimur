@@ -22,6 +22,7 @@
         <li><a href="/categories/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
+        <li><a href="/user/register">Регистрация</a></li>
 
     </ul>
     <p>

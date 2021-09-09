@@ -5,6 +5,7 @@ use App\Data\Category\CategoryController;
 use App\Data\Import\ImportController;
 use App\Data\Product\ProductController;
 use App\Data\Queue\QueueController;
+use App\Data\User\UserController;
 
 return [
     '/products/list'            => [ProductController::class, 'list'],
@@ -32,4 +33,6 @@ return [
     '/import/index'             => [ImportController::class, 'index'],
     '/import/upload'            => [ImportController::class, 'upload'],
     '/import/parsing'            => [ImportController::class, 'parsing'],
+
+    '/user/register'            => [UserController::class, 'register'],
 ];

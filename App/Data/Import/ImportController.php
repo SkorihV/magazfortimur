@@ -58,14 +58,17 @@ class ImportController extends AbstractController
         $fieldsArr = $this->filterFieldsArr($_POST);
 
         $importFilename = $this->getFilePathFromPost($request);
-        $taskName = 'Импорт файла ' . $importFilename;
-        $task = Import::class . '::productsFromFileTask';
-        $taskParams =  [
-            'filename' => $importFilename,
-            'fields' => $fieldsArr,
-        ];
+        if (file_exists($importFilename)) {
+            $taskName = 'Импорт файла ' . $importFilename;
+            $task = Import::class . '::productsFromFileTask';
+            $taskParams =  [
+                'filename' => $importFilename,
+                'fields' => $fieldsArr,
+            ];
 
-        $queue->addTask($taskName, $task, $taskParams);
+            $queue->addTask($taskName, $task, $taskParams);
+        }
+
         $tasks_queue = $queue->getTaskList();
 
 

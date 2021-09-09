@@ -52,6 +52,7 @@ class Import
 
 
             foreach ($product as $key => $value) {
+
                 $product[$key] = Db::escape($value);
             }
 
@@ -90,13 +91,24 @@ class Import
 
             if (empty($targetProduct)) {
                 $productId = $productService->add($product);
+                echo "<pre>";
+                var_dump($product);
+                echo "</pre>";
+
             } else {
                 $productId = $targetProduct['id'];
                 $targetProduct = array_merge($targetProduct, $product);
+                echo "<pre>";
+                var_dump($productId, $targetProduct);
+                echo "</pre>";
+
                 $productService->uploadById($productId, $targetProduct);
+
+
+
             }
 
-
+exit;
             $productData['image_urls'] = explode("\n", $image_urls);
             $productData['image_urls'] = array_map(function ($item) {
                 return trim($item);
