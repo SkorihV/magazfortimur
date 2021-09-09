@@ -5,7 +5,7 @@ use App\Category\CategoryRepository;
 use App\Category\CategoryService;
 use App\Di\Container;
 use App\Kernel;
-use App\Renderer;
+use App\Renderer\Renderer;
 use App\Router\Dispatcher;
 
 //require_once 'config.php';

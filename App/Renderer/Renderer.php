@@ -1,14 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Renderer;
 
 use Smarty;
+
 
 class Renderer
 {
     protected static $smarty;
 
-    protected $_smarty;
+    protected Smarty $_smarty;
 
     public function __construct(Smarty $smarty)
     {
@@ -17,7 +18,7 @@ class Renderer
 
     public static function getSmarty()
     {
-        
+
        if(is_null(static::$smarty)) {
             static::init();
         }
@@ -37,11 +38,16 @@ class Renderer
         static::$smarty = $smarty;
     }
 
-    public function render(string $template, array $data = []) {
+    /**
+     * @param string $template
+     * @param array $data
+     * @return mixed|void|bool|string[]|string
+     */
+    public function render(string $template, array $data = [])
+    {
         foreach ($data as $key => $value) {
             $this->_smarty->assign($key, $value);
         }
-
-        $this->_smarty->display($template);
+        return $this->_smarty->fetch($template);
     }
 }

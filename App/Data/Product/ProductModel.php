@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Product;
+namespace App\Data\Product;
 
-use App\Category\CategoryModel;
+use App\Data\Category\CategoryModel;
 
 /**
  *

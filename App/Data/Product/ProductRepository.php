@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Product;
+namespace App\Data\Product;
 
-use App\Category\CategoryService;
-use App\Category\CategoryModel;
+use App\Data\Category\CategoryService;
+use App\Data\Category\CategoryModel;
 use App\Db\Db;
 //use App\ProductImagesService as ProductImageService;
 

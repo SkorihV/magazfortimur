@@ -29,6 +29,7 @@ class Config implements ArrayAccess, Iterator
 
     public function __get(string $key)
     {
+
         return $this->data[$key] ?? (new NullConfig());
     }
 

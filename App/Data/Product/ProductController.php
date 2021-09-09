@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Product;
+namespace App\Data\Product;
 
 
-use App\Category\CategoryModel;
-use App\Category\CategoryService;
+use App\Data\Category\CategoryModel;
+use App\Data\Category\CategoryService;
 use App\Controller\AbstractController;
-use App\Renderer;
+use App\Renderer\Renderer;
 use App\Http\Request;
 use App\Http\Response;
 use App\Router\Route;
@@ -169,7 +169,7 @@ class ProductController extends AbstractController
             /* конец загрузки изображений*/
 
             if ($productId) {
-                $response->redirect('/products/list');
+                return $this->redirect('/products/list');
             } else {
                 die('какая то ошибка сзаза');
             }
@@ -202,7 +202,7 @@ class ProductController extends AbstractController
         $deleted =  $productService->deleteById($id);
 
         if ($deleted) {
-            $response->redirect('/products/list');
+            return $this->redirect('/products/list');
         } else {
             die('какая то ошибка сзаза1');
         }

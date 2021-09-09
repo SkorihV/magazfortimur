@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Category;
+namespace App\Data\Category;
 
 
 use App\Controller\AbstractController;
-use App\Product\ProductRepository;
-use App\Product\ProductService;
-use App\Renderer;
+use App\Data\Product\ProductRepository;
+use App\Data\Product\ProductService;
+use App\Renderer\Renderer;
 use App\Http\Request;
 use App\Http\Response;
 use App\Router\Route;
@@ -57,7 +57,7 @@ class CategoryController extends AbstractController
         $deleted =  $categoryRepository->deleteById($id);
 
         if ($deleted) {
-            $response->redirect('/categories/list');
+            return $this->redirect('/categories/list');
         } else {
             die('какая то ошибка сзаза');
         }
@@ -87,7 +87,7 @@ class CategoryController extends AbstractController
 
 
             if ($edited) {
-                $response->redirect('/categories/list');
+                return $this->redirect('/categories/list');
             } else {
                 die('какая то ошибка сзаза');
             }

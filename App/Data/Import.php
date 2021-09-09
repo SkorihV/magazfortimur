@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Data;
 
-use App\Category\CategoryService;
+use App\Data\Category\CategoryService;
 use App\Db\Db;
-use App\Product\ProductImagesService;
-use App\Product\ProductService;
+use App\Data\Product\ProductImagesService;
+use App\Data\Product\ProductService;
 
 class Import
 {

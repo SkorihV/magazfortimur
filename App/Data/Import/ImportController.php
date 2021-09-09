@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Import;
+namespace App\Data\Import;
 
 
 use App\Controller\AbstractController;
 use App\Db\Db;
-use App\Import;
+use App\Data\Import;
 use App\Http\Request;
 use App\Http\Response;
-use App\TasksQueue;
+use App\Data\TasksQueue;
 
 class ImportController extends AbstractController
 {

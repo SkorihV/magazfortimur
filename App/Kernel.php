@@ -4,6 +4,10 @@ namespace App;
 
 use App\Config\Config;
 use App\Router\Dispatcher;
+use App\Router\Exception\ControllerDoesNotException;
+use App\Router\Exception\ExpectToRecieveResponseObjectException;
+use App\Router\Exception\MethodDoesNotExistException;
+use App\Router\Exception\NotFoundException;
 use Smarty;
 
 class Kernel
@@ -30,8 +34,7 @@ class Kernel
 
             $smarty->template_dir = $config->renderer->templateDir;
             $smarty->compile_dir = $config->renderer->compileDir;
-//            $smarty->cache_dir = APP_DIR . '/var/cache';
-//            $smarty->config_dir = APP_DIR . '/var/configs';
+
 
             return $smarty;
         });
@@ -43,7 +46,24 @@ class Kernel
 
     public function run()
     {
-        (new Dispatcher($this->di))->dispatch();
+        try {
+           $response =  (new Dispatcher($this->di))->dispatch();
+
+           echo $response;
+        } catch (NotFoundException $e) {
+            //404
+            echo "404";
+        } catch (ControllerDoesNotException | MethodDoesNotExistException $e) {
+            //500
+            echo "500 роблема с контроллерами или роутерами";
+        }  catch (ExpectToRecieveResponseObjectException $e) {
+            //500
+
+            echo "500  - response";
+        } catch (\ReflectionException $e) {
+            //500
+            echo "500 - reflection";
+        }
     }
     
     

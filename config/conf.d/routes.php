@@ -1,10 +1,10 @@
 <?php
 
 
-use App\Category\CategoryController;
-use App\Import\ImportController;
-use App\Product\ProductController;
-use App\Queue\QueueController;
+use App\Data\Category\CategoryController;
+use App\Data\Import\ImportController;
+use App\Data\Product\ProductController;
+use App\Data\Queue\QueueController;
 
 return [
     '/products/list'            => [ProductController::class, 'list'],

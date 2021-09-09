@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Category;
+namespace App\Data\Category;
 
 class CategoryModel
 {

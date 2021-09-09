@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Category;
+namespace App\Data\Category;
 
 use App\Db\Db;
 use App\Http\Request;

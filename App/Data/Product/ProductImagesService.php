@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Product;
+namespace App\Data\Product;
 
 use App\Db\Db;
 

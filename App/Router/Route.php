@@ -2,8 +2,7 @@
 
 namespace App\Router;
 
-use App\Router\Exception\MethodDoesNotExistException;
-use App\Router\Exception\NotFoundException;
+use App\Http\Request;
 
 class Route
 {
@@ -27,9 +26,9 @@ class Route
      */
     private $params = [];
 
-    public function __construct($url)
+    public function __construct(Request $request)
     {
-        $this->url = $url;
+        $this->url = $request->getUrl();
     }
 
     /**
@@ -86,16 +85,6 @@ class Route
         return $this;
     }
 
-    /**
-     * @return mixed
-     * @throws MethodDoesNotExistException
-     * @throws NotFoundException
-     */
-    public function execute()
-    {
-
-    }
-
     public function setParam(string $key, $value)
     {
         $this->params[$key] = $value;
@@ -111,57 +100,5 @@ class Route
     {
         $this->params = [];
         return $this;
-    }
-
-    public function isValidPath(string $path)
-    {
-        return $this->getUrl() == $path || $this->checkSmartPath($path);
-
-    }
-
-    private function checkSmartPath(string $path): bool
-    {
-        $isSmartPath = strpos($path, '{');
-
-        if (!$isSmartPath) {
-            return false;
-        }
-
-        $this->clearParams();
-        $isEqual = false;
-
-        $url = $this->getUrl();
-
-        $urlLiChunks = explode('/', $url);
-        $pathChunks = explode('/', $path);
-
-        if (count($urlLiChunks) != count($pathChunks)) {
-            return false;
-        }
-
-        for ($i = 0; $i < count($pathChunks); $i++) {
-
-            $urlChunk = $urlLiChunks[$i];
-            $pathChunk = $pathChunks[$i];
-
-            $isSmartChunk = strpos($pathChunk, '{') !== false && strpos($pathChunk, '}') !== false;
-
-            if ($urlChunk == $pathChunk) {
-                $isEqual = true;
-
-                continue;
-            } else if ($isSmartChunk){
-                $paramName = str_replace(['{','}'], '', $pathChunk);
-
-                $this->setParam($paramName, $urlChunk);
-                $isEqual = true;
-
-                continue;
-            }
-            $isEqual = false;
-            break;
-
-        }
-        return $isEqual;
     }
 }
