@@ -22,8 +22,13 @@
         <li><a href="/categories/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
-        <li><a href="/user/register">Регистрация</a></li>
 
+        {if $user}
+            <li><span class="menu-item ">{$user->getName()}</span></li>
+
+        {else}
+        <li><a href="/user/register">Регистрация</a></li>
+        {/if}
     </ul>
     <p>
         <a href="/products/list">На главную</a>

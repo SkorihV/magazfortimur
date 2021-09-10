@@ -11,6 +11,11 @@ class Renderer
 
     protected Smarty $_smarty;
 
+    /**какие то общие данные
+     * @var array
+     */
+    protected $sharedData = [];
+
     public function __construct(Smarty $smarty)
     {
             $this->_smarty = $smarty;
@@ -45,9 +50,19 @@ class Renderer
      */
     public function render(string $template, array $data = [])
     {
+        foreach ($this->sharedData as $key => $value) {
+            $this->_smarty->assign($key, $value);
+        }
+
         foreach ($data as $key => $value) {
             $this->_smarty->assign($key, $value);
         }
+
         return $this->_smarty->fetch($template);
+    }
+
+    public function addSharedData(string $key, $value)
+    {
+        $this->sharedData[$key] = $value;
     }
 }

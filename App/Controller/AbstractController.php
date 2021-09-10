@@ -28,14 +28,22 @@ abstract class AbstractController
      * @var Response
      * @onInit(App\Http\Response)
      */
-    protected $response;
+    protected Response $response;
 
 
     /**
      * @var Request
     * @onInit(App\Http\Request)
      */
-    protected $request;
+    protected Request $request;
+
+    public function __construct()
+    {
+//        $this->request = new Request();
+//        $this->response = new Response();
+//        $this->route = new Route($this->getRequest());
+
+    }
 
     public function render(string $template, array $data = [])
     {
@@ -67,5 +75,13 @@ echo($this->renderer->render($template, $data));
     public function redirect(string  $url) {
 
         return $this->response->setRedirectUrl($url);
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
     }
 }

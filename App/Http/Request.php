@@ -25,6 +25,8 @@ class Request
 
         public function getStrFromPost(string $key, $default = '')
         {
+
+
             if(isset($_POST[$key])) {
                 return (string) $_POST[$key];
             }

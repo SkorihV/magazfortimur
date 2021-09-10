@@ -56,7 +56,8 @@ html, body {
   display: flex;
 }
 
-.top-menu li a {
+.top-menu li a,
+.top-menu li .menu-item {
   padding: 5px;
   font-size: 15px;
   color: black;

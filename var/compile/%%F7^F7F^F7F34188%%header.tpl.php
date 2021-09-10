@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-09-09 15:41:34
+<?php /* Smarty version 2.6.31, created on 2021-09-10 16:56:57
          compiled from header.tpl */ ?>
 <!doctype html>
 <html lang="ru">
@@ -25,8 +25,14 @@
         <li><a href="/categories/list">Категории</a></li>
         <li><a href="/import/index">Импорт</a></li>
         <li><a href="/queue/list">Задачи</a></li>
-        <li><a href="/user/register">Регистрация</a></li>
 
+        <?php if ($this->_tpl_vars['user']): ?>
+            <li><span class="menu-item "><?php echo $this->_tpl_vars['user']->getName(); ?>
+</span></li>
+
+        <?php else: ?>
+        <li><a href="/user/register">Регистрация</a></li>
+        <?php endif; ?>
     </ul>
     <p>
         <a href="/products/list">На главную</a>

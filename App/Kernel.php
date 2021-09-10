@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Config\Config;
+use App\Data\User\UserRepository;
+use App\Renderer\Renderer;
 use App\Router\Dispatcher;
 use App\Router\Exception\ControllerDoesNotException;
 use App\Router\Exception\ExpectToRecieveResponseObjectException;
@@ -47,6 +49,29 @@ class Kernel
     public function run()
     {
         try {
+
+            //$userId = 3;
+
+            session_start();
+            $userId = (int) $_SESSION['userId'] ?? 0;
+
+            if (!$userId) {
+                $userId =(int) $_GET['user'] ?? 0;
+                if ($userId) {
+                    $_SESSION['userId'] = $userId;
+                }
+            }
+
+            if ($userId) {
+                $user = (new UserRepository())->getById($userId);
+
+                /**
+                 * @var $renderer Renderer
+                 */
+                $renderer = $this->di->get(Renderer::class);
+                $renderer->addSharedData('user', $user);
+            }
+
            $response =  (new Dispatcher($this->di))->dispatch();
 
            echo $response;
