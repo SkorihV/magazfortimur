@@ -46,6 +46,7 @@ class Response
     {
         $this->body = $body;
 
+
         return $this;
     }
 

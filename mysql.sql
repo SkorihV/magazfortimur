@@ -78,3 +78,12 @@ CREATE  TABLE `tasks_queue` (
 ALTER TABLE `tasks_queue` CHANGE COLUMN `create_at` `created_at` DATETIME NOT NULL;
 
 ALTER TABLE tasks_queue CHANGE updated_at `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+
+
+CREATE TABLE `users` (
+                          `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                          `name` varchar(255) NOT NULL DEFAULT '',
+                          `email` varchar(255) NOT NULL DEFAULT '',
+                          `password` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

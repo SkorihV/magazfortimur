@@ -12,7 +12,7 @@ class UserController extends AbstractController
     /**
      * @route("/user/register/")
      */
-    public function register(Request  $request)
+    public function register(Request  $request, UserRepositoty $userRepositoty)
     {
         $data = [];
 
@@ -20,21 +20,30 @@ class UserController extends AbstractController
         if ($request->isPost()) {
 
             try {
-                $this->registerAction($request);
+               $user = $this->registerAction($request);
+                $userRepositoty->save($user);
 
+                return $this->redirect("/user/register/");
             } catch (EmptyFieldException $e) {
                     $data['error'] = [
                         'massage' => 'Заполните необходимые поля',
                         'requiredFields' => $e->getEmptyFields(),
                     ];
-
+            } catch (PasswordMismatchException $e) {
+                $data['error'] = [
+                    'massage' => 'Паоли не совпадают',
+                    'requiredFields' => [
+                        'password' => true,
+                        'passwordRepeat' => true,
+                    ],
+                ];
             }
         }
 
-        $this->render('user/register.form.tpl', $data);
+       return $this->render('user/register.form.tpl', $data);
     }
 
-    private function registerAction(Request $request)
+    private function registerAction(Request $request): UserModel
     {
 
         $email              = $request->getStrFromPost('email' );
@@ -70,5 +79,8 @@ class UserController extends AbstractController
             throw  new PasswordMismatchException();
         }
 
+        $user = new UserModel($name, $email, $password);
+
+        return $user;
     }
 }

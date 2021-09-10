@@ -59,6 +59,8 @@ echo($this->renderer->render($template, $data));
 ///*Нормально не работает!*/
 
 
+
+
         return $this->response->setBody($this->renderer->render($template, $data));
     }
 

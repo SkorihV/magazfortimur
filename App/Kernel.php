@@ -27,7 +27,7 @@ class Kernel
         /**
          * @var $config Config
          */
-       $config = $di->get(Config::class);
+        $config = $di->get(Config::class);
         $di->singletone(Smarty::class, function ($di){
             $smarty = new Smarty();
             $config = $di->get(Config::class);

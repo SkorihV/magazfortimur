@@ -82,7 +82,12 @@ class Config implements ArrayAccess, Iterator
        reset($this->dataKeys);
     }
 
-
+    /**
+     * @param string $dirname
+     * @return Config
+     * @throws ConfigDirectoryNotFoundException
+     * @throws ConfigFileNotFoundExceprion
+     */
     public static function create(string $dirname)
     {
 

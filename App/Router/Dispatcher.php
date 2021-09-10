@@ -37,6 +37,7 @@ class Dispatcher
      */
     public function dispatch()
     {
+
         /**
          * @var $route Route
          */
@@ -47,6 +48,8 @@ class Dispatcher
                 break;
             }
         }
+
+
         $controllerClass = $route->getController();
 
         if (is_null($controllerClass)) {
@@ -83,6 +86,9 @@ class Dispatcher
     {
         $routes = $this->getRoutes();
         $controller = $routes[$path];
+
+
+
 
         $isValidPath = $route->getUrl() == $path || $this->checkSmartPath($path, $route);
         if ($isValidPath){
