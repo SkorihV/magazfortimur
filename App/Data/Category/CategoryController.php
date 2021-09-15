@@ -20,6 +20,7 @@ class CategoryController extends AbstractController
 
     public function __construct()
     {
+        parent::__construct();
 //        $this->params = $params;
     }
 
@@ -27,6 +28,8 @@ class CategoryController extends AbstractController
     {
         $category = new CategoryModel('');
         $category->setId(0);
+
+
         if ($request->isPost()) {
 
             $category  = $categoryService->getFromPost($request);
@@ -34,7 +37,9 @@ class CategoryController extends AbstractController
 
 
             if ($insert) {
-                $response->redirect('/categories/list');
+
+                $response->setRedirectUrl('/categories/list');
+                $response->redirect();
             } else {
                 die('какая то ошибка сзаза');
             }

@@ -20,8 +20,8 @@ class ProductController extends AbstractController
 //    private Route $route;
 
     public function __construct()
-    {
-  //      $this->route = $route;
+    {        parent::__construct();
+
     }
 
     /**
@@ -118,8 +118,8 @@ class ProductController extends AbstractController
             $productImagesService->uploadImages($productId, $uploadImages);
 
             /* конец загрузки изображений*/
-
-            $response->redirect('/products/list');
+            $response->setRedirectUrl('/products/list');
+            $response->redirect();
         }
 
         $categories = $categoryService->getList();
@@ -135,7 +135,6 @@ class ProductController extends AbstractController
      * @param Request $request
      * @param ProductService $productService
      * @param ProductImagesService $productImagesService
-     * @param Response $response
      * @param CategoryService $categoryService
      * @param ProductRepository $productRepository
      * @return mixed
@@ -146,7 +145,6 @@ class ProductController extends AbstractController
         Request $request,
         ProductService $productService,
         ProductImagesService $productImagesService,
-        Response $response,
         CategoryService $categoryService,
         ProductRepository $productRepository)
     {
@@ -189,8 +187,7 @@ class ProductController extends AbstractController
 
     public function delete(
         Request $request,
-        ProductService $productService,
-        Response $response)
+        ProductService $productService)
     {
         $id = $request->getIntFromPost('id', false);
 

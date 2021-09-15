@@ -11,7 +11,7 @@ class Renderer
 
     protected Smarty $_smarty;
 
-    /**какие то общие данные
+    /**какие то общие данные которые нужны для инициализации renderer шлона
      * @var array
      */
     protected $sharedData = [];
@@ -50,12 +50,34 @@ class Renderer
      */
     public function render(string $template, array $data = [])
     {
-        foreach ($this->sharedData as $key => $value) {
-            $this->_smarty->assign($key, $value);
+//        foreach ($this->sharedData as $key => $value) {
+//            $this->_smarty->assign($key, $value);
+//        }
+//
+//        foreach ($data as $key => $value) {
+//            $this->_smarty->assign($key, $value);
+//        }
+//
+//        echo "<pre>";
+//        var_dump($this->_smarty);
+//        echo "</pre>";
+//
+//        return $this->_smarty->fetch($template);
+
+        foreach ($this->getSharedData() as $sharedKey => $sharedValue) {
+            if (is_object($sharedValue)) {
+                $this->_smarty->assign_by_ref($sharedKey, $sharedValue);
+            } else {
+                $this->_smarty->assign($sharedKey, $sharedValue);
+            }
         }
 
         foreach ($data as $key => $value) {
-            $this->_smarty->assign($key, $value);
+            if (is_object($value)) {
+                $this->_smarty->assign_by_ref($key, $value);
+            } else {
+                $this->_smarty->assign($key, $value);
+            }
         }
 
         return $this->_smarty->fetch($template);
@@ -64,5 +86,13 @@ class Renderer
     public function addSharedData(string $key, $value)
     {
         $this->sharedData[$key] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSharedData(): array
+    {
+        return $this->sharedData;
     }
 }

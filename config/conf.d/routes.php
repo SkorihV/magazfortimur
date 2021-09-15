@@ -35,4 +35,5 @@ return [
     '/import/parsing'            => [ImportController::class, 'parsing'],
 
     '/user/register'            => [UserController::class, 'register'],
+    '/user/auth'            => [UserController::class, 'auth'],
 ];

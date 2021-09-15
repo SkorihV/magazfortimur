@@ -10,55 +10,23 @@ use App\Http\Request;
 class UserController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param UserRepository $userRepository
-     * @route("/user/auth")
+     * @route("/user/register")
      */
-    public function auth(Request $request, UserRepository $userRepository)
-    {
-        $data = [];
-
-
-        if ($request->isPost()) {
-
-            try {
-                $user = $this->authAction($userRepository);
-
-echo "<pre>";
-var_dump(112121,$user, $userRepository);
-echo "</pre>";
-
-                return $this->redirect("/user/auth");
-            } catch (EmptyFieldException $e) {
-                $data['error'] = [
-                    'massage' => 'Заполните необходимые поля',
-                    'requiredFields' => $e->getEmptyFields(),
-                ];
-            } catch (PasswordMismatchException $e) {
-                $data['error'] = [
-                    'massage' => 'Пользователь с таким Емэйлом или паролем не найден',
-                    'requiredFields' => [
-                        'password' => true,
-                        'passwordRepeat' => true,
-                    ],
-                ];
-            }
-        }
-        return $this->render('user/auth.form.tpl', $data);
-
-    }
-    
-    /**
-     * @route("/user/register/")
-     */
-    public function register(Request $request, UserRepository $userRepository)
+    public function register(Request $request, UserRepository $userRepository, UserService $userService)
     {
         $data = [];
 
         if ($request->isPost()) {
 
             try {
-               $user = $this->registerAction();
+               $user = $this->registerAction($userRepository);
+
+                $user->setPassword(
+                    $userService->passwordEncoder(
+                        $user->getPassword()
+                    )
+                );
+
                 $userRepository->save($user);
 
                 return $this->redirect("/user/register");
@@ -79,6 +47,44 @@ echo "</pre>";
         }
 
        return $this->render('user/register.form.tpl', $data);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserRepository $userRepository
+     *
+     * @route("/user/auth")
+     */
+    public function auth(Request $request, UserRepository $userRepository, UserService $userService)
+    {
+        $data = [];
+
+        if ($request->isPost()) {
+
+            try {
+                $user = $this->authAction($userService);
+
+                $_SESSION['userId'] = $user->getId();
+
+                return $this->redirect("/user/auth");
+            } catch (EmptyFieldException $e) {
+                $data['error'] = [
+                    'massage' => 'Заполните необходимые поля',
+                    'requiredFields' => $e->getEmptyFields(),
+                ];
+            } catch (PasswordMismatchException $e) {
+                $data['error'] = [
+                    'massage' => 'Пользователь с таким Емэйлом или паролем не найден',
+                    'requiredFields' => [
+                        'password' => true,
+                        'passwordRepeat' => true,
+                    ],
+                ];
+            }
+        }
+
+        return $this->render('user/auth.form.tpl', $data);
+
     }
 
     private function registerAction(): UserModel
@@ -131,7 +137,6 @@ echo "</pre>";
     private function authAction(UserRepository $userRepository): ?UserModel
     {
 
-
         $email              = $this->getRequest()->getStrFromPost( 'email' );
         $password           = $this->getRequest()->getStrFromPost('password');
 
@@ -153,7 +158,7 @@ echo "</pre>";
         }
 
 
-        $user = $userRepository->findByEmailAndPassword($email, $password);
+        $user = $userRepository->getByEmailAndPassword($email, $password);
 
         if (is_null($user)) {
             throw new PasswordMismatchException();

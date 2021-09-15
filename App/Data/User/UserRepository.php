@@ -54,7 +54,6 @@ class UserRepository
         $user
             ->setId($id);
 
-
         return $user;
 
     }
@@ -78,6 +77,7 @@ class UserRepository
     {
         $query = "SELECT u.*  FROM users u  WHERE u.id = $id";
 
+
         $userArray =  Db::fetchRow($query);
         return $this->fromArray($userArray);
 
@@ -90,7 +90,7 @@ class UserRepository
      * @return UserModel|null
      * @throws \Exception
      */
-    public function findByEmailAndPassword($email, $password): ?UserModel
+    public function getByEmailAndPassword($email, $password): ?UserModel
     {
         $query = "SELECT u.*  FROM users u  WHERE u.email = '$email' AND u.password = '$password'";
 

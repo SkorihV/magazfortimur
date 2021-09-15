@@ -1,8 +1,8 @@
 <?php
 
 
-use App\Category\CategoryRepository;
-use App\Category\CategoryService;
+use App\Data\Category\CategoryRepository;
+use App\Data\Category\CategoryService;
 use App\Di\Container;
 use App\Kernel;
 use App\Renderer\Renderer;

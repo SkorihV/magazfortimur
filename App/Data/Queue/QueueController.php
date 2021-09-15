@@ -20,6 +20,7 @@ class QueueController extends AbstractController
 
     public function __construct()
     {
+        parent::__construct();
    //     $this->params = $params;
     }
 
@@ -63,10 +64,10 @@ class QueueController extends AbstractController
         $path = APP_UPLOAD_DIR .'/import/'. $fileName;
         unlink($path);
         $db->delete('tasks_queue', "id = $id");
-       // $response->setRedirectUrl('/queue/list');
-        echo "<pre>";
-        var_dump( $this->redirect('/queue/list'));
-        echo "</pre>";
+        $response->setRedirectUrl('/queue/list');
+//        echo "<pre>";
+//        var_dump( $this->redirect('/queue/list'));
+//        echo "</pre>";
 
 exit;
     }

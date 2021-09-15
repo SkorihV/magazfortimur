@@ -24,10 +24,9 @@
         <li><a href="/queue/list">Задачи</a></li>
 
         {if $user}
-            <li><span class="menu-item ">{$user->getName()}</span></li>
-
+           <li><span class="menu-item ">{$user->getName()}</span></li>
         {else}
-        <li><a href="/user/register">Регистрация</a></li>
+            <li><a href="/user/register">Регистрация</a></li>
         {/if}
     </ul>
     <p>
@@ -44,8 +43,34 @@
                 </div>
                 {/foreach}
 
+                <form action="/user/auth" method="post">
+
+                    <div class="form-group">
+                        <label for="user-email">Email</label>
+                        <input name="email"{if $smarty.post.email}value="{$smarty.post.email}"{/if} type="email" class="form-control" id="user-email" placeholder="name@example.com">
+                        {if $error.requiredFields.email}<div class="alert alert-danger">Заполните обязательное поле</div>{/if}
+
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label for="user-password">Пароль</label>
+                        <input name="password"  type="password" class="form-control" id="user-password" placeholder="Введите пароль">
+                        {if $error.requiredFields.password}<div class="alert alert-danger">Заполните обязательное поле</div>{/if}
+
+                    </div>
+                    <br>
+
+                    <button type="submit" class="btn btn-primary">Авторизироваться</button>
+
+                </form>
+
             </div>
         </div>
+
+
+
+
         <div class="right-side">
 
 

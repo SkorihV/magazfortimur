@@ -7,7 +7,8 @@
     </div>
 {/if}
 
-<form action="#" method="POST">
+
+<form action="" method="post">
 
     <div class="form-group">
         <label for="user-email">Email</label>
@@ -24,7 +25,9 @@
 
     </div>
     <br>
+
     <button type="submit" class="btn btn-primary">Авторизироваться</button>
+
 </form>
 </p>
 {include file="bottom.tpl"}

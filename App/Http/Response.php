@@ -41,11 +41,12 @@ class Response
 
     /**
      * @param string $body
+     * @return self
      */
     public function setBody(string $body): self
     {
-        $this->body = $body;
 
+        $this->body = $body;
 
         return $this;
     }

@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\AuthMiddleware\IMiddleware;
 use App\Config\Config;
 use App\Data\User\UserRepository;
+use App\Di\Container;
 use App\Renderer\Renderer;
 use App\Router\Dispatcher;
 use App\Router\Exception\ControllerDoesNotException;
@@ -14,12 +16,16 @@ use Smarty;
 
 class Kernel
 {
+    /**
+     * @var Di\Container
+     */
     private $di;
 
     public function __construct()
     {
         $di = new Di\Container();
         $this->di = $di;
+        $di->addOneMapping(Container::class, $di);
 
         $di->singletone(Config::class, function (){
             $configDir = 'config';
@@ -49,18 +55,21 @@ class Kernel
     public function run()
     {
         try {
+            $config = $this->di->get(Config::class);
 
-            //$userId = 3;
+            foreach ($config->di->middlewares[0] as $classname) {
+               $middleware = $this->di->get($classname);
 
-            session_start();
-            $userId = (int) $_SESSION['userId'] ?? 0;
 
-            if (!$userId) {
-                $userId =(int) $_GET['user'] ?? 0;
-                if ($userId) {
-                    $_SESSION['userId'] = $userId;
-                }
+               if ($middleware  instanceof IMiddleware) {
+                   $middleware->run();
+               }
             }
+
+            if(session_start() != PHP_SESSION_ACTIVE) {
+                session_start();
+            }
+            $userId = (int) ($_SESSION['userId'] ?? 0);
 
             if ($userId) {
                 $user = (new UserRepository())->getById($userId);

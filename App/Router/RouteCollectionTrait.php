@@ -22,7 +22,7 @@ trait RouteCollectionTrait
     /**
      * @var FS
      */
-    protected $FS;
+    protected $fs;
 
     /**
      * @return array
@@ -85,22 +85,7 @@ trait RouteCollectionTrait
             }
 
 
-            $docComment = (string) $reflectionMethod->getDocComment();
-
-            $docComment = str_replace(['/**', '*/'], '', $docComment);
-            $docComment = trim($docComment);
-            $docCommentArray = explode("\n", $docComment);
-
-            $docCommentArray = array_map(function($item) {
-                $item = trim($item);
-
-                $position = strpos($item, '*');
-                if ($position === 0) {
-                    $item = substr($item, 1);
-                }
-
-                return trim($item);
-            }, $docCommentArray);
+            $docCommentArray = $this->di->parseDocComment($reflectionMethod);
 
             foreach ($docCommentArray as $docString) {
                 $isRoute = strpos($docString, '@route(') === 0;

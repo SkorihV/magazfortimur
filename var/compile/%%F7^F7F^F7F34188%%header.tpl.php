@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-09-10 16:56:57
+<?php /* Smarty version 2.6.31, created on 2021-09-15 17:23:17
          compiled from header.tpl */ ?>
 <!doctype html>
 <html lang="ru">
@@ -27,11 +27,10 @@
         <li><a href="/queue/list">Задачи</a></li>
 
         <?php if ($this->_tpl_vars['user']): ?>
-            <li><span class="menu-item "><?php echo $this->_tpl_vars['user']->getName(); ?>
+           <li><span class="menu-item "><?php echo $this->_tpl_vars['user']->getName(); ?>
 </span></li>
-
         <?php else: ?>
-        <li><a href="/user/register">Регистрация</a></li>
+            <li><a href="/user/register">Регистрация</a></li>
         <?php endif; ?>
     </ul>
     <p>
@@ -52,8 +51,35 @@
                 </div>
                 <?php endforeach; endif; unset($_from); ?>
 
+                <form action="/user/auth" method="post">
+
+                    <div class="form-group">
+                        <label for="user-email">Email</label>
+                        <input name="email"<?php if ($_POST['email']): ?>value="<?php echo $_POST['email']; ?>
+"<?php endif; ?> type="email" class="form-control" id="user-email" placeholder="name@example.com">
+                        <?php if ($this->_tpl_vars['error']['requiredFields']['email']): ?><div class="alert alert-danger">Заполните обязательное поле</div><?php endif; ?>
+
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <label for="user-password">Пароль</label>
+                        <input name="password"  type="password" class="form-control" id="user-password" placeholder="Введите пароль">
+                        <?php if ($this->_tpl_vars['error']['requiredFields']['password']): ?><div class="alert alert-danger">Заполните обязательное поле</div><?php endif; ?>
+
+                    </div>
+                    <br>
+
+                    <button type="submit" class="btn btn-primary">Авторизироваться</button>
+
+                </form>
+
             </div>
         </div>
+
+
+
+
         <div class="right-side">
 
 

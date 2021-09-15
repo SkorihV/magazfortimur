@@ -47,7 +47,7 @@
         <input type="checkbox" class="form-check-input" id="user-agree">
         <label class="form-check-label" for="user-agree">Согласен на обработку персональных данных</label>
     </div>
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
 </form>
 </p>
 {include file="bottom.tpl"}
