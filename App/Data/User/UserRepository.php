@@ -10,7 +10,7 @@ class UserRepository
      * @param UserModel $user
      * @return UserModel
      */
-    public function save(UserModel $user): UserModel
+    public function save(UserModel $user): ?UserModel
     {
         $id = $user->getId();
         $arrayData = $this->toArray($user);
@@ -86,13 +86,12 @@ class UserRepository
 
     /**
      * @param $email
-     * @param $password
      * @return UserModel|null
      * @throws \Exception
      */
-    public function getByEmailAndPassword($email, $password): ?UserModel
+    public function getByEmail($email): ?UserModel
     {
-        $query = "SELECT u.*  FROM users u  WHERE u.email = '$email' AND u.password = '$password'";
+        $query = "SELECT u.*  FROM users u  WHERE u.email = '$email'";
 
         $userArray =  Db::fetchRow($query);
 

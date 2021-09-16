@@ -32,10 +32,13 @@ trait RouteCollectionTrait
     {
         $routes = [];
         foreach ($this->config->routes as $routePath => $routeConfig) {
+
             $routes[$routePath] = $routeConfig;
         }
 
         $annotationRoutes = $this->parseControllerForAnnotationRoutes();
+
+
 
         return array_merge($routes, $annotationRoutes);
     }
@@ -51,14 +54,19 @@ trait RouteCollectionTrait
 
         $routes = [];
 
+
+
         foreach ($files as $filepath) {
 
             if (strpos($filepath, 'Controller.php') === false) {
                 continue;
             }
+
             $controllerRoutes = $this->getRoutesFromControllerFile($filepath);
+
             $routes = array_merge($routes, $controllerRoutes);
         }
+
 
         return $routes;
     }
@@ -75,21 +83,23 @@ trait RouteCollectionTrait
         $controllerClassName = str_replace([APP_DIR . '/', '.php'], '', $filePath);
         $controllerClassName = str_replace([ '/', ], '\\', $controllerClassName);
 
+
         $reflectionClass = new ReflectionClass($controllerClassName);
         $reflectionMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
-
 
         foreach ($reflectionMethods as $reflectionMethod) {
             if ($reflectionMethod->isConstructor()) {
                 continue;
             }
 
-
             $docCommentArray = $this->di->parseDocComment($reflectionMethod);
+
+
+
+
 
             foreach ($docCommentArray as $docString) {
                 $isRoute = strpos($docString, '@route(') === 0;
-
                 if (empty($docString) || !$isRoute) {
                     continue;
                 }

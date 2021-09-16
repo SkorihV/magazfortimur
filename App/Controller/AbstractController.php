@@ -54,36 +54,9 @@ abstract class AbstractController
 
     public function render(string $template, array $data = [])
     {
-
-//        $smarty = Renderer::getSmarty();
-//
-//        foreach ($data as $key => $value) {
-//            $smarty->assign($key, $value);
-//        }
-//
-//        return $smarty->display($template);
-
-//        echo "<pre>";
-//        var_dump($template,$data);
-//        echo "</pre>";
-
-
-
-//echo "<pre>";
-//echo($this->renderer->render($template, $data));
-//echo "</pre>";
-///*Нормально не работает!*/
-
-
         $body = $this->renderer->render($template, $data);
-//echo "<pre>";
-//var_dump($body);
-//echo "</pre>";
-
 
         $this->response->setBody($body);
-
-
 
         return $this->response;
         //     return $this->renderer->render($template, $data);

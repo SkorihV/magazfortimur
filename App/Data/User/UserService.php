@@ -11,6 +11,11 @@ class UserService
         return $this->encodeByCrypt($password);
     }
 
+    public function passwordVerify(string $password, string $hash)
+    {
+        return password_verify($password, $hash);
+    }
+
     protected function encodeByMd5(string $encodeString) {
         return md5(md5($encodeString . static::$salt) . static::$salt);
     }

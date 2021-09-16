@@ -4,6 +4,7 @@ namespace App\AuthMiddleware;
 
 use App\Data\User\UserModel;
 use App\Data\User\UserRepository;
+use App\Data\User\UserService;
 use App\Di\Container;
 use App\Http\Request;
 use Exception;
@@ -25,12 +26,20 @@ class AuthMiddleware implements IMiddleware
      */
     private Container $di;
 
-    public function __construct(userRepository $userRepository, Request $request, Container $di)
-    {
+    /**
+     * @var UserService
+     */
+    private UserService $userService;
 
+    public function __construct(userRepository $userRepository,
+                                Request $request,
+                                Container $di,
+                                UserService $userService)
+    {
         $this->userRepository = $userRepository;
         $this->request = $request;
         $this->di = $di;
+        $this->userService = $userService;
     }
 
     public function run()
@@ -42,6 +51,19 @@ class AuthMiddleware implements IMiddleware
             $this->auth();
         }
 
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function beforeDispatch()
+    {
+        $this->sessionInit();
+        $user = $this->getSessionUser();
+
+        if (is_null($user)) {
+            $this->auth();
+        }
     }
 
     protected function sessionInit()
@@ -77,7 +99,9 @@ class AuthMiddleware implements IMiddleware
      */
     protected function auth()
     {
-        if (!$this->request->isPost() && $this->request->getUrl() !== '/user/auth') {
+
+
+        if (!$this->request->isPost() || $this->request->getUrl() !== '/user/login') {
             return null;
         }
 
@@ -87,11 +111,12 @@ class AuthMiddleware implements IMiddleware
         if ($email === false || $password === false) {
             return null;
         }
-        $user = $this->userRepository->getByEmailAndPassword($email, $password);
+        $user = $this->userRepository->getByEmail($email);
 
-        if (is_null($user)) {
+        if (is_null($user) || $this->userService->passwordVerify($password, $user->getPassword())) {
             return null;
-        }
+        };
+
         $_SESSION['userId'] = $user->getId();
 
         $this->setUser($user);
@@ -102,5 +127,10 @@ class AuthMiddleware implements IMiddleware
     protected function setUser(UserModel $user)
     {
         $this->di->addOneMapping(UserModel::class, $user);
+    }
+
+    public function afterDispatch()
+    {
+        // TODO: Implement afterDispatch() method.
     }
 }

@@ -43,14 +43,18 @@ class Dispatcher
          */
         $route = $this->di->get(Route::class);
 
+
+
         foreach ($this->getRoutes() as $path => $controller) {
+
             if ($this->isValidPath($path, $route)){
                 break;
             }
         }
 
-
         $controllerClass = $route->getController();
+
+
 
         if (is_null($controllerClass)) {
             throw new NotFoundException();
@@ -59,9 +63,11 @@ class Dispatcher
             throw new ControllerDoesNotException();
         }
 
-
-
         $controller = $this->di->get($controllerClass);
+
+
+
+
 
         $renderer = $this->di->get(Renderer::class);
         $this->di->setProperty($controller, 'renderer', $renderer);
@@ -79,18 +85,17 @@ class Dispatcher
         }
 
         return $response;
-
     }
+
 
     private function isValidPath(string $path, Route $route)
     {
         $routes = $this->getRoutes();
         $controller = $routes[$path];
 
-
-
-
         $isValidPath = $route->getUrl() == $path || $this->checkSmartPath($path, $route);
+
+
         if ($isValidPath){
             $route->setController($controller[0]);
             $route->setMethod($controller[1]);
@@ -145,5 +150,4 @@ class Dispatcher
         }
         return $isEqual;
     }
-
 }

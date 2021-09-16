@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.31, created on 2021-09-01 13:25:46
+<?php /* Smarty version 2.6.31, created on 2021-09-16 13:39:08
          compiled from products/index.tpl */ ?>
 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array('h1' => "Список товаров")));
@@ -92,8 +92,13 @@ $this->_sections['pagination']['last']       = ($this->_sections['pagination']['
 </td>
                 <td><?php echo $this->_tpl_vars['product']->getDescription(); ?>
 </td>
-                <td><a href='/products/edit?id=<?php echo $this->_tpl_vars['product']->getId(); ?>
-'>Редактировать</a></td>
+                <td>
+                    <a href='/products/edit?id=<?php echo $this->_tpl_vars['product']->getId(); ?>
+' class="btn btn-success btn-sm">Редактировать</a>
+                <br><p></p>
+                    <a href='/shop/cart/add?id=<?php echo $this->_tpl_vars['product']->getId(); ?>
+' class="btn btn-primary btn-sm">В корзину</a>
+                </td>
                 <td><form action="/products/delete" method="post" style="display:inline"><input type="hidden" name="id" value="<?php echo $this->_tpl_vars['product']->getId(); ?>
 "><input type="submit" value="Удалить"></form></td>
             </tr>

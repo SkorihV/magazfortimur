@@ -44,9 +44,14 @@ class  Container
             return $this->dependencyMapping[$className];
         }
 
+
+
         if ($this->isSingletone($className)) {
             return $this->getSingletone($className);
         }
+
+
+
         return $this->createInstance($className);
     }
 
@@ -124,6 +129,7 @@ class  Container
      */
     public function isSingletone(string $className)
     {
+
         return array_key_exists($className, $this->singletones);
     }
 
@@ -134,13 +140,20 @@ class  Container
      */
     protected function getSingletone(string $className)
     {
+
+
         if (!$this->isSingletone($className)) {
             return null;
         };
 
+
+
         if (is_null($this->singletones[$className])) {
             $this->singletones[$className] = $this->createInstance($className);
         }
+
+
+
 
         return $this->singletones[$className];
     }
@@ -155,11 +168,17 @@ class  Container
 
 
         if (isset($this->factories[$className])) {
+
             return $this->factories[$className]($this);
         }
 
+
         $reflectionClass = new ReflectionClass($className);
+
+
+
         $reflectionConstructor = $reflectionClass->getConstructor();
+
 
         if ($reflectionConstructor instanceof ReflectionMethod) {
             $arguments = $this->getDependencies($reflectionConstructor);
@@ -170,6 +189,8 @@ class  Container
         }
 
         $this->initProtectedAndPrivateProperties($object);
+
+
 
         return $object;
     }
@@ -277,21 +298,29 @@ class  Container
 
     public function parseDocComment($target)
     {
-        $isReflectionClass = $target instanceof ReflectionClass;
-        $isReflectionFunction = $target instanceof ReflectionFunction;
-        $isReflectionProperty = $target instanceof ReflectionProperty;
+//        $isReflectionClass = $target instanceof ReflectionClass;
+//        $isReflectionFunction = $target instanceof ReflectionFunction;
+//        $isReflectionProperty = $target instanceof ReflectionProperty;
+//
+//
+//        $hasDocComment = $isReflectionClass || $isReflectionFunction || $isReflectionProperty;
+//
+//        if (!$hasDocComment) {
+//            return null;
+//        }
 
-        $hasDocComment = $isReflectionClass || $isReflectionFunction || $isReflectionProperty;
 
-        if (!$hasDocComment) {
-            return null;
-        }
 
         $docComment = (string) $target->getDocComment();
+
+
 
         $docComment = str_replace(['/**', '*/'], '', $docComment);
         $docComment = trim($docComment);
         $docCommentArray = explode("\n", $docComment);
+
+
+
 
         $docCommentArray = array_map(function($item) {
             $item = trim($item);

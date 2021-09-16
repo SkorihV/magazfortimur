@@ -10,6 +10,15 @@ use App\Http\Request;
 class UserController extends AbstractController
 {
     /**
+     * @route("/user/login")
+     */
+    public function login()
+    {
+
+        return $this->redirect("/products");
+    }
+
+    /**
      * @route("/user/register")
      */
     public function register(Request $request, UserRepository $userRepository, UserService $userService)
@@ -62,7 +71,7 @@ class UserController extends AbstractController
         if ($request->isPost()) {
 
             try {
-                $user = $this->authAction($userService);
+                $user = $this->authAction($userRepository);
 
                 $_SESSION['userId'] = $user->getId();
 
@@ -152,13 +161,16 @@ class UserController extends AbstractController
             $hasEmptyFields = true;
         }
 
+echo "<pre>";
+var_dump($email, $password);
+echo "</pre>";
 
         if ($hasEmptyFields) {
             throw  $emptyFieldsException;
         }
 
 
-        $user = $userRepository->getByEmailAndPassword($email, $password);
+        $user = $userRepository->getByEmail($email, $password);
 
         if (is_null($user)) {
             throw new PasswordMismatchException();

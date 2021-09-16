@@ -5,6 +5,7 @@ namespace App;
 use App\AuthMiddleware\IMiddleware;
 use App\Config\Config;
 use App\Data\User\UserRepository;
+use App\Data\User\UserService;
 use App\Di\Container;
 use App\Renderer\Renderer;
 use App\Router\Dispatcher;
@@ -52,19 +53,22 @@ class Kernel
        }
     }
 
+
     public function run()
     {
         try {
+
+
             $config = $this->di->get(Config::class);
 
-            foreach ($config->di->middlewares[0] as $classname) {
-               $middleware = $this->di->get($classname);
-
-
-               if ($middleware  instanceof IMiddleware) {
-                   $middleware->run();
-               }
-            }
+//            foreach ($config->di->middlewares as $classname) {
+//
+//               $middleware = $this->di->get($classname);
+//
+//                if ($middleware instanceof IMiddleware) {
+//                    $middleware->beforeDispatch();
+//                }
+//            }
 
             if(session_start() != PHP_SESSION_ACTIVE) {
                 session_start();
@@ -81,7 +85,16 @@ class Kernel
                 $renderer->addSharedData('user', $user);
             }
 
+
            $response =  (new Dispatcher($this->di))->dispatch();
+
+//            foreach ($config->di->middlewares as $classname) {
+//                $middleware = $this->di->get($classname);
+//
+//                if ($middleware instanceof IMiddleware) {
+//                    $middleware->afterDispatch();
+//                }
+//            }
 
            echo $response;
         } catch (NotFoundException $e) {

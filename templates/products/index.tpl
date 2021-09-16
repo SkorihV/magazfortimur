@@ -47,7 +47,11 @@
                 <td>{$product->getPrice()}</td>
                 <td>{$product->getAmount()}</td>
                 <td>{$product->getDescription()}</td>
-                <td><a href='/products/edit?id={$product->getId()}'>Редактировать</a></td>
+                <td>
+                    <a href='/products/edit?id={$product->getId()}' class="btn btn-success btn-sm">Редактировать</a>
+                <br><p></p>
+                    <a href='/shop/cart/add?id={$product->getId()}' class="btn btn-primary btn-sm">В корзину</a>
+                </td>
                 <td><form action="/products/delete" method="post" style="display:inline"><input type="hidden" name="id" value="{$product->getId()}"><input type="submit" value="Удалить"></form></td>
             </tr>
             {/foreach}

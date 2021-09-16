@@ -30,6 +30,7 @@ class ProductController extends AbstractController
      *
      * @return mixed
      * @route("/product_list")
+     * @route("/products")
      */
     public function list(Request $request, ProductRepository $productRepository)
     {
