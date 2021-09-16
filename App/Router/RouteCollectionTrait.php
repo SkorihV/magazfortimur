@@ -38,8 +38,6 @@ trait RouteCollectionTrait
 
         $annotationRoutes = $this->parseControllerForAnnotationRoutes();
 
-
-
         return array_merge($routes, $annotationRoutes);
     }
 
@@ -53,8 +51,6 @@ trait RouteCollectionTrait
         $files =  $this->fs->scanDir(APP_DIR . '/App');
 
         $routes = [];
-
-
 
         foreach ($files as $filepath) {
 

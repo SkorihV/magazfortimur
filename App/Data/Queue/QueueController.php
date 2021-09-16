@@ -24,6 +24,12 @@ class QueueController extends AbstractController
    //     $this->params = $params;
     }
 
+    /**
+     * @param TasksQueue $tasksQueue
+     * @return Response
+     *
+     * @route("/queue/list")
+     */
     public function list(TasksQueue $tasksQueue )
     {
         $tasks = $tasksQueue->getTaskList();
@@ -38,6 +44,8 @@ class QueueController extends AbstractController
         $id = $request->getIntFromGet('id');
 
         $tasksQueue->runById($id);
+
+
         $tasks = $tasksQueue->getTaskList();
 
 //        return $this->render('queue/list.tpl', [
@@ -45,7 +53,7 @@ class QueueController extends AbstractController
 //        ]);
 
 
-        return $this->redirect('queue/list.tpl');
+        return $this->redirect('/queue/list');
     }
 
     /**
@@ -65,10 +73,9 @@ class QueueController extends AbstractController
         unlink($path);
         $db->delete('tasks_queue', "id = $id");
         $response->setRedirectUrl('/queue/list');
-//        echo "<pre>";
-//        var_dump( $this->redirect('/queue/list'));
-//        echo "</pre>";
+        $response->redirect();
 
-exit;
+
+
     }
 }

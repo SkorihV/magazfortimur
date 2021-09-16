@@ -57,6 +57,7 @@ class Db
 
     public static function fetchAssoc($result): ?array
     {
+
         return mysqli_fetch_assoc($result);
     }
 
@@ -146,6 +147,9 @@ class Db
         $query = "SELECT * FROM $tableName";
         $result = static::query($query);
         $columnsArr = static::fetchAssoc($result);
+echo "<pre>";
+var_dump($columnsArr);
+echo "</pre>";
 
         $columnsName = [];
 

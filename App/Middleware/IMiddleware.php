@@ -4,5 +4,6 @@ namespace App\AuthMiddleware;
 
 interface IMiddleware
 {
-    public function run();
+    public function beforeDispatch();
+    public function afterDispatch();
 }

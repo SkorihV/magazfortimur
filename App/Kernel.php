@@ -2,12 +2,9 @@
 
 namespace App;
 
-use App\AuthMiddleware\IMiddleware;
 use App\Config\Config;
-use App\Data\User\UserRepository;
-use App\Data\User\UserService;
 use App\Di\Container;
-use App\Renderer\Renderer;
+use App\AuthMiddleware\IMiddleware;
 use App\Router\Dispatcher;
 use App\Router\Exception\ControllerDoesNotException;
 use App\Router\Exception\ExpectToRecieveResponseObjectException;
@@ -58,7 +55,6 @@ class Kernel
     {
         try {
 
-
             $config = $this->di->get(Config::class);
 
 //            foreach ($config->di->middlewares as $classname) {
@@ -67,34 +63,40 @@ class Kernel
 //
 //                if ($middleware instanceof IMiddleware) {
 //                    $middleware->beforeDispatch();
-//                }
-//            }
-
-            if(session_start() != PHP_SESSION_ACTIVE) {
-                session_start();
-            }
-            $userId = (int) ($_SESSION['userId'] ?? 0);
-
-            if ($userId) {
-                $user = (new UserRepository())->getById($userId);
-
-                /**
-                 * @var $renderer Renderer
-                 */
-                $renderer = $this->di->get(Renderer::class);
-                $renderer->addSharedData('user', $user);
-            }
-
-
-           $response =  (new Dispatcher($this->di))->dispatch();
-
-//            foreach ($config->di->middlewares as $classname) {
-//                $middleware = $this->di->get($classname);
 //
-//                if ($middleware instanceof IMiddleware) {
-//                    $middleware->afterDispatch();
 //                }
 //            }
+
+//            if(session_start() != PHP_SESSION_ACTIVE) {
+//                session_start();
+//            }
+//            $userId = (int) ($_SESSION['userId'] ?? 0);
+//
+//            if ($userId) {
+//                $user = (new UserRepository())->getById($userId);
+//
+//                /**
+//                 * @var $renderer Renderer
+//                 */
+//                $renderer = $this->di->get(Renderer::class);
+//                $renderer->addSharedData('user', $user);
+//            }
+
+
+            $response =  (new Dispatcher($this->di))->dispatch();
+
+
+
+
+
+
+            foreach ($config->di->middlewares as $classname) {
+                $middleware = $this->di->get($classname);
+
+                if ($middleware instanceof IMiddleware) {
+                    $middleware->afterDispatch();
+                }
+            }
 
            echo $response;
         } catch (NotFoundException $e) {

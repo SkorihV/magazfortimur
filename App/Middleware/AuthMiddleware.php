@@ -42,17 +42,6 @@ class AuthMiddleware implements IMiddleware
         $this->userService = $userService;
     }
 
-    public function run()
-    {
-        $this->sessionInit();
-        $user = $this->getSessionUser();
-
-        if (is_null($user)) {
-            $this->auth();
-        }
-
-    }
-
     /**
      * @throws Exception
      */
@@ -64,7 +53,9 @@ class AuthMiddleware implements IMiddleware
         if (is_null($user)) {
             $this->auth();
         }
+
     }
+
 
     protected function sessionInit()
     {

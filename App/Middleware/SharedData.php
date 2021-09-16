@@ -14,26 +14,27 @@ class SharedData implements IMiddleware
      */
     private Container $di;
 
-    /**
-     * @param Container $di
-     */
     public function __construct(Container $di)
     {
-
         $this->di = $di;
     }
 
-    public function run()
+    public function beforeDispatch()
     {
         /**
          * @var $renderer Renderer
          */
         $renderer = $this->di->get(Renderer::class);
-
-
         $user = $this->di->getOrNull(UserModel::class);
+
         if (!is_null($user)) {
             $renderer->addSharedData('user', $user);
         }
     }
+
+    public function afterDispatch()
+    {
+
+    }
+
 }

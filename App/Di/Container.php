@@ -7,6 +7,7 @@ use App\Router\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionObject;
 use ReflectionProperty;
@@ -40,16 +41,14 @@ class  Container
             $this->addManyMapping($dependencyMapping);
         }
 
+
         if (array_key_exists($className, $this->dependencyMapping) && is_object($this->dependencyMapping[$className])) {
             return $this->dependencyMapping[$className];
         }
 
-
-
         if ($this->isSingletone($className)) {
             return $this->getSingletone($className);
         }
-
 
 
         return $this->createInstance($className);
@@ -79,6 +78,123 @@ class  Container
         foreach ($mapping as $key => $value) {
             $this->addOneMapping($key, $value);
         }
+
+
+    }
+
+    /**
+     * @param string $className
+     * @return bool
+     */
+    public function isSingletone(string $className)
+    {
+
+        return array_key_exists($className, $this->singletones);
+    }
+
+    /**
+     * @param $object
+     * @param string $propertyName
+     * @param $value
+     * @return bool|null
+     * @throws ReflectionException
+     */
+    public function setProperty($object, string $propertyName, $value)
+    {
+        if (!is_object($object)){
+            return null;
+        }
+
+        $reflectionController = new ReflectionObject($object);
+
+        $reflectionRenderer = $reflectionController->getProperty($propertyName);
+        $reflectionRenderer->setAccessible(true);
+        $reflectionRenderer->setValue($object, $value);
+        $reflectionRenderer->setAccessible(false);
+
+        return true;
+    }
+
+
+    /**
+     * @param string $className
+     * @param array|null $dependencyMapping
+     * @return object|null
+     */
+    public function getOrNull(string $className, array $dependencyMapping = null) {
+        try {
+            return $this->get($className, $dependencyMapping);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return $this
+     */
+    public function addOneMapping(string $key, $value) {
+        if (!is_object($value)) {
+            return $this;
+        }
+
+        $this->dependencyMapping[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $object
+     * @param string $methodName
+     * @return false|mixed|null
+     * @throws ReflectionException
+     */
+    public function call($object, string $methodName)
+    {
+        if (!is_object($object)){
+            return null;
+        }
+        $reflectionClass = new ReflectionClass($object);
+        $reflectionMethod = $reflectionClass->getMethod($methodName);
+
+        $arguments = $this->getDependencies($reflectionMethod);
+
+
+        return call_user_func_array([$object, $methodName], $arguments);
+    }
+
+    public function parseDocComment($target)
+    {
+        $isReflectionClass = $target instanceof ReflectionClass;
+        $isReflectionFunction = $target instanceof ReflectionFunctionAbstract;
+        $isReflectionProperty = $target instanceof ReflectionProperty;
+
+        $hasDocComment = $isReflectionClass || $isReflectionFunction || $isReflectionProperty;
+
+        if (!$hasDocComment) {
+            return null;
+        }
+
+
+        $docComment = (string) $target->getDocComment();
+
+        $docComment = str_replace(['/**', '*/'], '', $docComment);
+        $docComment = trim($docComment);
+        $docCommentArray = explode("\n", $docComment);
+
+        $docCommentArray = array_map(function ($item) {
+            $item = trim($item);
+
+            $position = strpos($item, '*');
+            if ($position === 0) {
+                $item = substr($item, 1);
+            }
+
+            return trim($item);
+        }, $docCommentArray);
+
+        return $docCommentArray;
     }
 
     protected function initProtectedAndPrivateProperties($object)
@@ -125,17 +241,6 @@ class  Container
 
     /**
      * @param string $className
-     * @return bool
-     */
-    public function isSingletone(string $className)
-    {
-
-        return array_key_exists($className, $this->singletones);
-    }
-
-
-    /**
-     * @param string $className
      * @return object|null
      */
     protected function getSingletone(string $className)
@@ -146,14 +251,9 @@ class  Container
             return null;
         };
 
-
-
         if (is_null($this->singletones[$className])) {
             $this->singletones[$className] = $this->createInstance($className);
         }
-
-
-
 
         return $this->singletones[$className];
     }
@@ -166,19 +266,14 @@ class  Container
     protected function createInstance(string $className)
     {
 
-
         if (isset($this->factories[$className])) {
 
             return $this->factories[$className]($this);
         }
 
-
         $reflectionClass = new ReflectionClass($className);
 
-
-
         $reflectionConstructor = $reflectionClass->getConstructor();
-
 
         if ($reflectionConstructor instanceof ReflectionMethod) {
             $arguments = $this->getDependencies($reflectionConstructor);
@@ -190,48 +285,8 @@ class  Container
 
         $this->initProtectedAndPrivateProperties($object);
 
-
-
         return $object;
     }
-
-    /**
-     * @param $object
-     * @param string $propertyName
-     * @param $value
-     * @return bool|null
-     * @throws ReflectionException
-     */
-    public function setProperty($object, string $propertyName, $value)
-    {
-        if (!is_object($object)){
-            return null;
-        }
-
-        $reflectionController = new ReflectionObject($object);
-
-        $reflectionRenderer = $reflectionController->getProperty($propertyName);
-        $reflectionRenderer->setAccessible(true);
-        $reflectionRenderer->setValue($object, $value);
-        $reflectionRenderer->setAccessible(false);
-
-
-        return true;
-    }
-
-    /**
-     * @param string $className
-     * @param array|null $dependencyMapping
-     * @return object|null
-     */
-    public function getOrNull(string $className, array $dependencyMapping = null) {
-        try {
-            return $this->get($className, $dependencyMapping);
-        } catch (\Throwable $e) {
-            return null;
-        }
-    }
-
 
     /**
      * @param \ReflectionMethod $reflectionMethod
@@ -244,7 +299,6 @@ class  Container
         $arguments = [];
 
         foreach ($reflectionParameters as $parameter) {
-
 
             $parameterName = $parameter->getName();
             $parameterType = $parameter->getType();
@@ -259,92 +313,6 @@ class  Container
         }
 
         return $arguments;
-    }
-
-    /**
-     * @param string $key
-     * @param $value
-     * @return $this
-     */
-    public function addOneMapping(string $key, $value) {
-        if (!is_object($value)) {
-            return $this;
-        }
-
-        $this->dependencyMapping[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param $object
-     * @param string $methodName
-     * @return false|mixed|null
-     * @throws ReflectionException
-     */
-    public function call($object, string $methodName)
-    {
-        if (!is_object($object)){
-            return null;
-        }
-        $reflectionClass = new ReflectionClass($object);
-        $reflectionMethod = $reflectionClass->getMethod($methodName);
-
-        $arguments = $this->getDependencies($reflectionMethod);
-
-
-        return call_user_func_array([$object, $methodName], $arguments);
-    }
-
-    public function parseDocComment($target)
-    {
-//        $isReflectionClass = $target instanceof ReflectionClass;
-//        $isReflectionFunction = $target instanceof ReflectionFunction;
-//        $isReflectionProperty = $target instanceof ReflectionProperty;
-//
-//
-//        $hasDocComment = $isReflectionClass || $isReflectionFunction || $isReflectionProperty;
-//
-//        if (!$hasDocComment) {
-//            return null;
-//        }
-
-
-
-        $docComment = (string) $target->getDocComment();
-
-
-
-        $docComment = str_replace(['/**', '*/'], '', $docComment);
-        $docComment = trim($docComment);
-        $docCommentArray = explode("\n", $docComment);
-
-
-
-
-        $docCommentArray = array_map(function($item) {
-            $item = trim($item);
-
-            $position = strpos($item, '*');
-            if ($position === 0) {
-                $item = substr($item, 1);
-            }
-
-            return trim($item);
-        }, $docCommentArray);
-
-        return $docCommentArray;
-
-    }
-
-    public function isInstanceOf(string $verifiable, string $reference) {
-        if (!(class_exists($verifiable) && class_exists($reference))) {
-            return false;
-        }
-
-        $class = $this->get($verifiable);
-
-        return $class instanceof $reference;
     }
 
 }

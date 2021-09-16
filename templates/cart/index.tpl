@@ -17,7 +17,7 @@
             <td>{$item->getPrice()}</td>
             <td>{$product->getAmount()}</td>
             <td>{$product->getTotal()}</td>
-            <td><form action="/cart/product/delete?product_id={$item->getId()}" method="post" style="display:inline"><input type="hidden" name="id" value="{$item->getId()}"><input type="submit" value="Удалить"></form></td>
+            <td><form action="/shop/cart/remove?id={$item->getId()}" method="post" style="display:inline"><input type="hidden" name="id" value="{$item->getId()}"><input type="submit" value="Удалить"></form></td>
         </tr>
     {/foreach}
     </tbody>

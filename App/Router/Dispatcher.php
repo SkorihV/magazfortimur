@@ -63,15 +63,15 @@ class Dispatcher
             throw new ControllerDoesNotException();
         }
 
-        $controller = $this->di->get($controllerClass);
+        $controller = $this->di->get($controllerClass, [
+            Route::class => $route,
+        ]);
 
 
 
-
-
-        $renderer = $this->di->get(Renderer::class);
-        $this->di->setProperty($controller, 'renderer', $renderer);
-        $this->di->setProperty($controller, 'route', $route);
+//        $renderer = $this->di->get(Renderer::class);
+//        $this->di->setProperty($controller, 'renderer', $renderer);
+//        $this->di->setProperty($controller, 'route', $route);
 
         $controllerMethod = $route->getMethod();
 

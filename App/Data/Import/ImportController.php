@@ -59,7 +59,7 @@ class ImportController extends AbstractController
         $fieldsArr = $this->filterFieldsArr($_POST);
 
         $importFilename = $this->getFilePathFromPost($request);
-        if (file_exists($importFilename)) {
+    //    if (file_exists($importFilename)) {
             $taskName = 'Импорт файла ' . $importFilename;
             $task = Import::class . '::productsFromFileTask';
             $taskParams =  [
@@ -68,9 +68,11 @@ class ImportController extends AbstractController
             ];
 
             $queue->addTask($taskName, $task, $taskParams);
-        }
+
+      //  }
 
         $tasks_queue = $queue->getTaskList();
+
 
 
         return $this->render('queue/list.tpl',[
@@ -81,6 +83,7 @@ class ImportController extends AbstractController
     public function parsing( Db $db, ImportRepository $importRepository)
     {
         $file = $_FILES['import_file'] ?? null;
+
 
         if (is_null($file) || empty($file['name'])) {
             die('не загружен файл для импорта');
@@ -101,6 +104,7 @@ class ImportController extends AbstractController
         $nameFieldsFile = $importRepository->getNames($columnFile);
 
         $columnTable = $db->getColumnNamesArr('products');
+
 
 
         return $this->render('import/parsing.tpl',[
