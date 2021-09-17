@@ -87,3 +87,25 @@ CREATE TABLE `users` (
                           `email` varchar(255) NOT NULL DEFAULT '',
                           `password` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `orders` (
+                          `id`          int unsigned    NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                          `totalSum`    float unsigned  NOT NULL DEFAULT 0,
+                          `user_id`     int unsigned,
+                          `created_at`  datetime        NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+CREATE TABLE `order_items` (
+                         `id`               int unsigned    NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                         `order_id`         int unsigned,
+                         `product_id`       int unsigned,
+                         `product_data`     text,
+                         `amount`           int             NOT NULL DEFAULT 0,
+                         `totalSum`         float           NOT NULL DEFAULT 0
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

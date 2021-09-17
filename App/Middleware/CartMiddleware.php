@@ -8,9 +8,20 @@ use App\Di\Container;
 class CartMiddleware implements IMiddleware
 {
 
+    /**
+     * @var Container
+     */
+    private Container $di;
+
+    /**
+     * @var Cart|mixed|null
+     */
+    private $cart;
+
     public function __construct(Container $di)
     {
 
+        $this->di = $di;
 
         $cartSerializedData = $_SESSION['cart'] ?? null;
         $cart = null;
@@ -18,20 +29,15 @@ class CartMiddleware implements IMiddleware
 
         if(!is_null($cartSerializedData)) {
             $cart = unserialize($cartSerializedData);
-
         }
 
-        if (!$cart instanceof Cart) {
+        if (!($cart instanceof Cart)) {
             $cart = new Cart();
         }
 
-        $cart = new Cart();
-
-
+        $this->cart = $cart;
         $di->addOneMapping(Cart::class, $cart);
 
-
-        //
     }
 
     public function beforeDispatch()
@@ -41,6 +47,6 @@ class CartMiddleware implements IMiddleware
 
     public function afterDispatch()
     {
-        // TODO: Implement afterDispatch() method.
+       $_SESSION['cart'] = serialize($this->cart);
     }
 }

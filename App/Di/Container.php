@@ -2,11 +2,8 @@
 namespace App\Di;
 
 
-use App\Router\Exception\MethodDoesNotExistException;
-use App\Router\Exception\NotFoundException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionFunction;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionObject;
@@ -36,6 +33,7 @@ class  Container
      */
     public function get(string $className, array $dependencyMapping = null)
     {
+
 
 
         if (!is_null($dependencyMapping)) {
@@ -280,13 +278,21 @@ class  Container
         $reflectionConstructor = $reflectionClass->getConstructor();
 
 
-        if ($reflectionConstructor instanceof ReflectionMethod) {
-            $arguments = $this->getDependencies($reflectionConstructor);
 
+        if ($reflectionConstructor instanceof ReflectionMethod) {
+
+
+            $arguments = $this->getDependencies($reflectionConstructor);
+            echo "<pre>";
+                var_dump($arguments);
+            echo "</pre>";
             $object =  $reflectionClass->newInstanceArgs($arguments);
+
+
         } else {
             $object = $reflectionClass->newInstance();
         }
+
 
         $this->initProtectedAndPrivateProperties($object);
 
@@ -311,12 +317,21 @@ class  Container
             $parameterType = $parameter->getType();
 
 
+
             assert($parameterType instanceof \ReflectionNamedType);
             $className = $parameterType->getName();
 
             if (class_exists($className)) {
                 $arguments[$parameterName] = $this->get($className);
             }
+
+            echo "<pre>";
+            var_dump('*************************');
+            var_dump($parameterName, '$parameterName');
+            var_dump($parameterType, '$parameterType');
+            var_dump($className, '$className');
+            var_dump('*************************');
+            echo "</pre>";
         }
 
         return $arguments;

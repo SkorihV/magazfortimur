@@ -20,6 +20,7 @@ define('APP_UPLOAD_DIR', APP_PUBLIC_DIR . '/upload');
 define('APP_UPLOAD_PRODUCTS_DIR', APP_UPLOAD_DIR . '/products');
 
 
+
 (new Kernel())->run();
 
 
