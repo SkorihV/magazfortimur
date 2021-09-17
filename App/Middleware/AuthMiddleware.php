@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AuthMiddleware;
+namespace App\Middleware;
 
 use App\Data\User\UserModel;
 use App\Data\User\UserRepository;
@@ -47,6 +47,8 @@ class AuthMiddleware implements IMiddleware
      */
     public function beforeDispatch()
     {
+
+
         $this->sessionInit();
         $user = $this->getSessionUser();
 
@@ -71,7 +73,9 @@ class AuthMiddleware implements IMiddleware
     {
         $userId =(int) $_SESSION['userId'] ?? 0;
 
-        if($userId) {
+
+        if(!$userId) {
+
             return null;
         }
 

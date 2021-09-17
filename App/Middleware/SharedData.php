@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AuthMiddleware;
+namespace App\Middleware;
 
 use App\Data\User\UserModel;
 use App\Di\Container;
@@ -21,6 +21,7 @@ class SharedData implements IMiddleware
 
     public function beforeDispatch()
     {
+
         /**
          * @var $renderer Renderer
          */

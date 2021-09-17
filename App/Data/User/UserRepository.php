@@ -37,6 +37,7 @@ class UserRepository
         $email          = $data['email'] ?? null;
         $password       = $data['password'] ?? null;
 
+
         if (is_null($name)) {
             throw new \Exception('Имя для инициализации пользователя обязательно');
         }
@@ -77,10 +78,8 @@ class UserRepository
     {
         $query = "SELECT u.*  FROM users u  WHERE u.id = $id";
 
-
         $userArray =  Db::fetchRow($query);
         return $this->fromArray($userArray);
-
 
     }
 

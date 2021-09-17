@@ -37,6 +37,7 @@ class  Container
     public function get(string $className, array $dependencyMapping = null)
     {
 
+
         if (!is_null($dependencyMapping)) {
             $this->addManyMapping($dependencyMapping);
         }
@@ -247,12 +248,15 @@ class  Container
     {
 
 
+
         if (!$this->isSingletone($className)) {
             return null;
         };
 
         if (is_null($this->singletones[$className])) {
+
             $this->singletones[$className] = $this->createInstance($className);
+
         }
 
         return $this->singletones[$className];
@@ -267,13 +271,14 @@ class  Container
     {
 
         if (isset($this->factories[$className])) {
-
             return $this->factories[$className]($this);
         }
+
 
         $reflectionClass = new ReflectionClass($className);
 
         $reflectionConstructor = $reflectionClass->getConstructor();
+
 
         if ($reflectionConstructor instanceof ReflectionMethod) {
             $arguments = $this->getDependencies($reflectionConstructor);
@@ -284,6 +289,8 @@ class  Container
         }
 
         $this->initProtectedAndPrivateProperties($object);
+
+
 
         return $object;
     }

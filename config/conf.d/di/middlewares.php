@@ -1,8 +1,8 @@
 <?php
 
-use App\AuthMiddleware\AuthMiddleware;
-use App\AuthMiddleware\CartMiddleware;
-use App\AuthMiddleware\SharedData;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\CartMiddleware;
+use App\Middleware\SharedData;
 
 return [
     AuthMiddleware::class,

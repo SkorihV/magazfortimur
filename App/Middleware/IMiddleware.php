@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AuthMiddleware;
+namespace App\Middleware;
 
 interface IMiddleware
 {

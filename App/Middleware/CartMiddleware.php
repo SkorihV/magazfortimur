@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AuthMiddleware;
+namespace App\Middleware;
 
 use App\Data\Cart\Cart;
 use App\Di\Container;
@@ -15,9 +15,6 @@ class CartMiddleware implements IMiddleware
         $cartSerializedData = $_SESSION['cart'] ?? null;
         $cart = null;
 
-        echo "<pre>";
-        var_dump(1);
-        echo "</pre>";
 
         if(!is_null($cartSerializedData)) {
             $cart = unserialize($cartSerializedData);
