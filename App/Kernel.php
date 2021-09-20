@@ -89,6 +89,11 @@ class Kernel
         } catch (\ReflectionException $e) {
             //500
             echo "500 - reflection";
+
+            echo "<pre>";
+            echo($e);
+            echo "</pre>";
+
         }
     }
     

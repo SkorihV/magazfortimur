@@ -1,10 +1,9 @@
 <?php
-namespace App\Units;
+namespace App\Utils;
 
 
 class DocParser
 {
-
 
     public function toArray(string $docComment)
     {
@@ -32,7 +31,7 @@ class DocParser
         $annotateValue = null;
 
         foreach ($docCommentArray as $docCommentItem) {
-            $annotationPrefix = $annotation . '(';
+            $annotationPrefix = $annotation . '("';
             $isHasAnnotate = strpos($docCommentItem, $annotationPrefix) === 0;
 
             if (!$isHasAnnotate) {
@@ -42,7 +41,7 @@ class DocParser
             $annotateValue = str_replace($annotationPrefix, '', $docCommentItem);
             $annotateValue = substr($annotateValue, 0, -1);
 
-            if ($replaceQuotes) {
+            if ($replaceQuotes && !empty($annotateValue)) {
                 $annotateValue = substr($annotateValue, 0, -1);
             }
 
@@ -50,5 +49,15 @@ class DocParser
         }
 
         return $annotateValue;
+    }
+
+    /**
+     * @param string $annotation
+     * @param string $docComment
+     * @return bool
+     */
+    public function isHasAnnotate(string $annotation,  string $docComment): bool
+    {
+        return strpos($docComment, $annotation) !== false;
     }
 }

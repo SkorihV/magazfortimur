@@ -283,9 +283,6 @@ class  Container
 
 
             $arguments = $this->getDependencies($reflectionConstructor);
-            echo "<pre>";
-                var_dump($arguments);
-            echo "</pre>";
             $object =  $reflectionClass->newInstanceArgs($arguments);
 
 
@@ -324,14 +321,14 @@ class  Container
             if (class_exists($className)) {
                 $arguments[$parameterName] = $this->get($className);
             }
-
-            echo "<pre>";
-            var_dump('*************************');
-            var_dump($parameterName, '$parameterName');
-            var_dump($parameterType, '$parameterType');
-            var_dump($className, '$className');
-            var_dump('*************************');
-            echo "</pre>";
+//
+//            echo "<pre>";
+//            var_dump('*************************');
+//            var_dump($parameterName, '$parameterName');
+//            var_dump($parameterType, '$parameterType');
+//            var_dump($className, '$className');
+//            var_dump('*************************');
+//            echo "</pre>";
         }
 
         return $arguments;

@@ -4,6 +4,7 @@ namespace App\Data\Shop\Order;
 
 use App\Controller\AbstractController;
 use App\Data\Product\ProductRepository;
+use App\Data\User\UserModel;
 use App\Model\ModelManager;
 
 
@@ -21,8 +22,9 @@ class OrderController extends AbstractController
     /**
      * @route("/order/create")
      */
-    public function create(ModelManager $manager, ProductRepository $productRepository)
+    public function create(ModelManager $manager, ProductRepository $productRepository, UserModel $user = null)
     {
+
         $productsForOrder = [
             [115, 40],
             [117, 2],
@@ -37,21 +39,23 @@ class OrderController extends AbstractController
 
             $product = $productRepository->getById($productId);
 
-            $orderItem = new OrderItemModel($amount, $product);
+            $orderItem = new OrderItemModel($amount, $product, $order);
 
             $order->addItem($orderItem);
         }
 
+        if (!is_null($user)) {
+            $order->setUserId($user);
+        }
 
 //        $order->getById(); => 0
 
         $manager->save($order);
         //както сохранаяем
 
-
-//        $order->getById(); => 5
-
-
+        foreach ($order->getItems() as $item ) {
+            $manager->save($item);
+        }
 
         return $this->redirect("/order/list");
     }

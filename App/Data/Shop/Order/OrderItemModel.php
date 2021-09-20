@@ -3,33 +3,66 @@
 namespace App\Data\Shop\Order;
 
 use App\Data\Product\ProductModel;
+use App\Model\AbstractModel;
 
-class OrderItemModel
+/**
+ * @Model\Table("order_items")
+ */
+class OrderItemModel extends  AbstractModel
 {
+
     /**
      * @var int
+     * @Model\Id
      */
-    private int $amount;
+     protected $id;
+
+    /**
+     * @var int
+     * @Model\TableField
+     */
+    protected int $amount;
 
     /**
      * @var float
+     * @Model\TableField
      */
-    private float $total;
+    protected $totalSum;
+
+        /**
+         * @var ProductModel
+         * @Model\TableField("product_id")
+         */
+    protected $product;
 
     /**
      * @var array
+     * @Model\TableField
      */
-    private array $productData;
+    protected array $productData;
 
     /**
      * @var OrderModel
+     * @Model\TableField("order_id")
      */
-    private  $order;
+    protected  $order;
 
-    public function __construct(int $amount, ProductModel $productModel)
+    /**
+     * @param int $amount
+     * @param ProductModel $productModel
+     * @param OrderModel $order
+     */
+    public function __construct(int $amount, ProductModel $productModel, OrderModel $order)
     {
         $this->amount = $amount;
-//        $this->productData = $productModel;
+        $this->totalSum = $amount * $productModel->getPrice();
+        $this->order = $order;
+        $this->product = $productModel;
+        $this->productData = [
+             'name' => $productModel->getName(),
+             'price' => $productModel->getPrice(),
+             'article' => $productModel->getArticle(),
+        ];
 
     }
 
@@ -41,8 +74,8 @@ class OrderItemModel
         return $this->amount;
     }
 
-    public function getTotal(): float
+    public function getTotalSum(): float
     {
-        return $this->total;
+        return $this->totalSum;
     }
 }

@@ -2,42 +2,51 @@
 namespace App\Data\Shop\Order;
 
 use App\Data\User\UserModel;
+use App\Model\AbstractModel;
 use DateTime;
 
 
 /**
  * @Model\Table("orders")
  */
-class OrderModel implements \ArrayAccess
+class OrderModel extends AbstractModel
 {
 
     /**
      * @var int
+     * @Model\Id()
      */
-    private int $id = 0;
+    protected int $id = 0;
 
     /**
      * @var DateTime
+     * @Model\TableField
      */
-    private DateTime $createAt;
+    protected $createdAt;
 
     /**
      * @var float
+     * @Model\TableField("totalSum")
      */
-    private float $totalSum;
+    protected $totalSum = 0;
 
     /**
      * @var UserModel
+     * @Model\TableField
      */
-    private UserModel $user;
+    protected  $userId;
 
     /**
      * @var OrderItemModel[]
      */
-    private $items;
+    protected $items;
 
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
-
+    
     /**
      * @return int
      */
@@ -58,18 +67,18 @@ class OrderModel implements \ArrayAccess
     /**
      * @return UserModel
      */
-    public function getUser(): UserModel
+    public function getUserId(): UserModel
     {
-        return $this->user;
+        return $this->userId;
     }
 
     /**
-     * @param UserModel $user
+     * @param UserModel $userId
      * @return OrderModel
      */
-    public function setUser(UserModel $user): OrderModel
+    public function setUserId(UserModel $userId): OrderModel
     {
-        $this->user = $user;
+        $this->userId = $userId;
         return $this;
     }
 
@@ -81,11 +90,24 @@ class OrderModel implements \ArrayAccess
         return $this->items;
     }
 
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
     public function addItem(OrderItemModel $item)
     {
+
         $this->items[] = $item;
+        $this->totalSum += $item->getTotalSum();
+
+
         return $this;
     }
+
 
     /**
      * @param OrderItemModel[] $items
@@ -95,26 +117,5 @@ class OrderModel implements \ArrayAccess
     {
         $this->items = $items;
         return $this;
-    }
-
-
-    public function offsetExists($offset)
-    {
-        // TODO: Implement offsetExists() method.
-    }
-
-    public function offsetGet($offset)
-    {
-        // TODO: Implement offsetGet() method.
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        // TODO: Implement offsetSet() method.
-    }
-
-    public function offsetUnset($offset)
-    {
-        // TODO: Implement offsetUnset() method.
     }
 }

@@ -92,7 +92,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `orders` (
                           `id`          int unsigned    NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                          `totalSum`    float unsigned  NOT NULL DEFAULT 0,
+                          `total_sum`    float unsigned  NOT NULL DEFAULT 0,
                           `user_id`     int unsigned,
                           `created_at`  datetime        NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
