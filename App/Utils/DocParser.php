@@ -4,6 +4,17 @@ namespace App\Utils;
 
 class DocParser
 {
+    /**
+     * @var ReflectionUtil
+     * @onInit(App\Units\ReflectionUtil)
+     */
+    private $reflectionUtil;
+
+    public function getClassAnnotatie(object $object, string $annotation)
+    {
+        $docComment = $this->reflectionUtil->getClassDocBlock($object);
+        return $this->getAnnotationValue($annotation, $docComment, false);
+    }
 
     public function toArray(string $docComment)
     {

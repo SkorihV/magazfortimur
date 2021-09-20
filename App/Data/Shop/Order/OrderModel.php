@@ -100,7 +100,6 @@ class OrderModel extends AbstractModel
 
     public function addItem(OrderItemModel $item)
     {
-
         $this->items[] = $item;
         $this->totalSum += $item->getTotalSum();
 

@@ -180,6 +180,8 @@ class ProductController extends AbstractController
         $category->setId(0);
         $product->setCategory($category);
 
+
+
         return $this->render('products/add.tpl', [
             "categories" => $categories,
             "product" => $product

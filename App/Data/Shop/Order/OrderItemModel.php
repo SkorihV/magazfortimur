@@ -8,7 +8,7 @@ use App\Model\AbstractModel;
 /**
  * @Model\Table("order_items")
  */
-class OrderItemModel extends  AbstractModel
+class OrderItemModel
 {
 
     /**

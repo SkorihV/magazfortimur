@@ -14,7 +14,6 @@ class UserController extends AbstractController
      */
     public function login()
     {
-
         return $this->redirect("/products");
     }
 
@@ -28,7 +27,7 @@ class UserController extends AbstractController
         if ($request->isPost()) {
 
             try {
-               $user = $this->registerAction($userRepository);
+               $user = $this->registerAction();
 
                 $user->setPassword(
                     $userService->passwordEncoder(

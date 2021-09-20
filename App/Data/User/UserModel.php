@@ -2,25 +2,34 @@
 
 namespace App\Data\User;
 
-class UserModel
+use App\Model\AbstractModel;
+
+/**
+ * @Model\Table("users")
+ */
+class UserModel extends AbstractModel
 {
     /**
      * @var int
+     * @Model\Id()
      */
     private int $id = 0;
 
     /**
      * @var string
+     * @Model\TableField
      */
     private string $name;
 
     /**
      * @var string
+     * @Model\TableField
      */
     private string $email;
 
     /**
      * @var string
+     * @Model\TableField
      */
     private string $password;
 

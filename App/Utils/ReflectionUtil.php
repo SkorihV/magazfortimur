@@ -13,4 +13,12 @@ class ReflectionUtil
         $reflectionId->setValue($object, $propertyValue);
         $reflectionId->setAccessible(false);
     }
+
+
+    public function getClassDocBlock(object $object)
+    {
+        $reflectionObject = new \ReflectionObject($object);
+
+        return $reflectionObject->getDocComment();
+    }
 }
