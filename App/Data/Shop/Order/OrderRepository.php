@@ -48,20 +48,51 @@ class OrderRepository
             throw new ClassNotExistException($message);
         }
 
-        $model = $this->di->get($modelClass);
+        /**
+         * @var $exampleModel AbstractModel
+         */
+        $exampleModel = $this->di->get($modelClass);
 
-        if (!($model instanceof AbstractModel)) {
+        if (!($exampleModel instanceof AbstractModel)) {
             $message = 'Class ' . $modelClass . ' does not allowed there. It must be a AbstractModel';
             throw new ClassNotAllowedException($message);
         }
 
-        $tableName = $this->modelAnalyzer->getTableName($model);
-        $isColumnName = $this->modelAnalyzer->getIdColumnName($model);
+        $tableName = $this->modelAnalyzer->getTableName($exampleModel);
+        $idColumnName = $this->modelAnalyzer->getIdColumnName($exampleModel);
+        $idPropertyName = $this->modelAnalyzer->getIdColumnName($exampleModel);
 
-        $query = "SELECT * FROM $tableName WHERE $isColumnName = $id";
-        $order = Db::fetchRow($query);
 
-        return $order;
+
+
+        $query = "SELECT * FROM $tableName WHERE $idColumnName = $id";
+        $modelArray = Db::fetchRow($query);
+
+        /**
+         * @var $model AbstractModel
+         */
+        $model = $this->di->get($modelClass);
+        $this->modelAnalyzer->setId($model, $id);
+
+        $tableFields = $this->modelAnalyzer->getTableFields($exampleModel);
+
+
+        foreach ($tableFields as $propertyName => $propertyField) {
+            $propertyValue = $modelArray[$propertyField] ?? null;
+
+            if (!is_null($propertyValue)) {
+                $this->modelAnalyzer->setProperty($model, $propertyName, $propertyValue);
+            }
+        }
+
+        echo "<pre>";
+        var_dump($tableFields);
+        var_dump($modelArray);
+        var_dump($model);
+        echo "</pre>";
+exit;
+
+        return $modelArray;
     }
 
     public function findBy(array $condition)

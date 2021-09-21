@@ -21,13 +21,19 @@ class ModelAnalyzer
      */
     private $stringUtil;
 
+    /**
+     * @var ReflectionUtil
+     */
+    private $reflectionUtil;
 
-    public function __construct(DocParser $docParser, StringUtil $stringUtil)
+
+    public function __construct(DocParser $docParser, StringUtil $stringUtil, ReflectionUtil $reflectionUtil)
     {
         $this->docParser = $docParser;
         $this->stringUtil = $stringUtil;
-
+        $this->reflectionUtil = $reflectionUtil;
     }
+
     public function getTableName(Model $model)
     {
         $reflectionObject = new \ReflectionObject($model);
@@ -36,6 +42,7 @@ class ModelAnalyzer
 
         return $this->docParser->getAnnotationValue('@Model\Table', $docComment);
     }
+
 
     public function getTableFields(Model $model)
     {
@@ -67,17 +74,59 @@ class ModelAnalyzer
             'objectProperty'    => $key,
             'tableProperty'     => $value,
         ];
-
     }
 
     public function getIdColumnName(Model $model)
     {
-        $isFieldData = $this->getIdField($model);
+        $idFieldData = $this->getIdField($model);
 
-        if (is_null($isFieldData)) {
+        if (is_null($idFieldData)) {
             return null;
         }
-        return $isFieldData['tableProperty'];
+
+        return $idFieldData['tableProperty'];
+    }
+
+    public function getIdPropertyName(Model $model)
+    {
+        $idFieldData = $this->getIdField($model);
+
+        if (is_null($idFieldData)) {
+            return null;
+        }
+
+        return $idFieldData['objectProperty'];
+    }
+
+    public function setId(AbstractModel $model, int $id)
+    {
+        $objectProperty = $this->getIdPropertyName($model);
+        $this->setProperty($model, $objectProperty, $id);
+    }
+
+
+    /**
+     * Назначение свойств модели
+     *
+     *
+     * @param AbstractModel $model
+     * @param string $property
+     * @param $value
+     */
+    public function setProperty(AbstractModel $model, string $property, $value)
+    {
+
+        $propertyType = $this->reflectionUtil->getProperyType($model, $property);
+
+        echo "<pre>";
+        var_dump($propertyType);
+        var_dump($property);
+        var_dump($value);
+        echo "</pre>";
+
+
+        exit;
+        $this->reflectionUtil->setPrivateValue($model, $property, $value);
 
     }
 
@@ -103,9 +152,6 @@ class ModelAnalyzer
             $fields[$propertyName] = $this->stringUtil->camelToSnake($field);
 
         }
-
         return $fields;
     }
-
-
 }

@@ -16,7 +16,7 @@ class OrderModel extends AbstractModel
      * @var int
      * @Model\Id()
      */
-    protected int $id = 0;
+    protected  $id = 0;
 
     /**
      * @var DateTime

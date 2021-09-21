@@ -70,7 +70,7 @@ class ModelManager
 
         if ($id) {
             $id = Db::insert($tableName, $tableData);
-            $this->reflectionUtil->setPrivateValue($model, $modelIdInfo['objectProperty'], $id);
+            $this->modelAnalyzer->setId($model, $id);
         } else {
             Db::update($tableName, $tableData, $modelIdInfo['tableProperty'] . " = '$id'");
         }
