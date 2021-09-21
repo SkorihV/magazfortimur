@@ -111,8 +111,32 @@ class ReflectionUtil
             return $type;
         }
 
-       $line =  $reflectionObject->getStartLine();
+        $startLine =  $reflectionObject->getStartLine();
+        $classFilename = $reflectionObject->getFileName();
 
+
+        $classFile = fopen($classFilename, 'r');
+        $code = "";
+
+        for ($i = 1; $i < $startLine; $i++) {
+            $code .= fgets($classFile);
+        }
+        fclose($classFile);
+
+
+
+        var_dump('**********************************');
+        var_dump($code);
+
+
+
+        $code = str_replace($reflectionObject->getDocComment(), '', $code);
+        $code = trim($code);
+        $code = explode('\n', $code);
+
+
+
+        exit;
         return $type;
     }
 
