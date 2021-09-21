@@ -37,5 +37,5 @@ class AbstractModel implements \ArrayAccess
         // TODO: Implement offsetUnset() method.
     }
 
-    abstract public function getId(): int;
+//    abstract public function getId(): int;
 }

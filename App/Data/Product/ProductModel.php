@@ -5,50 +5,41 @@ namespace App\Data\Product;
 use App\Data\Category\CategoryModel;
 
 
-/**
- * @Model\Table("products")
- */
+
 class ProductModel
 {
     /**
      * @var int
-     * @Model\Id()
      */
     protected int $id = 0;
 
     /**
      * @var string
-     * @Model\TableField
      */
     protected string $name;
 
     /**
      * @var string
-     * @Model\TableField
      */
     protected string $article = '';
 
     /**
      * @var float
-     * @Model\TableField
      */
     protected float $price;
 
     /**
      * @var int
-     * @Model\TableField
      */
     protected int $amount;
 
     /**
      * @var string
-     * @Model\TableField
      */
     protected string $description = '';
 
     /**
      * @var CategoryModel
-     * @Model\TableField("category_id")
      */
     protected CategoryModel $category;
 

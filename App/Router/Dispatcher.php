@@ -44,7 +44,6 @@ class Dispatcher
         $route = $this->di->get(Route::class);
 
 
-
         foreach ($this->getRoutes() as $path => $controller) {
 
             if ($this->isValidPath($path, $route)){
@@ -53,8 +52,6 @@ class Dispatcher
         }
 
         $controllerClass = $route->getController();
-
-
 
         if (is_null($controllerClass)) {
             throw new NotFoundException();
@@ -66,7 +63,6 @@ class Dispatcher
         $controller = $this->di->get($controllerClass, [
             Route::class => $route,
         ]);
-
 
 
 //        $renderer = $this->di->get(Renderer::class);

@@ -12,7 +12,13 @@ class DocParser
 
     public function getClassAnnotatie(object $object, string $annotation)
     {
+
+
+       $this->reflectionUtil = new ReflectionUtil;
+
         $docComment = $this->reflectionUtil->getClassDocBlock($object);
+
+
         return $this->getAnnotationValue($annotation, $docComment, false);
     }
 
@@ -42,8 +48,10 @@ class DocParser
         $annotateValue = null;
 
         foreach ($docCommentArray as $docCommentItem) {
-            $annotationPrefix = $annotation . '("';
+
+            $annotationPrefix = $annotation . '(';
             $isHasAnnotate = strpos($docCommentItem, $annotationPrefix) === 0;
+
 
             if (!$isHasAnnotate) {
                 continue;
@@ -53,7 +61,7 @@ class DocParser
             $annotateValue = substr($annotateValue, 0, -1);
 
             if ($replaceQuotes && !empty($annotateValue)) {
-                $annotateValue = substr($annotateValue, 0, -1);
+                $annotateValue = substr($annotateValue, 1, -1);
             }
 
             break;

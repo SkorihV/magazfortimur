@@ -65,13 +65,14 @@ class OrderController extends AbstractController
      */
     public function update(OrderRepository $orderRepository)
     {
+
         $order = $orderRepository->find(14);
+
 
         echo "<pre>";
         var_dump($order);
         echo "</pre>";
         exit;
-
 //        $productsForOrder = [
 //            [115, 40],
 //            [117, 2],

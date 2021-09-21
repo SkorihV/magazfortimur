@@ -54,7 +54,6 @@ class Kernel
         try {
             $config = $this->di->get(Config::class);
 
-
             foreach ($config->di->middlewares as $classname) {
 
                $middleware = $this->di->get($classname);
@@ -62,7 +61,6 @@ class Kernel
                 if ($middleware instanceof IMiddleware) {
                     $middleware->beforeDispatch();
                 }
-
             }
 
             $response =  (new Dispatcher($this->di))->dispatch();
@@ -93,9 +91,6 @@ class Kernel
             echo "<pre>";
             echo($e);
             echo "</pre>";
-
         }
     }
-    
-    
 }

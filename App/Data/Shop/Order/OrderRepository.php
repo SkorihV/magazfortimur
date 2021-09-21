@@ -9,11 +9,11 @@ use App\Exception\ClassNotExistException;
 use App\Model\AbstractModel;
 use App\Model\Exceptions\ClassNotAllowedException;
 use App\Model\ModelAnalyzer;
-use App\Model\ModelManager;
 use App\Utils\DocParser;
 
+
 /**
- * @Model(App\Data\Shop\OrderModel)
+ * @Model(App\Data\Shop\Order\OrderModel)
  */
 class OrderRepository
 {
@@ -31,7 +31,7 @@ class OrderRepository
      * @var DocParser
      * @onInit(App\Utils\DocParser)
      */
-    protected $docParser;
+    protected DocParser $docParser;
 
     /**
      * @var Container
@@ -55,10 +55,8 @@ class OrderRepository
             throw new ClassNotAllowedException($message);
         }
 
-
         $tableName = $this->modelAnalyzer->getTableName($model);
         $isColumnName = $this->modelAnalyzer->getIdColumnName($model);
-
 
         $query = "SELECT * FROM $tableName WHERE $isColumnName = $id";
         $order = Db::fetchRow($query);

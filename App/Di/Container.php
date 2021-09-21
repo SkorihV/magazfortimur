@@ -33,13 +33,9 @@ class  Container
      */
     public function get(string $className, array $dependencyMapping = null)
     {
-
-
-
         if (!is_null($dependencyMapping)) {
             $this->addManyMapping($dependencyMapping);
         }
-
 
         if (array_key_exists($className, $this->dependencyMapping) && is_object($this->dependencyMapping[$className])) {
             return $this->dependencyMapping[$className];
@@ -159,7 +155,6 @@ class  Container
 
         $arguments = $this->getDependencies($reflectionMethod);
 
-
         return call_user_func_array([$object, $methodName], $arguments);
     }
 
@@ -174,7 +169,6 @@ class  Container
         if (!$hasDocComment) {
             return null;
         }
-
 
         $docComment = (string) $target->getDocComment();
 
@@ -201,11 +195,11 @@ class  Container
         $reflectionObject = new ReflectionObject($object);
         $reflectionProperties = $reflectionObject->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED);
 
-        foreach ($reflectionProperties as $reflectionProperty) {
-//            $docComment = $reflectionProperty->getDocComment();
-            $docCommentArray = $this->parseDocComment($reflectionProperty);
 
+        foreach ($reflectionProperties as $reflectionProperty) {
+            $docCommentArray = $this->parseDocComment($reflectionProperty);
             $dependencyClass = null;
+
 
             foreach ($docCommentArray as $docComment) {
                 $onInitPrefix = '@onInit(';
@@ -221,7 +215,6 @@ class  Container
                 if (!class_exists($dependencyClass)) {
                     $dependencyClass = null;
                 }
-
                 break;
             }
 
@@ -234,7 +227,6 @@ class  Container
             $reflectionProperty->setValue($object, $dependencyClassObject);
             $reflectionProperty->setAccessible(false);
 
-//            echo "<pre>"; var_dump($docCommentArray, $dependencyClass); echo "</pre>";
         }
     }
 
@@ -244,17 +236,12 @@ class  Container
      */
     protected function getSingletone(string $className)
     {
-
-
-
         if (!$this->isSingletone($className)) {
             return null;
         };
 
         if (is_null($this->singletones[$className])) {
-
             $this->singletones[$className] = $this->createInstance($className);
-
         }
 
         return $this->singletones[$className];
@@ -267,33 +254,24 @@ class  Container
      */
     protected function createInstance(string $className)
     {
-
         if (isset($this->factories[$className])) {
             return $this->factories[$className]($this);
         }
-
 
         $reflectionClass = new ReflectionClass($className);
 
         $reflectionConstructor = $reflectionClass->getConstructor();
 
-
-
         if ($reflectionConstructor instanceof ReflectionMethod) {
-
 
             $arguments = $this->getDependencies($reflectionConstructor);
             $object =  $reflectionClass->newInstanceArgs($arguments);
-
 
         } else {
             $object = $reflectionClass->newInstance();
         }
 
-
         $this->initProtectedAndPrivateProperties($object);
-
-
 
         return $object;
     }
@@ -313,25 +291,13 @@ class  Container
             $parameterName = $parameter->getName();
             $parameterType = $parameter->getType();
 
-
-
             assert($parameterType instanceof \ReflectionNamedType);
             $className = $parameterType->getName();
 
             if (class_exists($className)) {
                 $arguments[$parameterName] = $this->get($className);
             }
-//
-//            echo "<pre>";
-//            var_dump('*************************');
-//            var_dump($parameterName, '$parameterName');
-//            var_dump($parameterType, '$parameterType');
-//            var_dump($className, '$className');
-//            var_dump('*************************');
-//            echo "</pre>";
         }
-
         return $arguments;
     }
-
 }

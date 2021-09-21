@@ -15,6 +15,7 @@ class ModelAnalyzer
      * @var DocParser
      */
     private  $docParser;
+
     /**
      * @var StringUtil
      */
@@ -31,6 +32,8 @@ class ModelAnalyzer
     {
         $reflectionObject = new \ReflectionObject($model);
         $docComment = $reflectionObject->getDocComment();
+
+
         return $this->docParser->getAnnotationValue('@Model\Table', $docComment);
     }
 
@@ -103,4 +106,6 @@ class ModelAnalyzer
 
         return $fields;
     }
+
+
 }
