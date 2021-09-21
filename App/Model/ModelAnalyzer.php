@@ -7,6 +7,7 @@ use App\Model\Exceptions\ManyModelIdFieldException;
 use App\Utils\DocParser;
 use App\Utils\ReflectionUtil;
 use App\Utils\StringUtil;
+use DateTime;
 
 
 class ModelAnalyzer
@@ -118,14 +119,8 @@ class ModelAnalyzer
 
         $propertyType = $this->reflectionUtil->getProperyType($model, $property);
 
-        echo "<pre>";
-        var_dump($propertyType);
-        var_dump($property);
-        var_dump($value);
-        echo "</pre>";
+        $value = $this->caseTypeFromOutside($propertyType, $value);
 
-
-        exit;
         $this->reflectionUtil->setPrivateValue($model, $property, $value);
 
     }
@@ -153,5 +148,61 @@ class ModelAnalyzer
 
         }
         return $fields;
+    }
+
+    private function caseTypeFromOutside(string $propertyType, $value)
+    {
+        switch($propertyType) {
+            case "int":
+            case "integer":
+                $value = (int) $value;
+                break;
+            case "float":
+                $value = (float) $value;
+                break;
+            case "string":
+                $value = (string) $value;
+                break;
+            case "bool":
+            case "boolean":
+                $value = (bool) $value;
+                break;
+            case "DateTime":
+                $value = new DateTime($value);
+                break;
+            default:
+                echo "<pre>";
+                var_dump('case');
+                var_dump($propertyType);
+                var_dump($value);
+                echo "</pre>";
+
+                exit;
+                break;
+
+
+        }
+        return $value;
+    }
+
+    private function caseTypeFromInside(string $propertyType, $value)
+    {
+        switch($propertyType) {
+            case "int":
+            case "integer":
+                $value = (int) $value;
+                break;
+            case "float":
+                $value = (float) $value;
+                break;
+            case "string":
+                $value = (string) $value;
+                break;
+            case "bool":
+            case "boolean":
+                $value = (bool) $value;
+                break;
+        }
+        return $value;
     }
 }

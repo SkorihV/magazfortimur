@@ -98,6 +98,21 @@ class ReflectionUtil
 
         $docComment = $reflectionProperty->getDocComment();
         $type = $this->getVarDocValue( $docComment);
+
+        if (strpos($type, '\\') === 0) {
+            return $type;
+        }
+
+        $firstChar = $type[0];
+
+        $firstCharLower = strtolower($firstChar);
+
+        if ($firstChar === $firstCharLower) {
+            return $type;
+        }
+
+       $line =  $reflectionObject->getStartLine();
+
         return $type;
     }
 
@@ -120,7 +135,15 @@ class ReflectionUtil
         $value = substr($varDoc, 5);
         $value = trim($value);
 
-
+        $validateType = [
+            'int',
+            'integer',
+            'float',
+            'string',
+            'bool',
+            'boolean',
+//            'array',
+        ];
 
 
         return $value;
@@ -128,3 +151,4 @@ class ReflectionUtil
 
     }
 }
+
