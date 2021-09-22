@@ -125,19 +125,43 @@ class ReflectionUtil
 
 
 
-        var_dump('**********************************');
-        var_dump($code);
-
-
-
         $code = str_replace($reflectionObject->getDocComment(), '', $code);
         $code = trim($code);
-        $code = explode('\n', $code);
+        $code = explode("use", $code);
+        $code = array_slice($code, 1);
+        $useCode = array_map(function($item){
+            $item = trim($item);
+            $item = str_replace("\n", '', $item);
+            $item = str_replace(";", '', $item);
 
+            return $item;
+        }, $code);
 
+        $useCode = implode(',', $useCode);
+        $useCode = explode(',', $useCode);
 
-        exit;
-        return $type;
+        $useCollection = array_map('trim', $useCode);
+
+        $useDictionary = [];
+        foreach($useCollection as $useString) {
+            if (strpos($useString, ' as') !== false) {
+                $useData = explode(' as', $useString);
+                $useDictionary[$useData[1]] = $useData[0];
+                continue;
+            }
+
+            if(strpos($useString, '\\') !== false) {
+                $useChunks = explode('\\', $useString);
+                $lastChunkIndex = count($useChunks) - 1;
+                $key = $useChunks[$lastChunkIndex];
+                $useDictionary[$key] = $useString;
+                continue;
+            }
+
+            $useDictionary[$useString] = $useString;
+
+        }
+        return $useDictionary[$type] ?? $type;
     }
 
     public function getVarDocValue(string $docComment)
