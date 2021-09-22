@@ -20,7 +20,7 @@ class UserController extends AbstractController
     /**
      * @route("/user/register")
      */
-    public function register(Request $request, UserRepository $userRepository, UserService $userService)
+    public function register(Request $request, UserRepositoryOld $userRepository, UserService $userService)
     {
         $data = [];
 
@@ -59,11 +59,11 @@ class UserController extends AbstractController
 
     /**
      * @param Request $request
-     * @param UserRepository $userRepository
+     * @param UserRepositoryOld $userRepository
      *
      * @route("/user/auth")
      */
-    public function auth(Request $request, UserRepository $userRepository, UserService $userService)
+    public function auth(Request $request, UserRepositoryOld $userRepository, UserService $userService)
     {
         $data = [];
 
@@ -137,12 +137,12 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param UserRepository $userRepository
+     * @param UserRepositoryOld $userRepository
      * @return UserModel|null
      * @throws EmptyFieldException
      * @throws PasswordMismatchException
      */
-    private function authAction(UserRepository $userRepository): ?UserModel
+    private function authAction(UserRepositoryOld $userRepository): ?UserModel
     {
 
         $email              = $this->getRequest()->getStrFromPost( 'email' );

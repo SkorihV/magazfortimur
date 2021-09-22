@@ -26,13 +26,13 @@ class ProductController extends AbstractController
 
     /**
      * @param Request $request
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryOld $productRepository
      *
      * @return mixed
      * @route("/product_list")
      * @route("/products")
      */
-    public function list(Request $request, ProductRepository $productRepository)
+    public function list(Request $request, ProductRepositoryOld $productRepository)
     {
 
         $current_page = $request->getIntFromGet('p', 1);
@@ -55,7 +55,7 @@ class ProductController extends AbstractController
 
     /**
      * @param Request $request
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryOld $productRepository
      * @param ProductService $productService
      * @param ProductImagesService $productImagesService
      * @param Response $response
@@ -65,12 +65,12 @@ class ProductController extends AbstractController
      * @route("/product_edit/{id}")
      * @route("/product_edit")
      */
-    public function edit(Request $request,
-                         ProductRepository $productRepository,
-                         ProductService $productService,
+    public function edit(Request              $request,
+                         ProductRepositoryOld $productRepository,
+                         ProductService       $productService,
                          ProductImagesService $productImagesService,
-                         Response $response,
-                         CategoryService $categoryService)
+                         Response             $response,
+                         CategoryService      $categoryService)
     {
 
         $productId = $request->getIntFromGet('id', null);
@@ -137,17 +137,17 @@ class ProductController extends AbstractController
      * @param ProductService $productService
      * @param ProductImagesService $productImagesService
      * @param CategoryService $categoryService
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryOld $productRepository
      * @return mixed
      *
      * @throws Exception
      */
     public function add(
-        Request $request,
-        ProductService $productService,
+        Request              $request,
+        ProductService       $productService,
         ProductImagesService $productImagesService,
-        CategoryService $categoryService,
-        ProductRepository $productRepository)
+        CategoryService      $categoryService,
+        ProductRepositoryOld $productRepository)
     {
 
         if ($request->isPost()) {

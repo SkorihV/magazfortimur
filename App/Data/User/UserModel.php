@@ -11,33 +11,35 @@ class UserModel extends AbstractModel
 {
     /**
      * @var int
-     * @Model\Id()
+     * @Model\Id
      */
-    private int $id = 0;
+    protected int $id = 0;
 
     /**
      * @var string
      * @Model\TableField
      */
-    private string $name;
+    protected string $name;
 
     /**
      * @var string
      * @Model\TableField
      */
-    private string $email;
+    protected string $email;
 
     /**
      * @var string
      * @Model\TableField
      */
-    private string $password;
+    protected string $password;
 
-    public function __construct(string $name, string $email, string $password)
+//    public function __construct(string $name, string $email, string $password)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
+
+//        $this->name = $name;
+//        $this->email = $email;
+//        $this->password = $password;
     }
 
     /**

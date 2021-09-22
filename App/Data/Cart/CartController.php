@@ -4,7 +4,7 @@ namespace App\Data\Cart;
 
 use App\Controller\AbstractController;
 use App\Data\Category\CategoryModel;
-use App\Data\Product\ProductRepository;
+use App\Data\Product\ProductRepositoryOld;
 
 class CartController extends AbstractController
 {
@@ -17,7 +17,7 @@ class CartController extends AbstractController
     /**
      * @route("/shop/cart")
      */
-    public function index(Cart $cart, ProductRepository $productRepository)
+    public function index(Cart $cart, ProductRepositoryOld $productRepository)
     {
 //       $cart = new Cart();
 //       $product = $productRepository->getById(113);
@@ -42,12 +42,12 @@ class CartController extends AbstractController
 
     /**
      * @param Cart $cart
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryOld $productRepository
      * @return \App\Http\Response
      *
      * @route("/shop/cart/add")
      */
-    public function addProduct(Cart  $cart,ProductRepository $productRepository)
+    public function addProduct(Cart $cart, ProductRepositoryOld $productRepository)
     {
 
         $id = $this->request->getIntFromGet('id');
@@ -67,12 +67,12 @@ class CartController extends AbstractController
 
     /**
      * @param Cart $cart
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryOld $productRepository
      * @return \App\Http\Response
      *
      * @route("/shop/cart/remove")
      */
-    public function removeProuct(Cart $cart, ProductRepository $productRepository)
+    public function removeProuct(Cart $cart, ProductRepositoryOld $productRepository)
     {
 
         $id = $this->request->getIntFromGet('id');

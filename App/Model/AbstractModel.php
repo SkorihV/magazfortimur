@@ -4,7 +4,7 @@ namespace App\Model;
 
 use ReflectionObject;
 
-class AbstractModel implements \ArrayAccess
+abstract class AbstractModel implements \ArrayAccess
 {
     public function offsetExists($offset)
     {
@@ -37,5 +37,5 @@ class AbstractModel implements \ArrayAccess
         // TODO: Implement offsetUnset() method.
     }
 
-//    abstract public function getId(): int;
+    abstract public function getId(): int;
 }

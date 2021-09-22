@@ -72,13 +72,12 @@ trait RouteCollectionTrait
      * @return array
      * @throws \ReflectionException
      */
-    protected function getRoutesFromControllerFile(string $filePath) {
-
+    protected function getRoutesFromControllerFile(string $filePath)
+    {
         $routes = [];
 
         $controllerClassName = str_replace([APP_DIR . '/', '.php'], '', $filePath);
         $controllerClassName = str_replace([ '/', ], '\\', $controllerClassName);
-
 
         $reflectionClass = new ReflectionClass($controllerClassName);
         $reflectionMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -89,10 +88,6 @@ trait RouteCollectionTrait
             }
 
             $docCommentArray = $this->di->parseDocComment($reflectionMethod);
-
-
-
-
 
             foreach ($docCommentArray as $docString) {
                 $isRoute = strpos($docString, '@route(') === 0;
@@ -105,7 +100,6 @@ trait RouteCollectionTrait
                 $routes[$url] = [$controllerClassName, $reflectionMethod->getName()];
             }
         }
-
         return $routes;
     }
 }

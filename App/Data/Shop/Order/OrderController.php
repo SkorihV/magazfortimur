@@ -3,7 +3,7 @@
 namespace App\Data\Shop\Order;
 
 use App\Controller\AbstractController;
-use App\Data\Product\ProductRepository;
+use App\Data\Product\ProductRepositoryOld;
 use App\Data\User\UserModel;
 use App\Http\Response;
 use App\Model\Exceptions\ManyModelIdFieldException;
@@ -24,7 +24,7 @@ class OrderController extends AbstractController
     /**
      * @route("/order/create")
      */
-    public function create(ModelManager $manager, ProductRepository $productRepository, UserModel $user = null)
+    public function create(ModelManager $manager, ProductRepositoryOld $productRepository, UserModel $user = null)
     {
 
         $productsForOrder = [

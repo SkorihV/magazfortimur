@@ -4,7 +4,7 @@ namespace App\Data\Category;
 
 
 use App\Controller\AbstractController;
-use App\Data\Product\ProductRepository;
+use App\Data\Product\ProductRepositoryOld;
 use App\Data\Product\ProductService;
 use App\Renderer\Renderer;
 use App\Http\Request;
@@ -125,11 +125,11 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    public function view(Request $request,
-                         CategoryService $categoryService,
-                         ProductService $productService,
-                         CategoryRepository $categoryRepository,
-                         ProductRepository $productRepository)
+    public function view(Request              $request,
+                         CategoryService      $categoryService,
+                         ProductService       $productService,
+                         CategoryRepository   $categoryRepository,
+                         ProductRepositoryOld $productRepository)
     {
         $category_id = $request->getIntFromGet('id', null);
 

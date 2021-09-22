@@ -3,7 +3,7 @@
 namespace App\Middleware;
 
 use App\Data\User\UserModel;
-use App\Data\User\UserRepository;
+use App\Data\User\UserRepositoryOld;
 use App\Data\User\UserService;
 use App\Di\Container;
 use App\Http\Request;
@@ -13,9 +13,9 @@ class AuthMiddleware implements IMiddleware
 {
 
     /**
-     * @var UserRepository
+     * @var UserRepositoryOld
      */
-    private UserRepository $userRepository;
+    private UserRepositoryOld $userRepository;
     /**
      * @var Request
      */
@@ -31,10 +31,10 @@ class AuthMiddleware implements IMiddleware
      */
     private UserService $userService;
 
-    public function __construct(userRepository $userRepository,
-                                Request $request,
-                                Container $di,
-                                UserService $userService)
+    public function __construct(UserRepositoryOld $userRepository,
+                                Request           $request,
+                                Container         $di,
+                                UserService       $userService)
     {
         $this->userRepository = $userRepository;
         $this->request = $request;

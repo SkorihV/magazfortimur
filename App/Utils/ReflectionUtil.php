@@ -6,7 +6,7 @@ use ReflectionObject;
 
 class ReflectionUtil
 {
-    public function getClassAnnotatie(object $object, string $annotation)
+    public function getClassAnnotate(object $object, string $annotation)
     {
 
         $docComment = $this->getClassDocBlock($object);
@@ -161,7 +161,31 @@ class ReflectionUtil
             $useDictionary[$useString] = $useString;
 
         }
-        return $useDictionary[$type] ?? $type;
+
+        $isArrayType = strpos($type,'[]') !== false;
+
+        if ($isArrayType) {
+            $type = str_replace('[]', '', $type);
+        }
+
+        $fullTypeName = $useDictionary[$type] ?? null;
+
+        if (is_null($fullTypeName)) {
+            $namespace = $reflectionObject->getNamespaceName();
+            $className = $namespace . '\\' . $type;
+
+            if (class_exists($className)) {
+                $fullTypeName = $className;
+            }
+        }
+
+        $type = $fullTypeName ?? $type;
+
+        if ($isArrayType) {
+            $type .= '[]';
+        }
+
+        return $type;
     }
 
     public function getVarDocValue(string $docComment)

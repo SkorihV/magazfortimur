@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Data\Shop\Order;
 
 use App\Data\User\UserModel;
@@ -32,12 +33,13 @@ class OrderModel extends AbstractModel
 
     /**
      * @var UserModel
-     * @Model\TableField
+     * @Model\TableField("user_id")
      */
     protected  $userId;
 
     /**
      * @var OrderItemModel[]
+     * @Model\Relation("order_id)
      */
     protected $items;
 

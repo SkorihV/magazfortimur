@@ -8,7 +8,7 @@ use App\Model\AbstractModel;
 /**
  * @Model\Table("order_items")
  */
-class OrderItemModel
+class OrderItemModel extends AbstractModel
 {
 
     /**
@@ -29,10 +29,10 @@ class OrderItemModel
      */
     protected $totalSum;
 
-        /**
-         * @var ProductModel
-         * @Model\TableField("product_id")
-         */
+    /**
+     * @var ProductModel
+     * @Model\TableField("product_id")
+     */
     protected $product;
 
     /**
@@ -41,9 +41,10 @@ class OrderItemModel
      */
     protected array $productData;
 
+    //     * @Model\TableField("order_id")
     /**
      * @var OrderModel
-     * @Model\TableField("order_id")
+     *
      */
     protected  $order;
 
@@ -63,8 +64,13 @@ class OrderItemModel
              'price' => $productModel->getPrice(),
              'article' => $productModel->getArticle(),
         ];
-
     }
+
+    public function getId(): int
+    {
+       return $this->id;
+    }
+
 
     /**
      * @return int
