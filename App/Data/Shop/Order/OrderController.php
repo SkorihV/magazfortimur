@@ -66,7 +66,7 @@ class OrderController extends AbstractController
     public function update(OrderRepository $orderRepository)
     {
 
-        $order = $orderRepository->find(14);
+        $order = $orderRepository->find(13);
 
 
         echo "<pre>";
@@ -96,7 +96,6 @@ class OrderController extends AbstractController
 //            $order->setUserId($user);
 //        }
 //
-////        $order->getById(); => 0
 //
 //        $manager->save($order);
 //        //както сохранаяем

@@ -173,7 +173,7 @@ class AbstractRepository
             }
 
             if (!empty($where)) {
-                $where = 'WHERE ' . implode(' AND', $where);
+                $where = ' WHERE ' . implode(' AND ', $where);
             }else {
                 $where = '';
             }
@@ -209,7 +209,7 @@ class AbstractRepository
             }
 
             if (!empty($where)) {
-                $where = 'WHERE ' . implode(' AND', $where);
+                $where = ' WHERE ' . implode(' AND ', $where);
             }else {
                 $where = '';
             }

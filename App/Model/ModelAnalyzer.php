@@ -147,6 +147,7 @@ class ModelAnalyzer
     {
         $propertyType = $this->reflectionUtil->getProperyType($model, $property);
         $value = $this->caseTypeFromOutside($propertyType, $value);
+        
         $this->reflectionUtil->setPrivateValue($model, $property, $value);
     }
 
@@ -160,12 +161,14 @@ class ModelAnalyzer
 
         $value = $this->generateRelationType($model, $propertyType, $outsideTableFieldName);
 
-echo "<pre>";
-var_dump("App/Model/ModelAnalyzer.php : 164", $value);
-echo "</pre>";
 
-//        $value = $this->caseTypeFromOutside($propertyType, $value);
-//        $this->reflectionUtil->setPrivateValue($model, $property, $value);
+//      $value = $this->caseTypeFromOutside($propertyType, $value);
+
+
+        /**
+         * @todo реализовать прокси "заместитель" для вложенных объектов
+         */
+       $this->reflectionUtil->setPrivateValue($model, $property, $value);
     }
     
 
@@ -265,6 +268,8 @@ echo "</pre>";
             }
             break;
         }
+
+        
         return $value;
     }
 
@@ -293,7 +298,10 @@ echo "</pre>";
         $repositoryClass = $this->getRepositoryClassByModelClass($modelClass);
         
 
-        
+        echo "<pre>";
+        var_dump("App/Model/ModelAnalyzer.php : 301", $repositoryClass, $modelClass);
+        echo "</pre>";
+
 
         /**
          * @var $repository AbstractRepository
