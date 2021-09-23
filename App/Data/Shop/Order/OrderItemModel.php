@@ -15,7 +15,7 @@ class OrderItemModel extends AbstractModel
      * @var int
      * @Model\Id
      */
-     protected $id;
+     protected $id = 0;
 
     /**
      * @var int
@@ -39,7 +39,7 @@ class OrderItemModel extends AbstractModel
      * @var array
      * @Model\TableField
      */
-    protected array $productData;
+    protected  $productData;
 
     //     * @Model\TableField("order_id")
     /**
@@ -56,6 +56,7 @@ class OrderItemModel extends AbstractModel
 //    public function __construct(int $amount, ProductModel $productModel, OrderModel $order)
     public function __construct()
     {
+
 //        $this->amount = $amount;
 //        $this->totalSum = $amount * $productModel->getPrice();
 //        $this->order = $order;
@@ -69,6 +70,7 @@ class OrderItemModel extends AbstractModel
 
     public function getId(): int
     {
+    
        return $this->id;
     }
 

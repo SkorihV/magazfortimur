@@ -120,6 +120,7 @@ class AbstractRepository
         $model = $this->getNewModel();
         $this->modelAnalyzer->setId($model, $id);
 
+        
         $tableFields = $this->modelAnalyzer->getTableFields(
             $this->getExampleModel()
         );

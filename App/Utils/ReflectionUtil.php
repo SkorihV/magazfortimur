@@ -82,6 +82,9 @@ class ReflectionUtil
         $reflectionModel = new \ReflectionObject($object);
         $reflectionId = $reflectionModel->getProperty($propertyName);
         $reflectionId->setAccessible(true);
+;
+        
+        
         $reflectionId->setValue($object, $propertyValue);
         $reflectionId->setAccessible(false);
     }

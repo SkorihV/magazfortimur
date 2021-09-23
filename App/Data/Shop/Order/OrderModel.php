@@ -15,7 +15,7 @@ class OrderModel extends AbstractModel
 
     /**
      * @var int
-     * @Model\Id()
+     * @Model\Id
      */
     protected  $id = 0;
 
@@ -27,7 +27,7 @@ class OrderModel extends AbstractModel
 
     /**
      * @var float
-     * @Model\TableField("totalSum")
+     * @Model\TableField
      */
     protected $totalSum = 0;
 

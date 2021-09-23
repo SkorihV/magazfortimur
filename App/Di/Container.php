@@ -33,11 +33,16 @@ class  Container
      */
     public function get(string $className, array $dependencyMapping = null)
     {
+        echo "<pre>";
+        var_dump("App/Di/Container.php : 48", $className);
+        echo "</pre>";
+
         if (!is_null($dependencyMapping)) {
             $this->addManyMapping($dependencyMapping);
         }
 
         if (array_key_exists($className, $this->dependencyMapping) && is_object($this->dependencyMapping[$className])) {
+
             return $this->dependencyMapping[$className];
         }
 

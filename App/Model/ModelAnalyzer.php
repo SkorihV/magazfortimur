@@ -147,7 +147,10 @@ class ModelAnalyzer
     {
         $propertyType = $this->reflectionUtil->getProperyType($model, $property);
         $value = $this->caseTypeFromOutside($propertyType, $value);
-        
+
+
+
+
         $this->reflectionUtil->setPrivateValue($model, $property, $value);
     }
 

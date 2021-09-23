@@ -7,7 +7,9 @@ use App\Data\Product\ProductRepositoryOld;
 use App\Data\User\UserModel;
 use App\Http\Response;
 use App\Model\Exceptions\ManyModelIdFieldException;
+use App\Model\ModelAnalyzer;
 use App\Model\ModelManager;
+use App\Utils\ReflectionUtil;
 
 
 class OrderController extends AbstractController
@@ -63,16 +65,38 @@ class OrderController extends AbstractController
     /**
      * @route("/order/update")
      */
-    public function update(OrderRepository $orderRepository)
+    public function update(OrderRepository $orderRepository,
+                           OrderItemRepository $orderItemRepository,
+                           ReflectionUtil $reflectionUtil,
+                           ModelAnalyzer $modelAnalyzer)
     {
 
-        $order = $orderRepository->find(13);
+        $orderItem = $orderItemRepository->find(2);
 
+        /**
+         * @var $orderItemProxy OrderItemModelProxy
+         */
+        $orderItemProxy = $this->di->get(OrderItemModelProxy::class);
+
+        
+        
+//        $orderItemProxy = new OrderItemModelProxy();
+
+        $reflectionUtil->setPrivateValue($orderItemProxy, $modelAnalyzer->getIdPropertyName($orderItemProxy), 2);
+       // $orderItemProxy->getAmount();
 
         echo "<pre>";
-        var_dump($order);
-        echo "</pre>";
+var_dump("App/Data/Shop/Order/OrderController.php : 71", $orderItemProxy);
+echo "</pre>";
         exit;
+        
+//        $order = $orderRepository->find(13);
+
+
+//        echo "<pre>";
+//        var_dump($order);
+//        echo "</pre>";
+//        exit;
 //        $productsForOrder = [
 //            [115, 40],
 //            [117, 2],
